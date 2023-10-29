@@ -25,6 +25,8 @@ bool Player::Awake() {
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
+    idleAnim.PushBack({ 138, 154, 32, 29 });
+
 	return true;
 }
 
@@ -32,6 +34,8 @@ bool Player::Start() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
+
+    currentAnimation = &idleAnim;
 
 	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
 	pbody->listener = this;

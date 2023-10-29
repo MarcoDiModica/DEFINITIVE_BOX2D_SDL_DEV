@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include "Point.h"
 #include "SDL/include/SDL.h"
+#include "Animation.h"
 
 struct SDL_Texture;
 
@@ -30,7 +31,14 @@ public:
 public:
 	float speed = 0.3f;
 	const char* texturePath;
-	SDL_Texture* texture = NULL;
+	SDL_Texture* texture = nullptr;
+	Animation* currentAnimation = nullptr;
+
+	Animation idleAnim;
+	Animation runAnim;
+	Animation JumpAnim;
+	Animation FallAnim;
+
 	PhysBody* pbody;
 	int pickCoinFxId;
 	bool isTouchingGround = false;
