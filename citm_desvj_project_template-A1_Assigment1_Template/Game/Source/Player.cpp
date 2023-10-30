@@ -83,17 +83,19 @@ bool Player::Update(float dt)
         dashTime += dt;
         if (dashTime >= maxDashTime) {
             isDashing = false;
-            canDash = true;
+            canDash = false;
             dashTime = 0.0f;
         }
         else {
-            vel.x = lastDirection == SDL_FLIP_NONE ? dashSpeed : -dashSpeed;
+            vel.x += dashDirection * dashSpeed * dt;
         }
     }
+
 
     SDL_RendererFlip flip = lastDirection;
     if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         vel.x = -speed * dt;
+        dashDirection = -1;
         isMoving = true;
         flip = SDL_FLIP_HORIZONTAL;  
         lastDirection = flip;
@@ -101,6 +103,7 @@ bool Player::Update(float dt)
     else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         vel.x = speed * dt;
         isMoving = true;
+        dashDirection = 1;
         flip = SDL_FLIP_NONE;  
         lastDirection = flip;
     }
@@ -125,7 +128,6 @@ bool Player::Update(float dt)
 
     if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && canDash) {
         isDashing = true;
-        canDash = false;
         dashTime = 0.0f;
     }
 

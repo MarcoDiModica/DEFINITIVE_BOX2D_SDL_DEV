@@ -37,6 +37,7 @@ public:
 	Animation* currentAnimation = nullptr;
 
 	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;
+	SDL_RendererFlip flip = SDL_FLIP_NONE;
 
 	Animation idleAnim;
 	Animation runAnim;
@@ -58,6 +59,7 @@ public:
 	float dashTime = 0.0f;
 	float maxDashTime = 4.0f;
 	float dashSpeed = 200.0f;
+	int dashDirection = 0;
 };
 
 #endif // __PLAYER_H__
