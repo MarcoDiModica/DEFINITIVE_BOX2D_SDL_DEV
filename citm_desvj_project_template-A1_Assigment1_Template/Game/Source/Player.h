@@ -28,7 +28,7 @@ public:
 
 	void UpdateCamera();
 
-	void UpdateAnimation(b2Vec2 vel, bool isTouchingGround);
+	
 
 public:
 	float speed = 0.3f;
@@ -45,7 +45,7 @@ public:
 
 	PhysBody* pbody;
 	int pickCoinFxId;
-	bool isTouchingGround = false;
+	bool isTouchingGround;
 	bool canDash = true;
 	float jumpImpulse = 2.0f;
 	float jumpIncrement = 1.0f;
@@ -53,6 +53,11 @@ public:
 	float initialJumpImpulse = 2.0f;
 	float dashMultiplier = 2.0f;
 	bool isMoving = false;
+
+	bool isDashing = false;
+	float dashTime = 0.0f;
+	float maxDashTime = 4.0f;
+	float dashSpeed = 200.0f;
 };
 
 #endif // __PLAYER_H__

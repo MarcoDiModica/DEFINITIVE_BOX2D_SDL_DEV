@@ -66,9 +66,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
-    
-
-	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
+	pbody = app->physics->CreatePlayer(position.x, position.y, 28, 28, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
@@ -77,29 +75,21 @@ bool Player::Start() {
 	return true;
 }
 
-void Player::UpdateAnimation(b2Vec2 vel, bool isTouchingGround)
-{
-    if (vel.x != 0) {
-        currentAnimation = &runAnim;
-    }
-    else if (vel.y > 0) {
-        currentAnimation = &JumpAnim;
-    }
-    else if (!isTouchingGround) {
-        currentAnimation = &FallAnim;
-    }
-    else {
-        currentAnimation = &idleAnim;
-    }
-    currentAnimation->Update();
-}
-
-
 bool Player::Update(float dt)
 {
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
-    bool inAir = vel.y != 0;
+    if (isDashing) {
+        dashTime += dt;
+        if (dashTime >= maxDashTime) {
+            isDashing = false;
+            canDash = true;
+            dashTime = 0.0f;
+        }
+        else {
+            vel.x = lastDirection == SDL_FLIP_NONE ? dashSpeed : -dashSpeed;
+        }
+    }
 
     SDL_RendererFlip flip = lastDirection;
     if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
@@ -119,7 +109,7 @@ bool Player::Update(float dt)
         isMoving = false;
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && vel.y == 0) {
+    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && isTouchingGround) {
         jumpImpulse += dt * jumpIncrement;
 
         if (jumpImpulse > maxJumpImpulse) {
@@ -127,26 +117,41 @@ bool Player::Update(float dt)
         }
 
         vel.y = -jumpImpulse;
+        isTouchingGround = false;
     }
     else {
         jumpImpulse = initialJumpImpulse;
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && canDash && isMoving) {
-        vel.x *= dashMultiplier;
+    if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && canDash) {
+        isDashing = true;
         canDash = false;
+        dashTime = 0.0f;
     }
+
 
     pbody->body->SetLinearVelocity(vel);
 
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 16;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 16;
 
-    UpdateAnimation(vel, isTouchingGround);
+    if (!isTouchingGround) {
+        currentAnimation = &JumpAnim;
+    }
+    if (isMoving && isTouchingGround) {
+        currentAnimation = &runAnim;
+    }
+    if (!isMoving && isTouchingGround)
+    {
+        currentAnimation = &idleAnim;
+    }
+    currentAnimation->Update();
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
     SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flip);
+
+
 
     return true;
 }
@@ -170,7 +175,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::PLATFORM:
         LOG("Collision PLATFORM");
         isTouchingGround = true;
-        canDash = true;
         break;
     case ColliderType::UNKNOWN:
         LOG("Collision UNKNOWN");
