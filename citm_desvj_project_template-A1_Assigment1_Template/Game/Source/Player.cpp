@@ -9,6 +9,7 @@
 #include "Point.h"
 #include "Physics.h"
 #include "Map.h"
+#include "Animation.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -25,6 +26,38 @@ bool Player::Awake() {
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
+    pugi::xml_node animNode = parameters.first_child();
+    while (animNode) {
+        Animation* currentAnim = nullptr;
+        if (std::string(animNode.name()) == "idle") {
+            currentAnim = &idleAnim;
+        }
+        else if (std::string(animNode.name()) == "run") {
+            currentAnim = &runAnim;
+        }
+        else if (std::string(animNode.name()) == "jump") {
+            currentAnim = &JumpAnim;
+        }
+        else if (std::string(animNode.name()) == "fall") {
+            currentAnim = &FallAnim;
+        }
+
+        if (currentAnim) {
+            for (pugi::xml_node node = animNode.child("pushback"); node; node = node.next_sibling("pushback")) {
+                currentAnim->PushBack({ node.attribute("x").as_int(),
+                                        node.attribute("y").as_int(),
+                                        node.attribute("width").as_int(),
+                                        node.attribute("height").as_int() });
+            }
+            currentAnim->speed = animNode.attribute("animspeed").as_float();
+            currentAnim->loop = animNode.attribute("loop").as_bool();
+        }
+
+        animNode = animNode.next_sibling();
+    }
+
+    currentAnimation = &idleAnim;
+
 	return true;
 }
 
@@ -33,51 +66,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
-    for (pugi::xml_node node = parameters.child("idle").child("pushback");
-        node; node = node.next_sibling("pushback"))
-    {
-        idleAnim.PushBack({ node.attribute("x").as_int(),
-                           node.attribute("y").as_int(),
-                           node.attribute("width").as_int(),
-                           node.attribute("height").as_int() });
-    }
-    idleAnim.speed = parameters.child("idle").attribute("animspeed").as_float();
-    idleAnim.loop = parameters.child("idle").attribute("loop").as_bool();
-
-    for (pugi::xml_node node = parameters.child("run").child("pushback");
-        node; node = node.next_sibling("pushback"))
-    {
-        runAnim.PushBack({ node.attribute("x").as_int(),
-                           node.attribute("y").as_int(),
-                           node.attribute("width").as_int(),
-                           node.attribute("height").as_int() });
-    }
-    runAnim.speed = parameters.child("run").attribute("animspeed").as_float();
-    runAnim.loop = parameters.child("run").attribute("loop").as_bool();
-
-    for (pugi::xml_node node = parameters.child("jump").child("pushback");
-        node; node = node.next_sibling("pushback"))
-    {
-        JumpAnim.PushBack({ node.attribute("x").as_int(),
-                           node.attribute("y").as_int(),
-                           node.attribute("width").as_int(),
-                           node.attribute("height").as_int() });
-    }
-    JumpAnim.speed = parameters.child("jump").attribute("animspeed").as_float();
-    JumpAnim.loop = parameters.child("jump").attribute("loop").as_bool();
-
-    for (pugi::xml_node node = parameters.child("fall").child("pushback");
-        node; node = node.next_sibling("pushback"))
-    {
-        FallAnim.PushBack({ node.attribute("x").as_int(),
-                           node.attribute("y").as_int(),
-                           node.attribute("width").as_int(),
-                           node.attribute("height").as_int() });
-    }
-    FallAnim.speed = parameters.child("fall").attribute("animspeed").as_float();
-    FallAnim.loop = parameters.child("fall").attribute("loop").as_bool();
-
-    currentAnimation = &idleAnim;
+    
 
 	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
 	pbody->listener = this;
@@ -88,47 +77,59 @@ bool Player::Start() {
 	return true;
 }
 
+void Player::UpdateAnimation(b2Vec2 vel, bool isTouchingGround)
+{
+    if (vel.x != 0) {
+        currentAnimation = &runAnim;
+    }
+    else if (vel.y > 0) {
+        currentAnimation = &JumpAnim;
+    }
+    else if (!isTouchingGround) {
+        currentAnimation = &FallAnim;
+    }
+    else {
+        currentAnimation = &idleAnim;
+    }
+    currentAnimation->Update();
+}
+
+
 bool Player::Update(float dt)
 {
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
+    bool inAir = vel.y != 0;
+
+    SDL_RendererFlip flip = lastDirection;
     if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         vel.x = -speed * dt;
         isMoving = true;
-        currentAnimation = &runAnim;
+        flip = SDL_FLIP_HORIZONTAL;  
+        lastDirection = flip;
     }
     else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         vel.x = speed * dt;
         isMoving = true;
-        currentAnimation = &runAnim;
+        flip = SDL_FLIP_NONE;  
+        lastDirection = flip;
     }
     else {
         vel.x = 0;
         isMoving = false;
-        currentAnimation = &idleAnim;
     }
 
     if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && vel.y == 0) {
-        // Incrementa la fuerza del salto basándose en cuánto tiempo se ha mantenido presionada la tecla
         jumpImpulse += dt * jumpIncrement;
-        currentAnimation = &JumpAnim;
 
-        // Limita la fuerza del salto a un valor máximo
         if (jumpImpulse > maxJumpImpulse) {
             jumpImpulse = maxJumpImpulse;
         }
 
-        // Aplica la fuerza del salto
         vel.y = -jumpImpulse;
     }
     else {
-        // Si se suelta la tecla de salto, resetea la fuerza del salto
         jumpImpulse = initialJumpImpulse;
-    }
-
-    if (vel.y < 0)
-    {
-        currentAnimation = &FallAnim;
     }
 
     if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && canDash && isMoving) {
@@ -138,23 +139,18 @@ bool Player::Update(float dt)
 
     pbody->body->SetLinearVelocity(vel);
 
-    //vel.y -= -jumpImpulse;
-
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 16;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 16;
 
+    UpdateAnimation(vel, isTouchingGround);
+
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
-
-    SDL_Rect destRect = { position.x, position.y, currentFrame.w, currentFrame.h };
-    SDL_RenderCopy(app->render->renderer, texture, &currentFrame, &destRect);
-    
-    //app->render->DrawTexture(texture, position.x, position.y);
-
-    if (vel.y > 0)
-        isTouchingGround = false;
+    SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
+    SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flip);
 
     return true;
 }
+
 
 
 bool Player::CleanUp()

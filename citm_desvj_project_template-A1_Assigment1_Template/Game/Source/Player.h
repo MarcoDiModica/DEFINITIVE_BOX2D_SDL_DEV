@@ -28,11 +28,15 @@ public:
 
 	void UpdateCamera();
 
+	void UpdateAnimation(b2Vec2 vel, bool isTouchingGround);
+
 public:
 	float speed = 0.3f;
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
 	Animation* currentAnimation = nullptr;
+
+	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;
 
 	Animation idleAnim;
 	Animation runAnim;

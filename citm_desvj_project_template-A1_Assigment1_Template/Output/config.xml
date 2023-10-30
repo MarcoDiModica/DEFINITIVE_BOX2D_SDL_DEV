@@ -24,7 +24,7 @@
   <scene>
     <map path="Assets/Maps/" name="MapTemplate.tmx"/>
 	<player x="400" y="352" texturepath="Assets/Textures/platformer.png">
-		  <idle animspeed ="0.5f" loop="true">
+		  <idle animspeed ="0.3f" loop="true">
 			  <pushback x="0" y="0" width="48" height="48"/>
 			  <pushback x="48" y="0" width="48" height="48"/>
 			  <pushback x="96" y="0" width="48" height="48"/>
@@ -36,7 +36,7 @@
 			  <pushback x="96" y="48" width="48" height="48"/>
 			  <pushback x="144" y="48" width="48" height="48"/>
 		  </idle>
-		  <run animspeed ="0.5f" loop="true">
+		  <run animspeed ="0.3f" loop="true">
 			  <pushback x="0" y="192" width="48" height="48"/>
 			  <pushback x="48" y="192" width="48" height="48"/>
 			  <pushback x="96" y="192" width="48" height="48"/>
@@ -45,12 +45,12 @@
 			  <pushback x="0" y="240" width="48" height="48"/>
 			  <pushback x="48" y="240" width="48" height="48"/>
 		  </run>
-		  <jump animspeed =" 0.5f" loop="false">
+		  <jump animspeed ="0.3f" loop="false">
 			  <pushback x="0" y="96" width="48" height="48"/>
 			  <pushback x="48" y="96" width="48" height="48"/>
 			  <pushback x="96" y="96" width="48" height="48"/>
 		  </jump>
-		  <fall animspeed =" 0.5f" loop="false">
+		  <fall animspeed ="0.3f" loop="false">
 			  <pushback x="0" y="144" width="48" height="48"/>
 			  <pushback x="48" y="144" width="48" height="48"/>
 			  <pushback x="96" y="144" width="48" height="48"/>
