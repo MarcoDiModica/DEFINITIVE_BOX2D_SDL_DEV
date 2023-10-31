@@ -112,29 +112,35 @@ bool Player::Update(float dt)
     lastDirection = flipHorizontal;
 
     if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isTouchingGround && vel.y == 0) {
-        jumpImpulse += dt * jumpIncrement;
-
-        if (jumpImpulse > maxJumpImpulse) {
-            jumpImpulse = maxJumpImpulse;
+        if (gravityScale == 1.0f)
+        {
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+            pbody->body->ApplyForce(b2Vec2(0, -950.0f), pbody->body->GetWorldCenter(), true);
+            isTouchingGround = false;
         }
-
-        vel.y = -jumpImpulse;
-        isTouchingGround = false;
+        else if (gravityScale == -1.0f)
+        {
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+            pbody->body->ApplyForce(b2Vec2(0, 950.0f), pbody->body->GetWorldCenter(), true);
+            isTouchingGround = false;
+        }
+        
     }
-    else {
-        jumpImpulse = initialJumpImpulse;
-    }
 
-    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && gravityScale != 1.0f) {
+    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && gravityScale == 1.0f) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, GRAVITY_Y));
+        pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+        pbody->body->ApplyForce(b2Vec2(0, -1.0f), pbody->body->GetWorldCenter(), true);
         flipVertical = SDL_FLIP_VERTICAL;
-        gravityScale = 1.0f;
+        gravityScale = -1.0f;
         isTouchingGround = false;
     }
-    else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && gravityScale != -1.0f) {
+    else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && gravityScale == -1.0f) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+        pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+        pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
         flipVertical = SDL_FLIP_NONE;
-        gravityScale = -1.0f;
+        gravityScale = 1.0f;
         isTouchingGround = false;
     }
 
