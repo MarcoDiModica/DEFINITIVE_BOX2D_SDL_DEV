@@ -144,6 +144,20 @@ bool Player::Update(float dt)
         isTouchingGround = false;
     }
 
+    if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && canDash)
+    {
+        if (lastDirection == SDL_FLIP_NONE)
+        {
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
+            pbody->body->ApplyForce(b2Vec2(5000.0f, 0.0f), pbody->body->GetWorldCenter(), true);
+        }
+        else if (lastDirection == SDL_FLIP_HORIZONTAL)
+        {
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
+            pbody->body->ApplyForce(b2Vec2(-5000.0f, 0.0f), pbody->body->GetWorldCenter(), true);
+        }
+    }
+
     pbody->body->SetLinearVelocity(vel);
 
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 16;
