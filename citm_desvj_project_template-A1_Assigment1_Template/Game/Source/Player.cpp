@@ -22,7 +22,9 @@ Player::~Player() {
 
 bool Player::Awake() {
 
-	position.x = parameters.attribute("x").as_int();
+    initX = parameters.attribute("x").as_int();
+    initY = parameters.attribute("y").as_int();
+    position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
@@ -200,7 +202,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ITEM:
         LOG("Collision ITEM");
         app->audio->PlayFx(pickCoinFxId);
-        
         break;
     case ColliderType::PLATFORM:
         LOG("Collision PLATFORM");
@@ -209,7 +210,16 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::UNKNOWN:
         LOG("Collision UNKNOWN");
         break;
+    case ColliderType::DEATH:
+        LOG("Collision DEATH");
+        Death();
+        break;
     }
+}
+
+void Player::Death()
+{
+    
 }
 
 void Player::UpdateCamera()

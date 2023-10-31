@@ -28,6 +28,8 @@ public:
 
 	void UpdateCamera();
 
+	void Death();
+
 public:
 	float speed = 0.3f;
 	const char* texturePath;
@@ -61,6 +63,8 @@ public:
 	int dashDirection = 0;
 
 	float gravityScale = 1.0f;
+	int initX;
+	int initY;
 };
 
 #endif // __PLAYER_H__
