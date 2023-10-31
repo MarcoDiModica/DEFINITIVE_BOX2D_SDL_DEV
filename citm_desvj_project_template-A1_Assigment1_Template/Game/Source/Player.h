@@ -28,8 +28,6 @@ public:
 
 	void UpdateCamera();
 
-	
-
 public:
 	float speed = 0.3f;
 	const char* texturePath;

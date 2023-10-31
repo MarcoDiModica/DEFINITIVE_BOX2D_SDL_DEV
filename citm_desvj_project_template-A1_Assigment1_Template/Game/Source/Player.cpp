@@ -181,6 +181,8 @@ bool Player::Update(float dt)
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
     SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flips);
 
+    UpdateCamera();
+
     return true;
 }
 
@@ -198,6 +200,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ITEM:
         LOG("Collision ITEM");
         app->audio->PlayFx(pickCoinFxId);
+        
         break;
     case ColliderType::PLATFORM:
         LOG("Collision PLATFORM");
@@ -211,11 +214,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void Player::UpdateCamera()
 {
-    //app->render->camera.x = position.x + app->render->camera.w / 2;
-    //app->render->camera.y = position.y - app->render->camera.h / 2;
+    /*app->render->camera.x = position.x + app->render->camera.w / 2;
+    app->render->camera.y = position.y - app->render->camera.h / 2;*/
 
-    /*if (app->render->camera.x < 0) app->render->camera.x = 0;
-    if (app->render->camera.y < 0) app->render->camera.y = 0;
-    if (app->render->camera.x > app->map->mapData.width - app->render->camera.w) app->render->camera.x = app->map->mapData.width - app->render->camera.w;
-    if (app->render->camera.y > app->map->mapData.height - app->render->camera.h) app->render->camera.y = app->map->mapData.height - app->render->camera.h;*/
+    //if (app->render->camera.x < 0) app->render->camera.x = 0;
+    //if (app->render->camera.y < 0) app->render->camera.y = 0;
+    //if (app->render->camera.x > app->map->mapData.width - app->render->camera.w) app->render->camera.x = app->map->mapData.width - app->render->camera.w;
+    //if (app->render->camera.y > app->map->mapData.height - app->render->camera.h) app->render->camera.y = app->map->mapData.height - app->render->camera.h;
 }

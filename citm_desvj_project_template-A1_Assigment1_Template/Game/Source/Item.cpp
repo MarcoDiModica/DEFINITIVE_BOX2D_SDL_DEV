@@ -29,7 +29,7 @@ bool Item::Start() {
 
 	//initilize textures
 	texture = app->tex->Load(texturePath);
-	pbody = app->physics->CreateCircle(position.x + 16, position.y + 16, 16, bodyType::DYNAMIC);
+	pbody = app->physics->CreateCircleNoColision(position.x + 16, position.y + 22, 16, bodyType::STATIC);
 	pbody->ctype = ColliderType::ITEM;
 
 	return true;
@@ -49,4 +49,18 @@ bool Item::Update(float dt)
 bool Item::CleanUp()
 {
 	return true;
+}
+
+void Item::OnCollision(PhysBody* physA, PhysBody* physB) {
+
+	switch (physB->ctype)
+	{
+	case ColliderType::PLAYER:
+		LOG("Collision ITEM");
+		pbody->body->GetWorld()->DestroyBody(pbody->body);
+		pbody->body = nullptr;
+		app->tex->UnLoad(texture);
+		texture = nullptr;
+		break;
+	}
 }
