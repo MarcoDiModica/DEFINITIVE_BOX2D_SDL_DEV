@@ -377,8 +377,18 @@ bool Map::LoadAllObjectGroups(pugi::xml_node mapNode) {
             int x = objectNode.attribute("x").as_int() + width / 2;
             int y = objectNode.attribute("y").as_int() + height / 2;
 
-            PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
-            c1->ctype = ColliderType::PLATFORM;
+
+            if (strcmp(objectNode.child("properties").child("property").attribute("value").as_string(), "Platform") == 0)
+            {
+                PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+                c1->ctype = ColliderType::PLATFORM;
+            }
+            else if (strcmp(objectNode.child("properties").child("property").attribute("value").as_string(), "Death") == 0)
+            {
+                PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+                c1->ctype = ColliderType::DEATH;
+            }
+           
         }
     }
 
