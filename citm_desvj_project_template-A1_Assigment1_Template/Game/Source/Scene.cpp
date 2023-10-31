@@ -6,6 +6,7 @@
 #include "Window.h"
 #include "Scene.h"
 #include "Map.h"
+#include "Player.h"
 
 #include "Defs.h"
 #include "Log.h"
