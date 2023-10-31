@@ -120,16 +120,14 @@ PhysBody* Physics::CreatePlayer(int x, int y, int width, int height, bodyType ty
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f; 
-	fixture.friction = 0.3f; 
+	fixture.friction = 0.0f; 
 	fixture.restitution = 0.0f; 
 
 	b->CreateFixture(&fixture);
 
-	// Add the foot sensor fixture
-	// Add the foot sensor fixture
-	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f; // Reduce el ancho del sensor de pie
+	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
 	float footSensorHeight = PIXEL_TO_METERS(height);
-	box.SetAsBox(footSensorWidth, footSensorHeight, b2Vec2(0, 0), 0); 
+	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);
 	fixture.isSensor = true;
 	b->CreateFixture(&fixture);
 

@@ -115,13 +115,13 @@ bool Player::Update(float dt)
         if (gravityScale == 1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, -950.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, -450.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         else if (gravityScale == -1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, 950.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, 450.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         
