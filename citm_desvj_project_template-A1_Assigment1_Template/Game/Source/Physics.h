@@ -77,6 +77,10 @@ public:
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
 
+public:
+
+	float gravity_y = 30.0f;
+
 private:
 
 	// Debug mode
@@ -84,4 +88,6 @@ private:
 
 	// Box2D World
 	b2World* world;
+
+	
 };

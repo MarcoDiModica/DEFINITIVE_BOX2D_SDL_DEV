@@ -36,7 +36,7 @@ bool Physics::Start()
 	LOG("Creating Physics 2D environment");
 
 	// Create a new World
-	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+	world = new b2World(b2Vec2(GRAVITY_X, gravity_y));
 
 	// Set this module as a listener for contacts
 	world->SetContactListener(this);
@@ -119,17 +119,20 @@ PhysBody* Physics::CreatePlayer(int x, int y, int width, int height, bodyType ty
 	
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 1.0f; // Adjust the density here
-	fixture.friction = 0.3f; // Adjust the friction here
-	fixture.restitution = 0.0f; // Adjust the restitution here
+	fixture.density = 1.0f; 
+	fixture.friction = 0.3f; 
+	fixture.restitution = 0.0f; 
 
 	b->CreateFixture(&fixture);
 
 	// Add the foot sensor fixture
-	float footSensorHeight = PIXEL_TO_METERS(height) * 0.1f; // The foot sensor is 10% of the player's height
-	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, footSensorHeight, b2Vec2(0, PIXEL_TO_METERS(height) / 2), 0);
+	// Add the foot sensor fixture
+	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f; // Reduce el ancho del sensor de pie
+	float footSensorHeight = PIXEL_TO_METERS(height);
+	box.SetAsBox(footSensorWidth, footSensorHeight, b2Vec2(0, 0), 0); 
 	fixture.isSensor = true;
 	b->CreateFixture(&fixture);
+
 
 	b->ResetMassData();
 

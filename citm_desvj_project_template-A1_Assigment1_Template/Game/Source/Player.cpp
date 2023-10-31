@@ -91,46 +91,52 @@ bool Player::Update(float dt)
         }
     }
 
-
     SDL_RendererFlip flip = lastDirection;
     if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
         vel.x = -speed * dt;
         dashDirection = -1;
         isMoving = true;
-        flip = SDL_FLIP_HORIZONTAL;  
-        lastDirection = flip;
+        flipHorizontal = SDL_FLIP_HORIZONTAL;  
     }
     else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
         vel.x = speed * dt;
         isMoving = true;
         dashDirection = 1;
-        flip = SDL_FLIP_NONE;  
-        lastDirection = flip;
+        flipHorizontal = SDL_FLIP_NONE;
     }
     else {
         vel.x = 0;
         isMoving = false;
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && isTouchingGround) {
-        jumpImpulse += dt * jumpIncrement;
+    lastDirection = flipHorizontal;
+
+    if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isTouchingGround && vel.y == 0) {
+        jumpImpulse += dt * jumpIncrement * gravityScale;
 
         if (jumpImpulse > maxJumpImpulse) {
             jumpImpulse = maxJumpImpulse;
         }
 
-        vel.y = -jumpImpulse;
+        vel.y = -jumpImpulse * gravityScale;
         isTouchingGround = false;
     }
     else {
         jumpImpulse = initialJumpImpulse;
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && canDash) {
-        isDashing = true;
-        dashTime = 0.0f;
+    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && gravityScale != 1.0f) {
+        pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, GRAVITY_Y));
+        flipVertical = SDL_FLIP_VERTICAL;
+        gravityScale = 1.0f;
+        isTouchingGround = false;
     }
-
+    else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && gravityScale != -1.0f) {
+        pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+        flipVertical = SDL_FLIP_NONE; 
+        gravityScale = -1.0f;
+        isTouchingGround = false;
+    }
 
     pbody->body->SetLinearVelocity(vel);
 
@@ -149,11 +155,13 @@ bool Player::Update(float dt)
     }
     currentAnimation->Update();
 
+    SDL_RendererFlip flips = (SDL_RendererFlip)(flipHorizontal | flipVertical);
+
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
-    SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flip);
+    SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flips);
 
-
+    
 
     return true;
 }
@@ -162,7 +170,6 @@ bool Player::Update(float dt)
 
 bool Player::CleanUp()
 {
-
     return true;
 }
 
