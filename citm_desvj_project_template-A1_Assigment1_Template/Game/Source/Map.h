@@ -130,6 +130,7 @@ private:
 	bool LoadTileSet(pugi::xml_node mapFile);
 	bool LoadLayer(pugi::xml_node& node, MapLayer* layer);
 	bool LoadAllLayers(pugi::xml_node mapNode);
+	bool LoadAllObjectGroups(pugi::xml_node mapNode);
 	TileSet* GetTilesetFromTileId(int gid) const;
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 
@@ -142,6 +143,7 @@ public:
 private:
 
 	bool mapLoaded;
+	bool* debug;
 };
 
 #endif // __MAP_H__

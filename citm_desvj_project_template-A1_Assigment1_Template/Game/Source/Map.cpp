@@ -11,6 +11,9 @@
 #include <math.h>
 #include "SDL_image/include/SDL_image.h"
 
+
+
+
 Map::Map() : Module(), mapLoaded(false)
 {
     name.Create("map");
@@ -36,6 +39,26 @@ bool Map::Start() {
     mapPath += name;
     bool ret = Load(mapPath);
 
+    debug = false;
+
+    ListItem<MapLayer*>* mapLayerItem;
+    mapLayerItem = mapData.maplayers.start;
+    
+    char* col = "Colissions";
+
+    while (mapLayerItem != NULL) {
+
+        if (mapLayerItem->data->name.GetString() != NULL &&  strcmp(mapLayerItem->data->name.GetString(), "Colissions") == 0)
+        {
+            if (mapLayerItem->data->properties.GetProperty("Draw") != NULL) {
+
+                debug = &mapLayerItem->data->properties.GetProperty("Draw")->value;
+            }
+        }
+        mapLayerItem = mapLayerItem->next;
+
+    }
+
     return ret;
 }
 
@@ -43,6 +66,12 @@ bool Map::Update(float dt)
 {
     if(mapLoaded == false)
         return false;
+
+
+
+    if (app->input->GetKey(SDL_SCANCODE_0) == KEY_DOWN) {
+        *debug = !*debug;
+    }
 
     ListItem<MapLayer*>* mapLayerItem;
     mapLayerItem = mapData.maplayers.start;
@@ -182,9 +211,15 @@ bool Map::Load(SString mapFileName)
     {
         ret = LoadAllLayers(mapFileXML.child("map"));
     }
+
+
+    if (ret == true)
+    {
+        ret = LoadAllObjectGroups(mapFileXML.child("map"));
+    }
     
     // NOTE: Later you have to create a function here to load and create the colliders from the map
-
+    /*
     PhysBody* c1 = app->physics->CreateRectangle(224 + 128, 543 + 32, 256, 64, STATIC);
     c1->ctype = ColliderType::PLATFORM;
 
@@ -193,6 +228,8 @@ bool Map::Load(SString mapFileName)
 
     PhysBody* c3 = app->physics->CreateRectangle(256, 704 + 32, 576, 64, STATIC);
     c3->ctype = ColliderType::PLATFORM;
+    */
+
     
     if(ret == true)
     {
@@ -325,6 +362,29 @@ bool Map::LoadAllLayers(pugi::xml_node mapNode) {
 
     return ret;
 }
+
+bool Map::LoadAllObjectGroups(pugi::xml_node mapNode) {
+    bool ret = true;
+
+    for (pugi::xml_node objectGroupNode = mapNode.child("objectgroup"); objectGroupNode && ret; objectGroupNode = objectGroupNode.next_sibling("objectgroup"))
+    {
+        for (pugi::xml_node objectNode = objectGroupNode.child("object"); objectNode && ret; objectNode = objectNode.next_sibling("object"))
+        {
+            int width = objectNode.attribute("width").as_int();
+            int height = objectNode.attribute("height").as_int();
+
+
+            int x = objectNode.attribute("x").as_int() + width / 2;
+            int y = objectNode.attribute("y").as_int() + height / 2;
+
+            PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+            c1->ctype = ColliderType::PLATFORM;
+        }
+    }
+
+    return ret;
+}
+
 
 bool Map::LoadProperties(pugi::xml_node& node, Properties& properties)
 {
