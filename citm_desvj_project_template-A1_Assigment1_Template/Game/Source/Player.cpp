@@ -112,13 +112,13 @@ bool Player::Update(float dt)
     lastDirection = flipHorizontal;
 
     if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isTouchingGround && vel.y == 0) {
-        jumpImpulse += dt * jumpIncrement * gravityScale;
+        jumpImpulse += dt * jumpIncrement;
 
         if (jumpImpulse > maxJumpImpulse) {
             jumpImpulse = maxJumpImpulse;
         }
 
-        vel.y = -jumpImpulse * gravityScale;
+        vel.y = -jumpImpulse;
         isTouchingGround = false;
     }
     else {
@@ -133,7 +133,7 @@ bool Player::Update(float dt)
     }
     else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && gravityScale != -1.0f) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-        flipVertical = SDL_FLIP_NONE; 
+        flipVertical = SDL_FLIP_NONE;
         gravityScale = -1.0f;
         isTouchingGround = false;
     }
@@ -160,8 +160,6 @@ bool Player::Update(float dt)
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
     SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flips);
-
-    
 
     return true;
 }
