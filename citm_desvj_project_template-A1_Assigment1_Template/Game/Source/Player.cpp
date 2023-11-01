@@ -117,13 +117,13 @@ bool Player::Update(float dt)
         if (gravityScale == 1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, -450.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, -625.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         else if (gravityScale == -1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, 450.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, 625.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         
@@ -226,7 +226,6 @@ void Player::UpdateCamera()
 {
     /*app->render->camera.x = position.x + app->render->camera.w / 2;
     app->render->camera.y = position.y - app->render->camera.h / 2;*/
-
     //if (app->render->camera.x < 0) app->render->camera.x = 0;
     //if (app->render->camera.y < 0) app->render->camera.y = 0;
     //if (app->render->camera.x > app->map->mapData.width - app->render->camera.w) app->render->camera.x = app->map->mapData.width - app->render->camera.w;

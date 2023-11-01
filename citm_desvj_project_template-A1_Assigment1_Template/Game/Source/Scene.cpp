@@ -85,7 +85,7 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	/*float camSpeed = 1; 
+	float camSpeed = 1; 
 
 	if(app->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
 		app->render->camera.y += (int)ceil(camSpeed * dt);
@@ -97,7 +97,7 @@ bool Scene::Update(float dt)
 		app->render->camera.x += (int)ceil(camSpeed * dt);
 
 	if(app->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
-		app->render->camera.x -= (int)ceil(camSpeed * dt);*/
+		app->render->camera.x -= (int)ceil(camSpeed * dt);
 
 	// Renders the image in the center of the screen 
 	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
