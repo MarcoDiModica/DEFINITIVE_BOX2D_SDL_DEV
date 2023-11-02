@@ -113,23 +113,24 @@ bool Player::Update(float dt)
 
     lastDirection = flipHorizontal;
 
+
     if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isTouchingGround && vel.y == 0) {
         if (gravityScale == 1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, -625.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, -525.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         else if (gravityScale == -1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, 625.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, 525.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_W) == KEY_DOWN && gravityScale == 1.0f) {
+    if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && gravityScale == 1.0f) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
         pbody->body->ApplyForce(b2Vec2(0, -1.0f), pbody->body->GetWorldCenter(), true);
@@ -137,7 +138,7 @@ bool Player::Update(float dt)
         gravityScale = -1.0f;
         isTouchingGround = false;
     }
-    else if (app->input->GetKey(SDL_SCANCODE_S) == KEY_DOWN && gravityScale == -1.0f) {
+    else if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && gravityScale == -1.0f) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
         pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
@@ -146,7 +147,7 @@ bool Player::Update(float dt)
         isTouchingGround = false;
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && canDash)
+    /*if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && canDash)
     {
         if (lastDirection == SDL_FLIP_NONE)
         {
@@ -158,6 +159,11 @@ bool Player::Update(float dt)
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
             pbody->body->ApplyForce(b2Vec2(-5000.0f, 0.0f), pbody->body->GetWorldCenter(), true);
         }
+    }*/
+
+    if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && isTouchingGround)
+    {
+        vel.x = 0; vel.y = -0.5;
     }
 
     pbody->body->SetLinearVelocity(vel);
