@@ -40,8 +40,8 @@ bool Player::Awake() {
         else if (std::string(animNode.name()) == "jump") {
             currentAnim = &JumpAnim;
         }
-        else if (std::string(animNode.name()) == "fall") {
-            currentAnim = &FallAnim;
+        else if (std::string(animNode.name()) == "death") {
+            currentAnim = &DeathAnim;
         }
 
         if (currentAnim) {
@@ -68,7 +68,7 @@ bool Player::Start() {
 	//initilize textures
 	texture = app->tex->Load(texturePath);
 
-	pbody = app->physics->CreatePlayer(position.x, position.y, 28, 28, bodyType::DYNAMIC);
+	pbody = app->physics->CreatePlayer(position.x, position.y, 34, 58, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
 
@@ -79,28 +79,29 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
-
-
     if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
         debug = !debug;
 
     if (death)
     {
-        b2Vec2 stop(0, 0);
-        pbody->body->SetLinearVelocity(stop);
-        b2Vec2 initpos(PIXEL_TO_METERS(initX), PIXEL_TO_METERS(initY));
-        pbody->body->SetTransform(initpos, 0);
-        gravityScale = 1.0f;
-        pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
-        pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-        pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
-        flipVertical = SDL_FLIP_NONE;
-        gravityScale = 1.0f;
-        death = false;
+        
+        currentAnimation = &DeathAnim;
+
+        if (currentAnimation->HasFinished())
+        {
+            b2Vec2 stop(0, 0);
+            pbody->body->SetLinearVelocity(stop);
+            b2Vec2 initpos(PIXEL_TO_METERS(initX), PIXEL_TO_METERS(initY));
+            pbody->body->SetTransform(initpos, 0);
+            gravityScale = 1.0f;
+            pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+            pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
+            flipVertical = SDL_FLIP_NONE;
+            gravityScale = 1.0f;
+            Respawn();
+        }
     }
-    
-
-
 
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
@@ -116,23 +117,59 @@ bool Player::Update(float dt)
         }
     }
 
+    if (vel.y != 0)
+    {
+        isInAir = true;
+    }
+    else
+    {
+        isInAir = false;
+    }
+
     SDL_RendererFlip flip = lastDirection;
-    if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
-        vel.x = -speed * dt;
-        dashDirection = -1;
-        isMoving = true;
-        flipHorizontal = SDL_FLIP_HORIZONTAL;  
+    if (isInAir)
+    {
+        //fisicas en el aire
+        
+        if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            vel.x = -speed * dt;
+            dashDirection = -1;
+            isMoving = true;
+            flipHorizontal = SDL_FLIP_HORIZONTAL;
+        }
+        else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            vel.x = speed * dt;
+            isMoving = true;
+            dashDirection = 1;
+            flipHorizontal = SDL_FLIP_NONE;
+        }
+        else {
+            vel.x = 0;
+            isMoving = false;
+        }
     }
-    else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
-        vel.x = speed * dt;
-        isMoving = true;
-        dashDirection = 1;
-        flipHorizontal = SDL_FLIP_NONE;
+    else
+    {
+        //fisicas en el suelo
+        
+        if (app->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT) {
+            vel.x = -speed * dt;
+            dashDirection = -1;
+            isMoving = true;
+            flipHorizontal = SDL_FLIP_HORIZONTAL;
+        }
+        else if (app->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT) {
+            vel.x = speed * dt;
+            isMoving = true;
+            dashDirection = 1;
+            flipHorizontal = SDL_FLIP_NONE;
+        }
+        else {
+            vel.x = 0;
+            isMoving = false;
+        }
     }
-    else {
-        vel.x = 0;
-        isMoving = false;
-    }
+
 
     lastDirection = flipHorizontal;
 
@@ -141,19 +178,19 @@ bool Player::Update(float dt)
         if (gravityScale == 1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, -625.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, -1625.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         else if (gravityScale == -1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, 625.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, 1625.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && gravityScale == 1.0f && (isTouchingGround || debug)) {
+    if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && gravityScale == 1.0f && (vel.y == 0 || debug)) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
         pbody->body->ApplyForce(b2Vec2(0, -1.0f), pbody->body->GetWorldCenter(), true);
@@ -161,7 +198,7 @@ bool Player::Update(float dt)
         gravityScale = -1.0f;
         isTouchingGround = false;
     }
-    else if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && gravityScale == -1.0f && (isTouchingGround || debug)) {
+    else if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && gravityScale == -1.0f && (vel.y == 0 || debug)) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
         pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
@@ -191,24 +228,21 @@ bool Player::Update(float dt)
 
     pbody->body->SetLinearVelocity(vel);
 
-    position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 16;
-    position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 16;
+    position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;
+    position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 42;
 
-    if (!isTouchingGround) {
+    if (vel.y != 0 && !death) {
         currentAnimation = &JumpAnim;
     }
-    if (isMoving && isTouchingGround) {
+    if (isMoving && vel.y == 0 && !death) {
         currentAnimation = &runAnim;
     }
-    if (!isMoving && isTouchingGround)
+    if (!isMoving && isTouchingGround && !death)
     {
         currentAnimation = &idleAnim;
     }
     currentAnimation->Update();
-
-
     
-
     SDL_RendererFlip flips = (SDL_RendererFlip)(flipHorizontal | flipVertical);
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
@@ -245,6 +279,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DEATH:
         LOG("Collision DEATH");
+        DeathAnim.Reset();
         Death();
         break;
     }
@@ -254,6 +289,13 @@ void Player::Death()
 {
     if(!debug)
         death = true;
+}
+
+void Player::Respawn()
+{
+    death = false;
+    DeathAnim.Reset();
+    currentAnimation = &idleAnim; 
 }
 
 void Player::UpdateCamera()

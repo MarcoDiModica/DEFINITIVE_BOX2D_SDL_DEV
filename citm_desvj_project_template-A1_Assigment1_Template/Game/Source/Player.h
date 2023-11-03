@@ -30,8 +30,10 @@ public:
 
 	void Death();
 
+	void Respawn();
+
 public:
-	float speed = 0.3f;
+	float speed = 0.4f;
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
 	Animation* currentAnimation = nullptr;
@@ -43,7 +45,7 @@ public:
 	Animation idleAnim;
 	Animation runAnim;
 	Animation JumpAnim;
-	Animation FallAnim;
+	Animation DeathAnim;
 
 	PhysBody* pbody;
 	int pickCoinFxId;
@@ -57,7 +59,7 @@ public:
 	float initialJumpImpulse = 2.0f;
 	float dashMultiplier = 2.0f;
 	bool isMoving = false;
-
+	bool isInAir = false;
 	bool isDashing = false;
 	float dashTime = 0.0f;
 	float maxDashTime = 4.0f;
