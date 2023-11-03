@@ -66,6 +66,7 @@
     <item x="416" y="512" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="200" y="672" texturepath="Assets/Textures/goldCoin.png"/>
     <item x="500" y="672" texturepath="Assets/Textures/goldCoin.png"/>
+	<Music x="256" y="515" musicpath="Assets/Audio/Music/snow.wav"/>
   </scene>
   
 </config>

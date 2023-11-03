@@ -63,17 +63,12 @@ bool Player::Awake() {
 	return true;
 }
 
-bool Player::Start() {
-
-	//initilize textures
+bool Player::Start() 
+{
 	texture = app->tex->Load(texturePath);
-
 	pbody = app->physics->CreatePlayer(position.x, position.y, 34, 58, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
-
-	pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/retro-video-game-coin-pickup-38299.ogg");
-
 	return true;
 }
 
@@ -259,6 +254,18 @@ bool Player::Update(float dt)
 
 bool Player::CleanUp()
 {
+    if (texture != nullptr)
+    {
+        app->tex->UnLoad(texture);
+        texture = nullptr;
+    }
+
+    if (pbody != nullptr)
+    {
+        delete pbody;
+        pbody = nullptr;
+    }
+    
     return true;
 }
 

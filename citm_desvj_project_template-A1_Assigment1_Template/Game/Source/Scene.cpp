@@ -121,5 +121,8 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
+	player->CleanUp();
+
+
 	return true;
 }
