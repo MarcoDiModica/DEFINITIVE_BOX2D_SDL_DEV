@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="256" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="28">
+<map version="1.10" tiledversion="1.10.1" orientation="orthogonal" renderorder="right-down" width="256" height="48" tilewidth="32" tileheight="32" infinite="0" nextlayerid="8" nextobjectid="28">
  <tileset firstgid="1" name="A ver" tilewidth="32" tileheight="32" tilecount="1440" columns="30">
   <image source="tile_celeste_main (1).png" width="960" height="1536"/>
  </tileset>
- <tileset firstgid="1441" name="MapMetadata" tilewidth="32" tileheight="32" margin="1" tilecount="2" columns="2">
+ <tileset firstgid="1441" name="MapMetadata" tilewidth="32" tileheight="32" spacing="1" margin="1" tilecount="2" columns="2">
   <image source="MapMetadata.png" width="67" height="34"/>
  </tileset>
  <imagelayer id="4" name="Sky Background (temp)(for display purposes only)">

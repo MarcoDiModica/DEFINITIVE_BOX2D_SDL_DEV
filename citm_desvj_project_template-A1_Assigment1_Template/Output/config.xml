@@ -23,7 +23,7 @@
 
   <scene>
     <map path="Assets/Maps/" name="Attempt2.tmx"/>
-	<player x="400" y="352" texturepath="Assets/Textures/platformer.png">
+	<player x="100" y="673" texturepath="Assets/Textures/platformer.png">
 		  <idle animspeed ="0.3f" loop="true">
 			  <pushback x="0" y="0" width="48" height="48"/>
 			  <pushback x="48" y="0" width="48" height="48"/>

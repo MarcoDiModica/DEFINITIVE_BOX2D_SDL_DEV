@@ -79,6 +79,29 @@ bool Player::Start() {
 
 bool Player::Update(float dt)
 {
+
+
+    if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+        debug = !debug;
+
+    if (death)
+    {
+        b2Vec2 stop(0, 0);
+        pbody->body->SetLinearVelocity(stop);
+        b2Vec2 initpos(PIXEL_TO_METERS(initX), PIXEL_TO_METERS(initY));
+        pbody->body->SetTransform(initpos, 0);
+        gravityScale = 1.0f;
+        pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+        pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+        pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
+        flipVertical = SDL_FLIP_NONE;
+        gravityScale = 1.0f;
+        death = false;
+    }
+    
+
+
+
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
     if (isDashing) {
@@ -118,19 +141,19 @@ bool Player::Update(float dt)
         if (gravityScale == 1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, -525.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, -625.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         else if (gravityScale == -1.0f)
         {
             pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
-            pbody->body->ApplyForce(b2Vec2(0, 525.0f), pbody->body->GetWorldCenter(), true);
+            pbody->body->ApplyForce(b2Vec2(0, 625.0f), pbody->body->GetWorldCenter(), true);
             isTouchingGround = false;
         }
         
     }
 
-    if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && gravityScale == 1.0f) {
+    if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && gravityScale == 1.0f && (isTouchingGround || debug)) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
         pbody->body->ApplyForce(b2Vec2(0, -1.0f), pbody->body->GetWorldCenter(), true);
@@ -138,7 +161,7 @@ bool Player::Update(float dt)
         gravityScale = -1.0f;
         isTouchingGround = false;
     }
-    else if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && gravityScale == -1.0f) {
+    else if (app->input->GetKey(SDL_SCANCODE_DOWN) == KEY_DOWN && gravityScale == -1.0f && (isTouchingGround || debug)) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
         pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
@@ -183,11 +206,15 @@ bool Player::Update(float dt)
     }
     currentAnimation->Update();
 
+
+    
+
     SDL_RendererFlip flips = (SDL_RendererFlip)(flipHorizontal | flipVertical);
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
-    SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flips);
+    //SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flips);
+    app->render->DrawTexture(texture, destRect.x, destRect.y, &currentFrame, flips);
 
     UpdateCamera();
 
@@ -225,15 +252,17 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void Player::Death()
 {
-    
+    if(!debug)
+        death = true;
 }
 
 void Player::UpdateCamera()
 {
-    /*app->render->camera.x = position.x + app->render->camera.w / 2;
-    app->render->camera.y = position.y - app->render->camera.h / 2;*/
-    //if (app->render->camera.x < 0) app->render->camera.x = 0;
-    //if (app->render->camera.y < 0) app->render->camera.y = 0;
-    //if (app->render->camera.x > app->map->mapData.width - app->render->camera.w) app->render->camera.x = app->map->mapData.width - app->render->camera.w;
-    //if (app->render->camera.y > app->map->mapData.height - app->render->camera.h) app->render->camera.y = app->map->mapData.height - app->render->camera.h;
+    app->render->camera.x = -position.x + app->render->camera.w / 2;
+    app->render->camera.y = -position.y + app->render->camera.h / 2;
+    if (app->render->camera.x > 0) app->render->camera.x = 0;
+    if (app->render->camera.y > 0) app->render->camera.y = 0;
+    if (app->render->camera.x < -app->map->mapData.width * app->map->mapData.tileWidth + app->render->camera.w) app->render->camera.x = -app->map->mapData.width * app->map->mapData.tileWidth + app->render->camera.w;
+    if (app->render->camera.y < -app->map->mapData.height * app->map->mapData.tileHeight + app->render->camera.h) app->render->camera.y = -app->map->mapData.height * app->map->mapData.tileHeight + app->render->camera.h;
+    
 }

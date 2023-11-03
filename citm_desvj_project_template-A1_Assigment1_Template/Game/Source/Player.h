@@ -48,6 +48,8 @@ public:
 	PhysBody* pbody;
 	int pickCoinFxId;
 	bool isTouchingGround;
+	bool death = false;
+	bool debug = false;
 	bool canDash = true;
 	float jumpImpulse = 2.0f;
 	float jumpIncrement = 1.0f;
