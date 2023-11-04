@@ -21,7 +21,8 @@ ESC = Close game
 
 Win condition = Arrive to the Strawberry
 
-Lose condition = Die
+Lose condition = Die  
+AAAA
 
 
 https://github.com/MarcoDiModica/DEFINITIVE_BOX2D_SDL_DEV/
