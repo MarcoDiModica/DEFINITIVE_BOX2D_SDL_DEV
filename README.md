@@ -17,10 +17,11 @@ F8 = Change from 60 to 30 fps
 F1 = God mode/Debug
 
 ESC = Close game  
+&nbsp;
 
 Win condition = Arrive to the Strawberry
 
 Lose condition = Die
-
+&nbsp;
 
 https://github.com/MarcoDiModica/DEFINITIVE_BOX2D_SDL_DEV/
