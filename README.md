@@ -18,8 +18,10 @@ F1 = God mode/Debug
 
 ESC = Close game
 
+
 Win condition = Arrive to the Strawberry
 
 Lose condition = Die
+
 
 https://github.com/MarcoDiModica/DEFINITIVE_BOX2D_SDL_DEV/
