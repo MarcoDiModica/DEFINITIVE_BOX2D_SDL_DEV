@@ -45,7 +45,16 @@ bool Scene::Awake(pugi::xml_node& config)
 		app->map->path = config.child("map").attribute("path").as_string();
 	}
 
-	return ret;
+
+	if (config.child("background"))
+	{
+		app->map->bgPath = config.child("background").attribute("path").as_string();
+		app->map->bgName = config.child("background").attribute("name").as_string();
+		
+	}
+	
+	
+  return ret;
 }
 
 // Called before the first frame
@@ -73,6 +82,15 @@ bool Scene::Start()
 		app->map->mapData.tileHeight,
 		app->map->mapData.tilesets.Count());
 
+
+
+	
+	
+	
+
+	
+
+
 	return true;
 }
 
@@ -85,6 +103,8 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
+	
+
 	float camSpeed = 1; 
 
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)

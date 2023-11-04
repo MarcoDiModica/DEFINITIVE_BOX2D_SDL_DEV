@@ -139,6 +139,9 @@ public:
 	MapData mapData;
 	SString name;
 	SString path;
+	SString bgName;
+	SString bgPath;
+	SDL_Texture* background;
 
 private:
 

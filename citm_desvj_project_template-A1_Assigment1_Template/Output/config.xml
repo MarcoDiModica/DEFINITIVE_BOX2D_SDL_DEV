@@ -22,6 +22,7 @@
   </audio>
 
   <scene>
+    <background path="Assets/Maps/" name="Background.png"/>
     <map path="Assets/Maps/" name="Attempt2.tmx"/>
 	<player x="100" y="673" texturepath="Assets/Textures/platformer.png">
 		  <idle animspeed ="0.3f" loop="true">

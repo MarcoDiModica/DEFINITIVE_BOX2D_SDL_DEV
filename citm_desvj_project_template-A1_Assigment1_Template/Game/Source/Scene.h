@@ -40,7 +40,9 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 	Player* player;
-
+	SString bgPath;
+	SString bgName;
+	
 };
 
 #endif // __SCENE_H__

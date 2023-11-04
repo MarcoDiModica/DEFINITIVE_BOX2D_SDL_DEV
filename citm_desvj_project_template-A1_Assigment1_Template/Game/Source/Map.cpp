@@ -37,8 +37,9 @@ bool Map::Start() {
     //Calls the functon to load the map, make sure that the filename is assigned
     SString mapPath = path;
     mapPath += name;
+    bgPath += bgName;
     bool ret = Load(mapPath);
-
+    background = app->tex->Load(bgPath.GetString());
     debug = false;
 
     ListItem<MapLayer*>* mapLayerItem;
@@ -67,7 +68,7 @@ bool Map::Update(float dt)
     if(mapLoaded == false)
         return false;
 
-
+    app->render->DrawTexture(background, 0, 0);
 
     if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
         *debug = !*debug;
