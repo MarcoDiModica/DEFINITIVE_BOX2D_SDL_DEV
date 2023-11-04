@@ -30,7 +30,7 @@ public:
 	void Reset()
 	{
 		currentFrame = 0;
-		loopCount--;
+		loopCount = 0;
 	}
 
 	bool HasFinished()
