@@ -16,7 +16,7 @@ F8 = Change from 60 to 30 fps
 
 F1 = God mode/Debug
 
-ESC = Close game
+ESC = Close game  
 &NewLine;
 
 Win condition = Arrive to the Strawberry
