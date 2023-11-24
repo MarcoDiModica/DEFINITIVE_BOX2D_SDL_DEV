@@ -28,6 +28,7 @@ enum class ColliderType {
 	ITEM,
 	PLATFORM,
 	DEATH,
+	ENEMY,
 	UNKNOWN
 	// ..
 };
@@ -71,6 +72,9 @@ public:
 	// Create basic physics objects
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreatePlayer(int x, int y, int width, int height, bodyType type);
+	PhysBody* CreateGroundEnemy(int x, int y, int width, int height, bodyType type);
+	PhysBody* CreateFlyingEnemy(int x, int y, int width, int height, bodyType type);
+
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateCircleNoColision(int x, int y, int radious, bodyType type);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);

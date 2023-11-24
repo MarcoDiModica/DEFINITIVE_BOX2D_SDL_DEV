@@ -12,6 +12,8 @@ enum class EntityType
 {
 	PLAYER,
 	ITEM,
+	WALKING_ENEMY,
+	FLYING_ENEMY,
 	UNKNOWN
 };
 
