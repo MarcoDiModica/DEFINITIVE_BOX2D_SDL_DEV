@@ -22,12 +22,16 @@ Player::~Player() {
 
 bool Player::Awake() {
 
+
+    //Import Parameters
     initX = parameters.attribute("x").as_int();
     initY = parameters.attribute("y").as_int();
     position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
 
+
+    //Set animations
     pugi::xml_node animNode = parameters.first_child();
     while (animNode) {
         Animation* currentAnim = nullptr;
@@ -77,6 +81,8 @@ bool Player::Update(float dt)
     if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
         debug = !debug;
 
+
+    //Play death animation and respawn
     if (death)
     {
         
@@ -98,8 +104,11 @@ bool Player::Update(float dt)
         }
     }
 
+
+    //get the velocity from last frame
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
+    //Kinda useless rn, shoukd probably delete this
     if (isDashing) {
         dashTime += dt;
         if (dashTime >= maxDashTime) {
@@ -112,6 +121,7 @@ bool Player::Update(float dt)
         }
     }
 
+    //checks if the character is currently in the air
     if (vel.y != 0)
     {
         isInAir = true;
@@ -168,7 +178,7 @@ bool Player::Update(float dt)
 
     lastDirection = flipHorizontal;
 
-
+    //Jump
     if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN && isTouchingGround && vel.y == 0 && !death) {
         if (gravityScale == 1.0f)
         {
@@ -185,6 +195,8 @@ bool Player::Update(float dt)
         
     }
 
+
+    //Gravity change
     if (app->input->GetKey(SDL_SCANCODE_UP) == KEY_DOWN && gravityScale == 1.0f && (vel.y == 0 || debug) && !death) {
         pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, GRAVITY_Y));
         pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));

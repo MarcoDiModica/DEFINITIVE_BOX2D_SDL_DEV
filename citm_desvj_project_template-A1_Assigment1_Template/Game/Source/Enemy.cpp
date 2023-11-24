@@ -83,6 +83,7 @@ bool Enemy::Update(float dt)
         {
             b2Vec2 stop(0, 0);
             pbody->body->SetLinearVelocity(stop);
+            app->entityManager->DestroyEntity(this);
         }
     }
 
@@ -169,4 +170,6 @@ void Enemy::Death()
 {
     if(!debug)
         death = true;
+
+    
 }

@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 #include "Animation.h"
+#include "Box2D/Box2D/Box2D.h"
 
 struct SDL_Texture;
 
@@ -48,6 +49,7 @@ public:
 	bool death = false;
 	bool debug = false;
 	bool isMoving = false;
+	bool isTouchingGround = true;
 
 	float gravityScale = 1.0f;
 	int initX;
