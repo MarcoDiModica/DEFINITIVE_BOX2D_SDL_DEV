@@ -133,3 +133,99 @@ bool EntityManager::Update(float dt)
 
 	return ret;
 }
+
+bool EntityManager::LoadState(pugi::xml_node node)
+{
+	bool ret = true;
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+	
+	pugi::xml_node player = node.child("Player");
+	pugi::xml_node items = node.child("Items");
+	pugi::xml_node walkingEnemies = node.child("Walking_Enemies");
+	pugi::xml_node flyingEnemies = node.child("Flying_Enemies");
+
+	int playerNo = 1;
+	int itemNo = 1;
+	int wEnemyNo = 1;
+	int fEnemyno = 1;
+
+	for (item = entities.start; item != NULL && ret == true; item = item->next)
+	{
+		pEntity = item->data;
+		EntityType type = item->data->type;
+		switch (type)
+		{
+		case EntityType::PLAYER:
+			ret = pEntity->LoadState(player, playerNo);
+			playerNo++;
+			break;
+		case EntityType::ITEM:
+			ret = pEntity->LoadState(items, itemNo);
+			wEnemyNo ++;
+			break;
+		case EntityType::WALKING_ENEMY:
+			ret = pEntity->LoadState(walkingEnemies, wEnemyNo);
+			wEnemyNo++;
+			break;
+		case EntityType::FLYING_ENEMY:
+			ret = pEntity->LoadState(flyingEnemies, fEnemyno);
+			fEnemyno++;
+			break;
+		default:
+			break;
+		}
+		
+	}
+
+
+	return ret;
+}
+
+bool EntityManager::SaveState(pugi::xml_node node)
+{
+
+	bool ret = true;
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+
+	pugi::xml_node player = node.append_child("Player");
+	pugi::xml_node items = node.append_child("Items");
+	pugi::xml_node walkingEnemies = node.append_child("Walking_Enemies");
+	pugi::xml_node flyingEnemies = node.append_child("Flying_Enemies");
+
+	int playerNo = 1;
+	int itemNo = 1;
+	int wEnemyNo = 1;
+	int fEnemyno = 1;
+
+	for (item = entities.start; item != NULL && ret == true; item = item->next)
+	{
+		pEntity = item->data;
+		EntityType type = item->data->type;
+		switch (type)
+		{
+		case EntityType::PLAYER:
+			ret = pEntity->SaveState(player, playerNo);
+			playerNo++;
+			break;
+		case EntityType::ITEM:
+			ret = pEntity->SaveState(items, itemNo);
+			wEnemyNo++;
+			break;
+		case EntityType::WALKING_ENEMY:
+			ret = pEntity->SaveState(walkingEnemies, wEnemyNo);
+			wEnemyNo++;
+			break;
+		case EntityType::FLYING_ENEMY:
+			ret = pEntity->SaveState(flyingEnemies, fEnemyno);
+			fEnemyno++;
+			break;
+		default:
+			break;
+		}
+
+	}
+
+	return ret;
+}

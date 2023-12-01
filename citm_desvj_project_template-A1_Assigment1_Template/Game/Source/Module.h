@@ -55,6 +55,17 @@ public:
 		return true;
 	}
 
+	// Called when pressing F6 (load game)
+	virtual bool LoadState(pugi::xml_node node)
+	{
+		return true;
+	}
+
+	//Called when pressing F5 (save game)
+	virtual bool SaveState(pugi::xml_node node)
+	{
+		return true;
+	}
 public:
 
 	SString name;

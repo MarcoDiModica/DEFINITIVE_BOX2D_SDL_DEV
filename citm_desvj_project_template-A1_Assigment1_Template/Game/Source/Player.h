@@ -32,6 +32,10 @@ public:
 
 	void Respawn();
 
+	bool LoadState(pugi::xml_node node, int num);
+
+	bool SaveState(pugi::xml_node node, int num);
+
 public:
 	float speed = 0.4f;
 	const char* texturePath;

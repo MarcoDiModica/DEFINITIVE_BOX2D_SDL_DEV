@@ -326,3 +326,60 @@ void Player::UpdateCamera()
     if (app->render->camera.y < -app->map->mapData.height * app->map->mapData.tileHeight + app->render->camera.h) app->render->camera.y = -app->map->mapData.height * app->map->mapData.tileHeight + app->render->camera.h;
     
 }
+
+
+bool Player::LoadState(pugi::xml_node node, int num)
+{
+    
+    SString childName("player%d", num);
+    
+    
+    pugi::xml_node player = node.child(childName.GetString());
+    
+
+    pugi::xml_node pos = player.child("Position");
+    float32 x = pos.attribute("x").as_float();
+    float32 y = pos.attribute("y").as_float();
+    float gravity = player.attribute("gravity").as_float();
+    pugi::xml_node velocity = player.child("velocity");
+    float32 vx = velocity.attribute("vx").as_float();
+    float32 vy = velocity.attribute("vy").as_float();
+
+    pbody->body->SetTransform(b2Vec2(x, y), 0);
+    gravityScale = gravity;
+    pbody->body->SetLinearVelocity(b2Vec2(vx, vy));
+    b2Vec2 vel = pbody->body->GetLinearVelocity();
+
+
+    return true;
+}
+
+bool Player::SaveState(pugi::xml_node node, int num)
+{
+    SString childName("player%d", num);
+
+    
+    pugi::xml_node player = node.append_child(childName.GetString());
+
+
+    pugi::xml_node pos = player.append_child("Position");
+    pugi::xml_attribute x = pos.append_attribute("x");
+    pugi::xml_attribute y = pos.append_attribute("y");
+    pugi::xml_attribute gravity = player.append_attribute("gravity");
+    pugi::xml_node velocity = player.append_child("velocity");
+    pugi::xml_attribute vx = velocity.append_attribute("vx");
+    pugi::xml_attribute vy = velocity.append_attribute("vy");
+
+
+    x.set_value(pbody->body->GetPosition().x);
+    y.set_value(pbody->body->GetPosition().y);
+    gravity.set_value(gravityScale);
+    vx.set_value(pbody->body->GetLinearVelocity().x);
+    vy.set_value(pbody->body->GetLinearVelocity().y);
+
+
+    return true;
+}
+
+
+

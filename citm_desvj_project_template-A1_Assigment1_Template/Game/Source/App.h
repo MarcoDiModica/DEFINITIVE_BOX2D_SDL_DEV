@@ -51,6 +51,12 @@ public:
 	const char* GetTitle() const;
 	const char* GetOrganization() const;
 
+
+
+	// Ask to save/load at the end of the frame
+	void LoadRequest();
+	void SaveRequest();
+
 private:
 
 	// Load config file
@@ -71,6 +77,11 @@ private:
 	// Call modules after each loop iteration
 	bool PostUpdate();
 
+	// Load from an XML file
+	void LoadFromFile();
+
+	// Load to an XML file
+	void SaveToFile();
 public:
 
 	// Modules
@@ -115,6 +126,9 @@ private:
 
 	uint32 maxFrameDuration = 16;
 
+
+	bool loadRequest;
+	bool saveRequest;
 };
 
 extern App* app;
