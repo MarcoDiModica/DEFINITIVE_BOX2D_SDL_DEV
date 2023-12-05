@@ -127,8 +127,8 @@ private:
 	uint32 maxFrameDuration = 16;
 
 
-	bool loadRequest;
-	bool saveRequest;
+	bool loadRequest = false;
+	bool saveRequest = false;
 };
 
 extern App* app;
