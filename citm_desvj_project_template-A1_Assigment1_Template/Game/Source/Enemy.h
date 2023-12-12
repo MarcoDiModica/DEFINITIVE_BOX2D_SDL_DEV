@@ -51,6 +51,7 @@ public:
 	bool isMoving = false;
 	bool isTouchingGround = true;
 
+
 	float gravityScale = 1.0f;
 	int initX;
 	int initY;

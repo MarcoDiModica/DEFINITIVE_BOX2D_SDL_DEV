@@ -145,10 +145,22 @@ PhysBody* Physics::CreatePlayer(int x, int y, int width, int height, bodyType ty
 PhysBody* Physics::CreateFlyingEnemy(int x, int y, int width, int height, bodyType type)
 {
 	b2BodyDef body;
+	body.gravityScale = 0.0f;
 
-	if (type == DYNAMIC) body.type = b2_dynamicBody;
-	if (type == STATIC) body.type = b2_staticBody;
-	if (type == KINEMATIC) body.type = b2_kinematicBody;
+	switch (type) {
+	case DYNAMIC:
+		body.type = b2_dynamicBody;
+		break;
+	case STATIC:
+		body.type = b2_staticBody;
+		break;
+	case KINEMATIC:
+		body.type = b2_kinematicBody;
+		break;
+	default:
+		body.type = b2_staticBody;
+		break;
+	}
 
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 	body.fixedRotation = true;
@@ -159,17 +171,10 @@ PhysBody* Physics::CreateFlyingEnemy(int x, int y, int width, int height, bodyTy
 	b2FixtureDef fixture;
 	fixture.shape = &box;
 	fixture.density = 1.0f;
-	fixture.friction = 0.0f;
+	fixture.friction = 0.0f; // No friction for flying enemy
 	fixture.restitution = 0.0f;
 
 	b->CreateFixture(&fixture);
-
-	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
-	float footSensorHeight = PIXEL_TO_METERS(height);
-	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);
-	fixture.isSensor = true;
-	b->CreateFixture(&fixture);
-
 
 	b->ResetMassData();
 
@@ -179,7 +184,20 @@ PhysBody* Physics::CreateFlyingEnemy(int x, int y, int width, int height, bodyTy
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
 
+	pbody->ctype = ColliderType::ENEMY;
+
 	return pbody;
+}
+
+
+void Physics::CreatePathForFlyingEnemy(PhysBody* enemy, int startX, int startY, int endX, int endY)
+{
+	b2Vec2 start = b2Vec2(PIXEL_TO_METERS(startX), PIXEL_TO_METERS(startY));
+	b2Vec2 end = b2Vec2(PIXEL_TO_METERS(endX), PIXEL_TO_METERS(endY));
+
+	b2Vec2 path[] = { start, end };
+
+	enemy->SetPath(path, 2); 
 }
 
 PhysBody* Physics::CreateGroundEnemy(int x, int y, int width, int height, bodyType type)
@@ -215,6 +233,15 @@ PhysBody* Physics::CreateGroundEnemy(int x, int y, int width, int height, bodyTy
 	pbody->ctype = ColliderType::ENEMY;
 
 	return pbody;
+}
+
+void Physics::CreatePathForGroundEnemy(PhysBody* enemy, int startX, int endX, int y)
+{
+	b2Vec2 start = b2Vec2(PIXEL_TO_METERS(startX), PIXEL_TO_METERS(y));
+	b2Vec2 end = b2Vec2(PIXEL_TO_METERS(endX), PIXEL_TO_METERS(y));
+
+	b2Vec2 path[] = { start, end };
+	enemy->SetPath(path, 2); 
 }
 
 PhysBody* Physics::CreateCircle(int x, int y, int radious, bodyType type)
@@ -546,4 +573,11 @@ int PhysBody::RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& no
 	}
 
 	return ret;
+}
+
+void PhysBody::SetPath(b2Vec2* path, int pathLength)
+{
+	this->path = path;
+	this->pathLength = pathLength;
+	currentTargetIndex = 0;
 }

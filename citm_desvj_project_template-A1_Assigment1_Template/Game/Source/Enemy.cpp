@@ -68,6 +68,7 @@ bool Enemy::Start()
 {
 	texture = app->tex->Load(texturePath);
 	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
+    //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ENEMY;
 	return true;

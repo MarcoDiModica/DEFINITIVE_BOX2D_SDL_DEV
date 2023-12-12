@@ -46,12 +46,18 @@ public:
 	float GetRotation() const;
 	bool Contains(int x, int y) const;
 	int RayCast(int x1, int y1, int x2, int y2, float& normal_x, float& normal_y) const;
+	void SetPath(b2Vec2* path, int pathLength);
 
 public:
 	int width, height;
 	b2Body* body;
 	Entity* listener;
 	ColliderType ctype;
+
+private:
+	b2Vec2* path = nullptr;
+	int pathLength = 0;
+	int currentTargetIndex = 0;
 };
 
 // Module --------------------------------------
@@ -73,7 +79,9 @@ public:
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreatePlayer(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateGroundEnemy(int x, int y, int width, int height, bodyType type);
+	void CreatePathForGroundEnemy(PhysBody* enemy, int startX, int endX, int y);
 	PhysBody* CreateFlyingEnemy(int x, int y, int width, int height, bodyType type);
+	void CreatePathForFlyingEnemy(PhysBody* enemy, int startX, int startY, int endX, int endY);
 
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateCircleNoColision(int x, int y, int radious, bodyType type);
