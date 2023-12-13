@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "EnemyFly.h"
 #include "App.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -10,23 +10,25 @@
 #include "Physics.h"
 #include "Map.h"
 #include "Animation.h"
+#include "Player.h"
+#include "EntityManager.h"
 
-Enemy::Enemy() : Entity(EntityType::WALKING_ENEMY)
+EnemyFLY::EnemyFLY() : Entity(EntityType::FLYING_ENEMY)
 {
-	name.Create("Enemy");
+    name.Create("EnemyFly");
 }
 
-Enemy::~Enemy() {
+EnemyFLY::~EnemyFLY() {
 
 }
 
-bool Enemy::Awake() {
+bool EnemyFLY::Awake() {
 
     initX = parameters.attribute("x").as_int();
     initY = parameters.attribute("y").as_int();
     position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
+    position.y = parameters.attribute("y").as_int();
+    texturePath = parameters.attribute("texturepath").as_string();
     //path = parameters.attribute("path").as_string();
 
     pugi::xml_node animNode = parameters.first_child();
@@ -61,20 +63,20 @@ bool Enemy::Awake() {
 
     currentAnimation = &idleAnim;
 
-	return true;
+    return true;
 }
 
-bool Enemy::Start()
+bool EnemyFLY::Start()
 {
-	texture = app->tex->Load(texturePath);
-	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
+    texture = app->tex->Load(texturePath);
+    pbody = app->physics->CreateFlyingEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
-	pbody->listener = this;
-	pbody->ctype = ColliderType::ENEMY;
-	return true;
+    pbody->listener = this;
+    pbody->ctype = ColliderType::ENEMY;
+    return true;
 }
 
-bool Enemy::Update(float dt)
+bool EnemyFLY::Update(float dt)
 {
     if (death)
     {
@@ -92,25 +94,25 @@ bool Enemy::Update(float dt)
 
     if (path.x != 0 && path.y != 0 && !death) {
         if (position.x < path.x) {
-			vel.x = enemySpeed;
-			flipHorizontal = SDL_FLIP_NONE;
-			isMoving = true;
-		}
+            vel.x = enemySpeed;
+            flipHorizontal = SDL_FLIP_NONE;
+            isMoving = true;
+        }
         else if (position.x > path.x) {
-			vel.x = -enemySpeed;
-			flipHorizontal = SDL_FLIP_HORIZONTAL;
-			isMoving = true;
-		}
+            vel.x = -enemySpeed;
+            flipHorizontal = SDL_FLIP_HORIZONTAL;
+            isMoving = true;
+        }
         else if (position.x == path.x) {
-			vel.x = 0;
-			isMoving = false;
-		}
-	}
+            vel.x = 0;
+            isMoving = false;
+        }
+    }
     else if (!death) {
-		vel.x = 0;
-		isMoving = false;
-	}
-    
+        vel.x = 0;
+        isMoving = false;
+    }
+
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 42;
 
@@ -125,7 +127,7 @@ bool Enemy::Update(float dt)
         currentAnimation = &idleAnim;
     }
     currentAnimation->Update();
-    
+
     SDL_RendererFlip flips = (SDL_RendererFlip)(flipHorizontal | flipVertical);
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
@@ -136,7 +138,7 @@ bool Enemy::Update(float dt)
     return true;
 }
 
-bool Enemy::CleanUp()
+bool EnemyFLY::CleanUp()
 {
     if (texture != nullptr)
     {
@@ -149,11 +151,11 @@ bool Enemy::CleanUp()
         delete pbody;
         pbody = nullptr;
     }
-    
+
     return true;
 }
 
-void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
+void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype)
     {
@@ -168,13 +170,11 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision PLAYER");
         app->entityManager->DestroyEntity(this);
         break;
-    }
+	}
 }
 
-void Enemy::Death()
+void EnemyFLY::Death()
 {
-    if(!debug)
+    if (!debug)
         death = true;
-
-    
 }
