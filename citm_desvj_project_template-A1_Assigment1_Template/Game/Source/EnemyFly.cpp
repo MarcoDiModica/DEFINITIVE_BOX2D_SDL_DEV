@@ -78,6 +78,8 @@ bool EnemyFLY::Start()
 
 bool EnemyFLY::Update(float dt)
 {
+    b2Vec2 vel = pbody->body->GetLinearVelocity();
+
     if (death)
     {
         currentAnimation = &DeathAnim;
@@ -89,28 +91,39 @@ bool EnemyFLY::Update(float dt)
             app->entityManager->DestroyEntity(this);
         }
     }
+    else
+    {
+        // Si el jugador está a la vista, mueve al enemigo hacia el jugador
+        //if (PlayerInSight())
+        //{
+        //    
+        //    
+        //    if (player->position.x > position.x)
+        //    {
+        //        // Mueve al enemigo a la derecha
+        //        vel.x = enemySpeed;
+        //        flipHorizontal = SDL_FLIP_NONE;
+        //        isMoving = true;
+        //    }
+        //    else if (player->position.x < position.x)
+        //    {
+        //        // Mueve al enemigo a la izquierda
+        //        vel.x = -enemySpeed;
+        //        flipHorizontal = SDL_FLIP_HORIZONTAL;
+        //        isMoving = true;
+        //    }
 
-    b2Vec2 vel = pbody->body->GetLinearVelocity();
-
-    if (path.x != 0 && path.y != 0 && !death) {
-        if (position.x < path.x) {
-            vel.x = enemySpeed;
-            flipHorizontal = SDL_FLIP_NONE;
-            isMoving = true;
-        }
-        else if (position.x > path.x) {
-            vel.x = -enemySpeed;
-            flipHorizontal = SDL_FLIP_HORIZONTAL;
-            isMoving = true;
-        }
-        else if (position.x == path.x) {
-            vel.x = 0;
-            isMoving = false;
-        }
-    }
-    else if (!death) {
-        vel.x = 0;
-        isMoving = false;
+        //    // Si hay un obstáculo delante, haz que el enemigo salte
+        //    if (ObstacleInFront())
+        //    {
+        //        Jump();
+        //    }
+        //}
+        //else
+        //{
+        //    vel.x = 0;
+        //    isMoving = false;
+        //}
     }
 
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;

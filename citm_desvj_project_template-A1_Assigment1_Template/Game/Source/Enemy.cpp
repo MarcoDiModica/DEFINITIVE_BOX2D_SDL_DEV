@@ -26,10 +26,8 @@ bool Enemy::Awake() {
     initX = parameters.attribute("x").as_int();
     initY = parameters.attribute("y").as_int();
     position.x = parameters.attribute("x").as_int();
-	position.y = parameters.attribute("y").as_int();
-    width = parameters.attribute("width").as_int();
-    height = parameters.attribute("height").as_int();
-	texturePath = parameters.attribute("texturepath").as_string();
+    position.y = parameters.attribute("y").as_int();
+    texturePath = parameters.attribute("texturepath").as_string();
     //path = parameters.attribute("path").as_string();
 
     pugi::xml_node animNode = parameters.first_child();
@@ -38,12 +36,15 @@ bool Enemy::Awake() {
         if (std::string(animNode.name()) == "idle") {
             currentAnim = &idleAnim;
         }
-        else if (std::string(animNode.name()) == "death") {
-			currentAnim = &DeathAnim;
-		}
+        else if (std::string(animNode.name()) == "run") {
+            currentAnim = &runAnim;
+        }
         else if (std::string(animNode.name()) == "jump") {
-			currentAnim = &JumpAnim;
-		}
+            currentAnim = &JumpAnim;
+        }
+        else if (std::string(animNode.name()) == "death") {
+            currentAnim = &DeathAnim;
+        }
 
         if (currentAnim) {
             for (pugi::xml_node node = animNode.child("pushback"); node; node = node.next_sibling("pushback")) {
@@ -61,7 +62,7 @@ bool Enemy::Awake() {
 
     currentAnimation = &idleAnim;
 
-	return true;
+    return true;
 }
 
 bool Enemy::Start()

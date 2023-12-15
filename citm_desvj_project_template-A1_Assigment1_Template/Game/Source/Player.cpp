@@ -300,6 +300,10 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision DEATH");
         Death();
         break;
+    /*case ColliderType::ENEMY:
+        LOG("Collision ENEMY");
+		Death();
+		break;*/
     }
 }
 

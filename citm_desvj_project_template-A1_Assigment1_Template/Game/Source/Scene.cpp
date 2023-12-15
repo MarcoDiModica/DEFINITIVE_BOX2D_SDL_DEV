@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "EntityManager.h"
 #include "Enemy.h"
+#include "EnemyFly.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -59,6 +60,11 @@ bool Scene::Awake(pugi::xml_node& config)
 		enemyground1 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
 		enemyground1->parameters = config.child("enemyground");
 	}
+
+	if (config.child("enemyfly")) {
+		enemyfly1 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
+		enemyfly1->parameters = config.child("enemyfly");
+	}
 	
   return ret;
 }
@@ -88,15 +94,6 @@ bool Scene::Start()
 		app->map->mapData.tileHeight,
 		app->map->mapData.tilesets.Count());
 
-
-
-	
-	
-	
-
-	
-
-
 	return true;
 }
 
@@ -109,7 +106,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	
 
 	float camSpeed = 1; 
 

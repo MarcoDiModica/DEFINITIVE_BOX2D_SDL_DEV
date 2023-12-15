@@ -4,6 +4,8 @@
 #include "Module.h"
 #include "Player.h"
 #include "Item.h"
+#include "Enemy.h"
+#include "EnemyFly.h"
 
 struct SDL_Texture;
 
@@ -34,13 +36,16 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	Player* player;
+	Enemy* enemyground1;
+	EnemyFLY* enemyfly1;
+
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
-	Player* player;
-	Enemy* enemyground1;
+	
 	SString bgPath;
 	SString bgName;
 	
