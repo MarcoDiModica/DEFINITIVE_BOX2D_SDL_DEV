@@ -181,7 +181,7 @@ void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::PLAYER:
         LOG("Collision PLAYER");
-        app->entityManager->DestroyEntity(this);
+        Death();
         break;
 	}
 }

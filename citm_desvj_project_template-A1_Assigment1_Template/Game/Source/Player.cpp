@@ -85,7 +85,6 @@ bool Player::Update(float dt)
     //Play death animation and respawn
     if (death)
     {
-        
         currentAnimation = &DeathAnim;
 
         if (currentAnimation->HasFinished())
@@ -300,10 +299,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision DEATH");
         Death();
         break;
-    /*case ColliderType::ENEMY:
+    case ColliderType::ENEMY:
         LOG("Collision ENEMY");
 		Death();
-		break;*/
+        app->entityManager->DestroyEntity(physB->listener);
+		break;
     }
 }
 

@@ -63,7 +63,7 @@
 		  </death>
 			  
 	</player>
-	<enemyground x="150" y="673" texturepath="Assets/Textures/enemyground.png">
+	<enemyground x="150" y="650" texturepath="Assets/Textures/enemyground.png">
 		  <idle animspeed ="0.3f" loop="true">
 			  <pushback x="0" y="0" width="96" height="96"/>
 			  <pushback x="96" y="0" width="96" height="96"/>

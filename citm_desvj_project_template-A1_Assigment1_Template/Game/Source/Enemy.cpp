@@ -68,7 +68,7 @@ bool Enemy::Awake() {
 bool Enemy::Start()
 {
 	texture = app->tex->Load(texturePath);
-	pbody = app->physics->CreateGroundEnemy(position.x, position.y, width, height, bodyType::DYNAMIC);
+	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ENEMY;
@@ -81,14 +81,7 @@ bool Enemy::Update(float dt)
 
     if (death)
     {
-        currentAnimation = &DeathAnim;
-
-        if (currentAnimation->HasFinished())
-        {
-            b2Vec2 stop(0, 0);
-            pbody->body->SetLinearVelocity(stop);
-            app->entityManager->DestroyEntity(this);
-        }
+        app->physics->CreateRectangle(10,10,10,10,STATIC);
     }
     else
     {
@@ -179,17 +172,18 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision DEATH");
         Death();
         break;
+    case ColliderType::PLATFORM:
+        LOG("Collision PLATFORM");
+		isTouchingGround = true;
+        break;
     case ColliderType::PLAYER:
         LOG("Collision PLAYER");
-        app->entityManager->DestroyEntity(this);
+        Death();
         break;
     }
 }
 
 void Enemy::Death()
 {
-    if(!debug)
-        death = true;
-
-    
+    death = true;
 }
