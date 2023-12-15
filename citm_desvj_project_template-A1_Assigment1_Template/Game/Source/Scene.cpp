@@ -7,6 +7,8 @@
 #include "Scene.h"
 #include "Map.h"
 #include "Player.h"
+#include "EntityManager.h"
+#include "Enemy.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -53,6 +55,10 @@ bool Scene::Awake(pugi::xml_node& config)
 		
 	}
 	
+	if (config.child("enemyground")) {
+		enemyground1 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
+		enemyground1->parameters = config.child("enemyground");
+	}
 	
   return ret;
 }

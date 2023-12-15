@@ -40,6 +40,7 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 	Player* player;
+	Enemy* enemyground1;
 	SString bgPath;
 	SString bgName;
 	

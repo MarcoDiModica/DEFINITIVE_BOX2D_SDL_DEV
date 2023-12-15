@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "Map.h"
 #include "Animation.h"
+#include "EntityManager.h"
 
 Enemy::Enemy() : Entity(EntityType::WALKING_ENEMY)
 {
@@ -26,6 +27,8 @@ bool Enemy::Awake() {
     initY = parameters.attribute("y").as_int();
     position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
+    width = parameters.attribute("width").as_int();
+    height = parameters.attribute("height").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
     //path = parameters.attribute("path").as_string();
 
@@ -35,15 +38,12 @@ bool Enemy::Awake() {
         if (std::string(animNode.name()) == "idle") {
             currentAnim = &idleAnim;
         }
-        else if (std::string(animNode.name()) == "run") {
-            currentAnim = &runAnim;
-        }
-        else if (std::string(animNode.name()) == "jump") {
-            currentAnim = &JumpAnim;
-        }
         else if (std::string(animNode.name()) == "death") {
-            currentAnim = &DeathAnim;
-        }
+			currentAnim = &DeathAnim;
+		}
+        else if (std::string(animNode.name()) == "jump") {
+			currentAnim = &JumpAnim;
+		}
 
         if (currentAnim) {
             for (pugi::xml_node node = animNode.child("pushback"); node; node = node.next_sibling("pushback")) {
@@ -67,7 +67,7 @@ bool Enemy::Awake() {
 bool Enemy::Start()
 {
 	texture = app->tex->Load(texturePath);
-	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
+	pbody = app->physics->CreateGroundEnemy(position.x, position.y, width, height, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::ENEMY;
@@ -76,6 +76,8 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
+    b2Vec2 vel = pbody->body->GetLinearVelocity();
+
     if (death)
     {
         currentAnimation = &DeathAnim;
@@ -87,30 +89,41 @@ bool Enemy::Update(float dt)
             app->entityManager->DestroyEntity(this);
         }
     }
+    else
+    {
+        // Si el jugador está a la vista, mueve al enemigo hacia el jugador
+        //if (PlayerInSight())
+        //{
+        //    
+        //    
+        //    if (player->position.x > position.x)
+        //    {
+        //        // Mueve al enemigo a la derecha
+        //        vel.x = enemySpeed;
+        //        flipHorizontal = SDL_FLIP_NONE;
+        //        isMoving = true;
+        //    }
+        //    else if (player->position.x < position.x)
+        //    {
+        //        // Mueve al enemigo a la izquierda
+        //        vel.x = -enemySpeed;
+        //        flipHorizontal = SDL_FLIP_HORIZONTAL;
+        //        isMoving = true;
+        //    }
 
-    b2Vec2 vel = pbody->body->GetLinearVelocity();
+        //    // Si hay un obstáculo delante, haz que el enemigo salte
+        //    if (ObstacleInFront())
+        //    {
+        //        Jump();
+        //    }
+        //}
+        //else
+        //{
+        //    vel.x = 0;
+        //    isMoving = false;
+        //}
+    }
 
-    if (path.x != 0 && path.y != 0 && !death) {
-        if (position.x < path.x) {
-			vel.x = enemySpeed;
-			flipHorizontal = SDL_FLIP_NONE;
-			isMoving = true;
-		}
-        else if (position.x > path.x) {
-			vel.x = -enemySpeed;
-			flipHorizontal = SDL_FLIP_HORIZONTAL;
-			isMoving = true;
-		}
-        else if (position.x == path.x) {
-			vel.x = 0;
-			isMoving = false;
-		}
-	}
-    else if (!death) {
-		vel.x = 0;
-		isMoving = false;
-	}
-    
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 42;
 
@@ -125,7 +138,7 @@ bool Enemy::Update(float dt)
         currentAnimation = &idleAnim;
     }
     currentAnimation->Update();
-    
+
     SDL_RendererFlip flips = (SDL_RendererFlip)(flipHorizontal | flipVertical);
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
@@ -135,6 +148,7 @@ bool Enemy::Update(float dt)
 
     return true;
 }
+
 
 bool Enemy::CleanUp()
 {
