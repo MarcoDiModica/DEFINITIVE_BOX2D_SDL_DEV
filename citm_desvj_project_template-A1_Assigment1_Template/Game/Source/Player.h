@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "SDL/include/SDL.h"
 #include "Animation.h"
+#include <list>
 
 struct SDL_Texture;
 
@@ -45,6 +46,8 @@ public:
 	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;
 	SDL_RendererFlip flipHorizontal = lastDirection;
 	SDL_RendererFlip flipVertical = SDL_FLIP_NONE;
+
+	std::list<PhysBody*> bullets;
 
 	Animation idleAnim;
 	Animation runAnim;

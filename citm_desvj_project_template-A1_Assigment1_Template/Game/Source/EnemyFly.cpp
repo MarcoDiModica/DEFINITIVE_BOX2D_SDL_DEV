@@ -183,6 +183,10 @@ void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision PLAYER");
         Death();
         break;
+    case ColliderType::WEAPON:
+        LOG("Collision WEAPON");
+		Death();
+		break;
 	}
 }
 

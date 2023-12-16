@@ -29,6 +29,7 @@ enum class ColliderType {
 	PLATFORM,
 	DEATH,
 	ENEMY,
+	WEAPON,
 	UNKNOWN
 	// ..
 };
@@ -82,6 +83,7 @@ public:
 	void CreatePathForGroundEnemy(PhysBody* enemy, int startX, int endX, int y);
 	PhysBody* CreateFlyingEnemy(int x, int y, int width, int height, bodyType type);
 	void CreatePathForFlyingEnemy(PhysBody* enemy, int startX, int startY, int endX, int endY);
+	PhysBody* CreateBullet(int x, int y, int width, int height, bodyType type, ColliderType collider, int velocity, b2Vec2 direction);
 
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateCircleNoColision(int x, int y, int radious, bodyType type);

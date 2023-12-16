@@ -103,22 +103,8 @@ bool Player::Update(float dt)
         }
     }
 
-
     //get the velocity from last frame
     b2Vec2 vel = pbody->body->GetLinearVelocity();
-
-    //Kinda useless rn, shoukd probably delete this
-    if (isDashing) {
-        dashTime += dt;
-        if (dashTime >= maxDashTime) {
-            isDashing = false;
-            canDash = false;
-            dashTime = 0.0f;
-        }
-        else {
-            vel.x += dashDirection * dashSpeed * dt;
-        }
-    }
 
     //checks if the character is currently in the air
     if (vel.y != 0)
@@ -213,19 +199,24 @@ bool Player::Update(float dt)
         isTouchingGround = false;
     }
 
-    /*if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_DOWN && canDash)
+    if (app->input->GetKey(SDL_SCANCODE_RSHIFT) == KEY_DOWN)
     {
-        if (lastDirection == SDL_FLIP_NONE)
-        {
-            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
-            pbody->body->ApplyForce(b2Vec2(5000.0f, 0.0f), pbody->body->GetWorldCenter(), true);
+        b2Vec2 bulletDirection;
+        b2Vec2 bulletPos;
+        if (flipHorizontal == SDL_FLIP_HORIZONTAL) {
+            bulletDirection = b2Vec2(-1, 0); // Left
+            bulletPos.x = position.x - 22;
+            bulletPos.y = position.y + 40;
         }
-        else if (lastDirection == SDL_FLIP_HORIZONTAL)
-        {
-            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, pbody->body->GetLinearVelocity().y));
-            pbody->body->ApplyForce(b2Vec2(-5000.0f, 0.0f), pbody->body->GetWorldCenter(), true);
+        else if (flipHorizontal == SDL_FLIP_NONE) {
+            bulletDirection = b2Vec2(1, 0); // Right
+            bulletPos.x = position.x + 62;
+            bulletPos.y = position.y + 40;
         }
-    }*/
+
+        PhysBody* newBullet = app->physics->CreateBullet(bulletPos.x, bulletPos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, bulletDirection);
+        bullets.push_back(newBullet);
+    }
 
     if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && isTouchingGround && !death)
     {
@@ -253,7 +244,6 @@ bool Player::Update(float dt)
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
-    //SDL_RenderCopyEx(app->render->renderer, texture, &currentFrame, &destRect, 0.0, NULL, flips);
     app->render->DrawTexture(texture, destRect.x, destRect.y, &currentFrame, flips);
 
     UpdateCamera();
