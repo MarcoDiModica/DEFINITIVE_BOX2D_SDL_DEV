@@ -67,7 +67,7 @@ bool Enemy::Awake() {
 
 bool Enemy::Start()
 {
-	texture = app->tex->Load(texturePath);
+    texture = app->tex->Load(texturePath);
 	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
 	pbody->listener = this;
@@ -81,42 +81,49 @@ bool Enemy::Update(float dt)
 
     if (death)
     {
-        app->physics->CreateRectangle(10,10,10,10,STATIC);
+        currentAnimation = &DeathAnim;
+
+        if (currentAnimation->HasFinished())
+        {
+            b2Vec2 stop(0, 0);
+            pbody->body->SetLinearVelocity(stop);
+            app->entityManager->DestroyEntity(this);
+        }
     }
     else
     {
         // Si el jugador está a la vista, mueve al enemigo hacia el jugador
-        //if (PlayerInSight())
-        //{
-        //    
-        //    
-        //    if (player->position.x > position.x)
-        //    {
-        //        // Mueve al enemigo a la derecha
-        //        vel.x = enemySpeed;
-        //        flipHorizontal = SDL_FLIP_NONE;
-        //        isMoving = true;
-        //    }
-        //    else if (player->position.x < position.x)
-        //    {
-        //        // Mueve al enemigo a la izquierda
-        //        vel.x = -enemySpeed;
-        //        flipHorizontal = SDL_FLIP_HORIZONTAL;
-        //        isMoving = true;
-        //    }
+        if (position.DistanceTo(app->scene->player->position) < 200)
+        {
+            if (app->scene->player->position.x > position.x)
+            {
+                // Mueve al enemigo a la derecha
+                vel.x = enemySpeed * dt;
+                flipHorizontal = SDL_FLIP_NONE;
+                isMoving = true;
+            }
+            else if (app->scene->player->position.x < position.x)
+            {
+                // Mueve al enemigo a la izquierda
+                vel.x = -enemySpeed * dt;
+                flipHorizontal = SDL_FLIP_HORIZONTAL;
+                isMoving = true;
+            }
 
-        //    // Si hay un obstáculo delante, haz que el enemigo salte
-        //    if (ObstacleInFront())
-        //    {
-        //        Jump();
-        //    }
-        //}
-        //else
-        //{
-        //    vel.x = 0;
-        //    isMoving = false;
-        //}
+            // Si hay un obstáculo delante, haz que el enemigo salte
+            /*if (ObstacleInFront())
+            {
+                Jump();
+            }*/
+        }
+        else
+        {
+            vel.x = 0;
+            isMoving = false;
+        }
     }
+
+    
 
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 42;
@@ -133,6 +140,8 @@ bool Enemy::Update(float dt)
     }
     currentAnimation->Update();
 
+    pbody->body->SetLinearVelocity(vel);
+
     SDL_RendererFlip flips = (SDL_RendererFlip)(flipHorizontal | flipVertical);
 
     SDL_Rect currentFrame = currentAnimation->GetCurrentFrame();
@@ -142,7 +151,6 @@ bool Enemy::Update(float dt)
 
     return true;
 }
-
 
 bool Enemy::CleanUp()
 {

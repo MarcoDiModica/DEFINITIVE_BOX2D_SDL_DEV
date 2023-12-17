@@ -292,7 +292,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
     case ColliderType::ENEMY:
         LOG("Collision ENEMY");
 		Death();
-        app->entityManager->DestroyEntity(physB->listener);
 		break;
     }
 }

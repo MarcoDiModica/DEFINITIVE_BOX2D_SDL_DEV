@@ -134,6 +134,7 @@ private:
 	bool LoadAllObjectGroups(pugi::xml_node mapNode);
 	TileSet* GetTilesetFromTileId(int gid) const;
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
+	void CreateNavigationMap(int& width, int& height, uchar** buffer) const;
 
 public: 
 
@@ -143,11 +144,14 @@ public:
 	SString bgName;
 	SString bgPath;
 	SDL_Texture* background;
+	PathFinding* pathfinding;
 
 private:
 
 	bool mapLoaded;
 	bool* debug;
+	MapLayer* navigationLayer;
+	int blockedGid = 49;
 };
 
 #endif // __MAP_H__

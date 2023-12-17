@@ -88,43 +88,56 @@ bool EnemyFLY::Update(float dt)
         {
             b2Vec2 stop(0, 0);
             pbody->body->SetLinearVelocity(stop);
-            app->entityManager->DestroyEntity(this);
+            delete app->scene->enemyfly1;
         }
     }
     else
     {
         // Si el jugador está a la vista, mueve al enemigo hacia el jugador
-        //if (PlayerInSight())
-        //{
-        //    
-        //    
-        //    if (player->position.x > position.x)
-        //    {
-        //        // Mueve al enemigo a la derecha
-        //        vel.x = enemySpeed;
-        //        flipHorizontal = SDL_FLIP_NONE;
-        //        isMoving = true;
-        //    }
-        //    else if (player->position.x < position.x)
-        //    {
-        //        // Mueve al enemigo a la izquierda
-        //        vel.x = -enemySpeed;
-        //        flipHorizontal = SDL_FLIP_HORIZONTAL;
-        //        isMoving = true;
-        //    }
+        if (position.DistanceTo(app->scene->player->position) < 200)
+        {
+            if (app->scene->player->position.x > position.x)
+            {
+                // Move the enemy to the right
+                vel.x = enemySpeed * dt;
+                flipHorizontal = SDL_FLIP_NONE;
+                isMoving = true;
+            }
+            else if (app->scene->player->position.x < position.x)
+            {
+                // Move the enemy to the left
+                vel.x = -enemySpeed * dt;
+                flipHorizontal = SDL_FLIP_HORIZONTAL;
+                isMoving = true;
+            }
 
-        //    // Si hay un obstáculo delante, haz que el enemigo salte
-        //    if (ObstacleInFront())
-        //    {
-        //        Jump();
-        //    }
-        //}
-        //else
-        //{
-        //    vel.x = 0;
-        //    isMoving = false;
-        //}
+            if (app->scene->player->position.y > position.y)
+            {
+                // Move the enemy upwards
+                vel.y = -enemySpeed * dt;
+            }
+            else if (app->scene->player->position.y < position.y)
+            {
+                // Move the enemy downwards
+                vel.y = enemySpeed * dt;
+            }
+
+            // If there is an obstacle in front, make the enemy jump
+            /*if (ObstacleInFront())
+            {
+                Jump();
+            }*/
+        }
+        else
+        {
+            vel.x = 0;
+            vel.y = 0;
+            isMoving = false;
+        }
+
     }
+    
+    pbody->body->SetLinearVelocity(vel);
 
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 42;
@@ -133,11 +146,11 @@ bool EnemyFLY::Update(float dt)
         currentAnimation = &JumpAnim;
     }
     if (isMoving && vel.y == 0 && !death) {
-        currentAnimation = &runAnim;
+        currentAnimation = &JumpAnim;
     }
     if (!isMoving && isTouchingGround && !death)
     {
-        currentAnimation = &idleAnim;
+        currentAnimation = &JumpAnim;
     }
     currentAnimation->Update();
 
@@ -192,6 +205,5 @@ void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
 
 void EnemyFLY::Death()
 {
-    if (!debug)
-        death = true;
+    death = true;
 }

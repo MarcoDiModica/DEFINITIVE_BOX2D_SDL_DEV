@@ -53,11 +53,13 @@ public:
 	int width;
 	int height;
 
+	
+
 	float gravityScale = 1.0f;
 	int initX;
 	int initY;
 
-	b2Vec2 path;
+	b2Vec2 path1;
 	int currentTargetIndex;
 	int enemySpeed = 0.3f;
 };
