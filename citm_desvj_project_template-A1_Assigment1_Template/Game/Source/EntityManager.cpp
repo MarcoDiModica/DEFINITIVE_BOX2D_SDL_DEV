@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Physics.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -128,6 +129,12 @@ bool EntityManager::Update(float dt)
 	for (item = entities.start; item != NULL && ret == true; item = item->next)
 	{
 		pEntity = item->data;
+
+		if(pEntity->pendingtodestroy)
+		{
+			app->physics->DestroyObject(pEntity->pbody);
+			DestroyEntity(pEntity);
+		}
 
 		if (pEntity->active == false) continue;
 		ret = item->data->Update(dt);

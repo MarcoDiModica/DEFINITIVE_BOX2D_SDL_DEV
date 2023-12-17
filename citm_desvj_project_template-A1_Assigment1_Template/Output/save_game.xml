@@ -7,16 +7,24 @@
 	<scene />
 	<entitymanager>
 		<Player>
-			<player1 angle="0" gravity="-1">
-				<Position x="46.7758484" y="16.1335506" />
-				<velocity vx="0" vy="7.45420647" />
+			<player1 gravity="-1">
+				<Position x="2" y="11.7319345" />
+				<velocity vx="0" vy="-10.009203" />
 			</player1>
 		</Player>
 		<Items />
-		<Walking_Enemies />
-		<Flying_Enemies />
+		<Walking_Enemies>
+			<enemy1>
+				<Position x="3.05848336" y="13.4850016" />
+			</enemy1>
+		</Walking_Enemies>
+		<Flying_Enemies>
+			<enemy1>
+				<Position x="3.08163548" y="9.46000004" />
+			</enemy1>
+		</Flying_Enemies>
 	</entitymanager>
 	<renderer>
-		<camera x="-1782" y="-374" />
+		<camera x="0" y="-168" />
 	</renderer>
 </game_state>

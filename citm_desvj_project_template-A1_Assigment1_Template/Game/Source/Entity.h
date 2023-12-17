@@ -81,11 +81,13 @@ public:
 	EntityType type;
 	bool active = true;
 	pugi::xml_node parameters; 
+	PhysBody* pbody;
 
 	// Possible properties, it depends on how generic we
 	// want our Entity class, maybe it's not renderable...
 	iPoint position;       
 	bool renderable = true;
+	bool pendingtodestroy = false;
 };
 
 #endif // __ENTITY_H__

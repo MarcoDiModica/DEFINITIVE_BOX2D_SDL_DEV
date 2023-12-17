@@ -65,6 +65,8 @@ bool Physics::PreUpdate()
 			
 			if (pb1 && pb2 && pb1->listener)
 				pb1->listener->OnCollision(pb1, pb2);
+
+			
 		}
 	}
 
@@ -236,6 +238,12 @@ PhysBody* Physics::CreateFlyingEnemy(int x, int y, int width, int height, bodyTy
 
 	b->CreateFixture(&fixture);
 
+	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
+	float footSensorHeight = PIXEL_TO_METERS(height);
+	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);
+	fixture.isSensor = true;
+	b->CreateFixture(&fixture);
+
 	b->ResetMassData();
 
 	PhysBody* pbody = new PhysBody();
@@ -280,6 +288,12 @@ PhysBody* Physics::CreateGroundEnemy(int x, int y, int width, int height, bodyTy
 	fixture.friction = 0.0f;
 	fixture.restitution = 0.0f;
 
+	b->CreateFixture(&fixture);
+
+	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
+	float footSensorHeight = PIXEL_TO_METERS(height);
+	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);
+	fixture.isSensor = true;
 	b->CreateFixture(&fixture);
 
 	b->ResetMassData();
@@ -640,4 +654,10 @@ void PhysBody::SetPath(b2Vec2* path, int pathLength)
 	this->path = path;
 	this->pathLength = pathLength;
 	currentTargetIndex = 0;
+}
+
+
+void Physics::DestroyObject(PhysBody* pbody)
+{
+	world->DestroyBody(pbody->body);
 }

@@ -19,6 +19,18 @@ Enemy::Enemy() : Entity(EntityType::WALKING_ENEMY)
 
 Enemy::~Enemy() {
 
+    if (texture != nullptr)
+    {
+        app->tex->UnLoad(texture);
+        texture = nullptr;
+    }
+
+    if (pbody != nullptr)
+    {
+        delete pbody;
+        pbody = nullptr;
+    }
+
 }
 
 bool Enemy::Awake() {
@@ -87,9 +99,11 @@ bool Enemy::Update(float dt)
         {
             b2Vec2 stop(0, 0);
             pbody->body->SetLinearVelocity(stop);
-            app->entityManager->DestroyEntity(this);
+            pendingtodestroy = true;
+            return true;
         }
     }
+    
     else
     {
         // Si el jugador está a la vista, mueve al enemigo hacia el jugador
@@ -150,6 +164,8 @@ bool Enemy::Update(float dt)
     app->render->DrawTexture(texture, destRect.x, destRect.y, &currentFrame, flips);
 
     return true;
+
+
 }
 
 bool Enemy::CleanUp()
@@ -186,7 +202,6 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::PLAYER:
         LOG("Collision PLAYER");
-        Death();
         break;
     case ColliderType::WEAPON:
         LOG("Collision WEAPON");
@@ -198,4 +213,38 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Enemy::Death()
 {
     death = true;
+}
+
+bool Enemy::LoadState(pugi::xml_node node, int num)
+{
+
+    SString childName("enemy%d", num);
+
+
+    pugi::xml_node enemy = node.child(childName.GetString());
+
+
+    pugi::xml_node pos = enemy.child("Position");
+    float32 x = pos.attribute("x").as_float();
+    float32 y = pos.attribute("y").as_float();
+    pbody->body->SetTransform(b2Vec2(x, y), 0);
+
+    return true;
+}
+
+bool Enemy::SaveState(pugi::xml_node node, int num)
+{
+    SString childName("enemy%d", num);
+
+
+    pugi::xml_node enemy = node.append_child(childName.GetString());
+
+    pugi::xml_node pos = enemy.append_child("Position");
+    pugi::xml_attribute x = pos.append_attribute("x");
+    pugi::xml_attribute y = pos.append_attribute("y");
+    
+    x.set_value(pbody->body->GetPosition().x);
+    y.set_value(pbody->body->GetPosition().y);
+
+    return true;
 }

@@ -54,7 +54,6 @@ public:
 	Animation JumpAnim;
 	Animation DeathAnim;
 
-	PhysBody* pbody;
 	int pickCoinFxId;
 	bool isTouchingGround;
 	bool death = false;

@@ -31,6 +31,9 @@ public:
 
 	void SetPath(b2Vec2 path);
 
+	bool LoadState(pugi::xml_node node, int num);
+
+	bool SaveState(pugi::xml_node node, int num);
 public:
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
@@ -45,7 +48,7 @@ public:
 	Animation JumpAnim;
 	Animation DeathAnim;
 
-	PhysBody* pbody;
+	
 	bool death = false;
 	bool debug = false;
 	bool isMoving = false;
