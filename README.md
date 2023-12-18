@@ -18,9 +18,17 @@ RSHIFT = Shoot
 
 ## DEBUG & SETTINGS
 
-F8 = Change from 60 to 30 fps
+F3 = Suicide/Restart Level
 
-F1 = God mode/Debug
+F5 = Save the current game state
+
+F6 = Load the previous state (even across levels)
+
+F9 = View Colliders/Paths/logic
+
+F10 = GOD MODE, cannot be killed, and infinite gravity changes
+
+F11 = Change from 60 to 30 fps
 
 ESC = Close game  
 &nbsp;
