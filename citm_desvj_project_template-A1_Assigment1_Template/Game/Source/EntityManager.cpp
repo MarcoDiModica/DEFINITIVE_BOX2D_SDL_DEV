@@ -159,6 +159,7 @@ void EntityManager::RespawnAllEnemies()
 
 		if (pEntity->type == EntityType::WALKING_ENEMY || pEntity->type == EntityType::FLYING_ENEMY)
 		{
+			pEntity->Disable();
 			pEntity->Enable();
 		}
 		
