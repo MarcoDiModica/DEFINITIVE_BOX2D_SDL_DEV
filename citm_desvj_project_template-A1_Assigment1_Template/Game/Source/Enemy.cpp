@@ -88,6 +88,7 @@ bool Enemy::Update(float dt)
 
     if (death)
     {
+        pbody->ctype = ColliderType::UNKNOWN;
         currentAnimation = &DeathAnim;
 
         if (!audiohasplayed)

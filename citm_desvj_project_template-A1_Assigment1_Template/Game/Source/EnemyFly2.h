@@ -1,5 +1,5 @@
-#ifndef __ENEMYFLY_H__
-#define __ENEMYFLY_H__
+#ifndef __ENEMYFLY2_H__
+#define __ENEMYFLY2_H__
 
 #include "Entity.h"
 #include "Point.h"
@@ -9,13 +9,13 @@
 
 struct SDL_Texture;
 
-class EnemyFLY : public Entity
+class EnemyFLY2 : public Entity
 {
 public:
 
-	EnemyFLY();
+	EnemyFLY2();
 
-	virtual ~EnemyFLY();
+	virtual ~EnemyFLY2();
 
 	bool Awake();
 
@@ -68,4 +68,4 @@ public:
 	int enemySpeed = 0.3f;
 };
 
-#endif // __ENEMYFLY_H__
+#endif // __ENEMYFLY2_H__

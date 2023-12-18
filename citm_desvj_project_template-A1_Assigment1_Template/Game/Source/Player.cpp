@@ -10,6 +10,7 @@
 #include "Physics.h"
 #include "Map.h"
 #include "Animation.h"
+#include "Bullet.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -72,6 +73,7 @@ bool Player::Start()
 	texture = app->tex->Load(texturePath);
     //Add path to config file
     deathSFX = app->audio->LoadFx(deathSFXPath);
+    texture2 = app->tex->Load("Assets/Textures/player1.png");
 	pbody = app->physics->CreatePlayer(position.x, position.y, 34, 58, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
@@ -224,7 +226,7 @@ bool Player::Update(float dt)
         //PhysBody* newBullet = app->physics->CreateBullet(bulletPos.x, bulletPos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, bulletDirection);
         //bullets.push_back(newBullet);
 
-        app->entityManager->CreateEntity(EntityType::BULLET, &bulletPos, &bulletDirection);
+        Entity* bullet = app->entityManager->CreateEntity(EntityType::BULLET, &bulletPos, &bulletDirection);
     }
 
     if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && isTouchingGround && !death)

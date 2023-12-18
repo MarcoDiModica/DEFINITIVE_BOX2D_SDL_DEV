@@ -39,6 +39,8 @@ public:
 	Player* player;
 	Enemy* enemyground1;
 	EnemyFLY* enemyfly1;
+	Enemy* enemyground2;
+	EnemyFLY* enemyfly2;
 
 	const char* musicPath;
 

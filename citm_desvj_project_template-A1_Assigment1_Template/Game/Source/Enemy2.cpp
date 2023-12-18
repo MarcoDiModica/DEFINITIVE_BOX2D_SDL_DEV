@@ -1,4 +1,4 @@
-#include "Enemy.h"
+#include "Enemy2.h"
 #include "App.h"
 #include "Textures.h"
 #include "Audio.h"
@@ -12,18 +12,18 @@
 #include "Animation.h"
 #include "EntityManager.h"
 
-Enemy::Enemy() : Entity(EntityType::WALKING_ENEMY)
+Enemy2::Enemy2() : Entity(EntityType::WALKING_ENEMY)
 {
 	name.Create("Enemy");
 }
 
-Enemy::~Enemy() {
+Enemy2::~Enemy2() {
 
    
 
 }
 
-bool Enemy::Awake() {
+bool Enemy2::Awake() {
 
     initX = parameters.attribute("x").as_int();
     initY = parameters.attribute("y").as_int();
@@ -68,7 +68,7 @@ bool Enemy::Awake() {
     return true;
 }
 
-bool Enemy::Start()
+bool Enemy2::Start()
 {
     death = false;
     DeathAnim.Reset();
@@ -82,7 +82,7 @@ bool Enemy::Start()
 	return true;
 }
 
-bool Enemy::Update(float dt)
+bool Enemy2::Update(float dt)
 {
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
@@ -208,7 +208,7 @@ bool Enemy::Update(float dt)
 
 }
 
-bool Enemy::CleanUp()
+bool Enemy2::CleanUp()
 {
     if (texture != nullptr)
     {
@@ -228,7 +228,7 @@ bool Enemy::CleanUp()
     return true;
 }
 
-void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
+void Enemy2::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype)
     {
@@ -253,13 +253,13 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
     }
 }
 
-void Enemy::Death()
+void Enemy2::Death()
 {
     death = true;
     pbody->ctype = ColliderType::UNKNOWN;
 }
 
-bool Enemy::LoadState(pugi::xml_node node, int num)
+bool Enemy2::LoadState(pugi::xml_node node, int num)
 {
 
     SString childName("enemy%d", num);
@@ -308,7 +308,7 @@ bool Enemy::LoadState(pugi::xml_node node, int num)
     return true;
 }
 
-bool Enemy::SaveState(pugi::xml_node node, int num)
+bool Enemy2::SaveState(pugi::xml_node node, int num)
 {
 
     SString childName("enemy%d", num);

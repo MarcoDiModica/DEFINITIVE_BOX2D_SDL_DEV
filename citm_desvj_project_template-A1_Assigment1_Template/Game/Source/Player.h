@@ -42,13 +42,14 @@ public:
 	const char* texturePath;
 	const char* deathSFXPath;
 	SDL_Texture* texture = nullptr;
+	SDL_Texture* texture2 = nullptr;
 	Animation* currentAnimation = nullptr;
 
 	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;
 	SDL_RendererFlip flipHorizontal = lastDirection;
 	SDL_RendererFlip flipVertical = SDL_FLIP_NONE;
 
-	std::list<PhysBody*> bullets;
+	std::list<Entity*> bullets;
 
 	Animation idleAnim;
 	Animation runAnim;

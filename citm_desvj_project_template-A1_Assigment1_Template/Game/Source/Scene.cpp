@@ -10,6 +10,8 @@
 #include "EntityManager.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Enemy2.h"
+#include "EnemyFly2.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -64,6 +66,16 @@ bool Scene::Awake(pugi::xml_node& config)
 	if (config.child("enemyfly")) {
 		enemyfly1 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
 		enemyfly1->parameters = config.child("enemyfly");
+	}
+
+	if (config.child("enemyground2")) {
+		enemyground2 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
+		enemyground2->parameters = config.child("enemyground2");
+	}
+
+	if (config.child("enemyfly2")) {
+		enemyfly2 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
+		enemyfly2->parameters = config.child("enemyfly2");
 	}
 
 	musicPath = config.child("Music").attribute("musicpath").as_string();

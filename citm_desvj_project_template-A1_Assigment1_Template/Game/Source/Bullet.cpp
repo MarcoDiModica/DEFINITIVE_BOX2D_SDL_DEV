@@ -34,7 +34,7 @@ Bullet::Bullet(b2Vec2* position, b2Vec2* direction) : Entity(EntityType::BULLET)
 		this->direction.x = 0;
 		this->direction.y = 0;
 	}
-	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, this->direction);
+	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 18, 18, DYNAMIC, ColliderType::WEAPON, 15, this->direction);
 	pbody->listener = this;
 }
 
@@ -52,8 +52,8 @@ bool Bullet::Awake()
 
 bool Bullet::Start()
 {
-	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, direction);
-    texture = app->tex->Load("Assets/Textures/player1.png");
+	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 18, 18, DYNAMIC, ColliderType::WEAPON, 15, direction);
+    texture = app->tex->Load("Assets/Textures/goldCoin.png");
 
    
 	return true;
