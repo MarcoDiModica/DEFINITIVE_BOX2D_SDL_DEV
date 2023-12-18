@@ -22,6 +22,10 @@ F8 = Change from 60 to 30 fps
 
 F1 = God mode/Debug
 
+F5 Save the current game state
+
+F6 Load the previous state (even across levels)
+
 ESC = Close game  
 &nbsp;
 
