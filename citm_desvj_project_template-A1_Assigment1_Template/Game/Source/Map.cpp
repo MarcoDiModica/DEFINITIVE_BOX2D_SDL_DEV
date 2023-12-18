@@ -67,6 +67,7 @@ bool Map::Start() {
     //uchar* navigationMap = NULL;
     //CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
     //pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
+    //RELEASE_ARRAY(navigationMap);
 
     return ret;
 }

@@ -71,6 +71,7 @@ bool EnemyFLY::Start()
     death = false;
     DeathAnim.Reset();
     texture = app->tex->Load(texturePath);
+    pathTexture = app->tex->Load("Assets/Textures/goldCoin.png");
     pbody = app->physics->CreateFlyingEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
     pbody->listener = this;
@@ -96,48 +97,60 @@ bool EnemyFLY::Update(float dt)
     }
     else
     {
-        // Si el jugador está a la vista, mueve al enemigo hacia el jugador
-        if (position.DistanceTo(app->scene->player->position) < 200)
+        //// Si el jugador está a la vista, mueve al enemigo hacia el jugador
+        //if (position.DistanceTo(app->scene->player->position) < 200)
+        //{
+        //    if (app->scene->player->position.x > position.x)
+        //    {
+        //        // Move the enemy to the right
+        //        vel.x = enemySpeed * dt;
+        //        flipHorizontal = SDL_FLIP_NONE;
+        //        isMoving = true;
+        //    }
+        //    else if (app->scene->player->position.x < position.x)
+        //    {
+        //        // Move the enemy to the left
+        //        vel.x = -enemySpeed * dt;
+        //        flipHorizontal = SDL_FLIP_HORIZONTAL;
+        //        isMoving = true;
+        //    }
+
+        //    if (app->scene->player->position.y > position.y)
+        //    {
+        //        // Move the enemy upwards
+        //        vel.y = -enemySpeed * dt;
+        //    }
+        //    else if (app->scene->player->position.y < position.y)
+        //    {
+        //        // Move the enemy downwards
+        //        vel.y = enemySpeed * dt;
+        //    }
+
+        //    // If there is an obstacle in front, make the enemy jump
+        //    /*if (ObstacleInFront())
+        //    {
+        //        Jump();
+        //    }*/
+        //}
+        //else
+        //{
+        //    vel.x = 0;
+        //    vel.y = 0;
+        //    isMoving = false;
+        //}
+
+        /*iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
+        iPoint playerPos = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
+
+        app->map->pathfinding->CreatePath(enemyPos, playerPos);
+
+        const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+
+        for (uint i = 0; i < path->Count(); ++i)
         {
-            if (app->scene->player->position.x > position.x)
-            {
-                // Move the enemy to the right
-                vel.x = enemySpeed * dt;
-                flipHorizontal = SDL_FLIP_NONE;
-                isMoving = true;
-            }
-            else if (app->scene->player->position.x < position.x)
-            {
-                // Move the enemy to the left
-                vel.x = -enemySpeed * dt;
-                flipHorizontal = SDL_FLIP_HORIZONTAL;
-                isMoving = true;
-            }
-
-            if (app->scene->player->position.y > position.y)
-            {
-                // Move the enemy upwards
-                vel.y = -enemySpeed * dt;
-            }
-            else if (app->scene->player->position.y < position.y)
-            {
-                // Move the enemy downwards
-                vel.y = enemySpeed * dt;
-            }
-
-            // If there is an obstacle in front, make the enemy jump
-            /*if (ObstacleInFront())
-            {
-                Jump();
-            }*/
-        }
-        else
-        {
-            vel.x = 0;
-            vel.y = 0;
-            isMoving = false;
-        }
-
+            iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+            app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
+        }*/
     }
     
     pbody->body->SetLinearVelocity(vel);
