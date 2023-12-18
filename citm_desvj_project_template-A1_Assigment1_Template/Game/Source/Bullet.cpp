@@ -53,7 +53,7 @@ bool Bullet::Awake()
 bool Bullet::Start()
 {
 	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, direction);
-    
+    texture = app->tex->Load("Assets/Textures/player1.png");
 
    
 	return true;
@@ -62,6 +62,8 @@ bool Bullet::Start()
 
 bool Bullet::Update(float dt)
 {
+	app->render->DrawTexture(texture, pbody->body->GetPosition().x, pbody->body->GetPosition().y, nullptr);
+	
 	return true;
 
 }

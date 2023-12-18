@@ -143,11 +143,15 @@ iPoint Map::MapToWorld(int x, int y) const
     return ret;
 }
 
-iPoint Map::WorldToMap(int x, int y) 
-{
+iPoint Map::WorldToMap(int x, int y) {
+
     iPoint ret(0, 0);
 
-    //
+    ret.x = x / mapData.tileWidth;
+    ret.y = y / mapData.tileHeight;
+    
+
+    
 
     return ret;
 }
@@ -285,7 +289,7 @@ bool Map::Load(SString mapFileName)
         navigationLayer = mapLayer->data;
 
         while (mapLayer != NULL) {
-            if (mapLayer->data->properties.GetProperty("Navigation") != NULL && mapLayer->data->properties.GetProperty("Navigation")->value) {
+            if (mapLayer->data->properties.GetProperty("Navigate") != NULL && mapLayer->data->properties.GetProperty("Navigate")->value) {
                 navigationLayer = mapLayer->data;
                 break;
             }

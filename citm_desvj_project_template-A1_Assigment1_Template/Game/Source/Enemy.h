@@ -36,6 +36,9 @@ public:
 	bool SaveState(pugi::xml_node node, int num);
 public:
 	const char* texturePath;
+	const char* deathSFXPath;
+	uint deathSFX;
+	bool audiohasplayed = false;
 	SDL_Texture* texture = nullptr;
 	SDL_Texture* pathTexture = nullptr;
 	Animation* currentAnimation = nullptr;

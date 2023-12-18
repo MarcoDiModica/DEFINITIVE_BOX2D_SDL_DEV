@@ -29,6 +29,7 @@ bool EnemyFLY::Awake() {
     position.x = parameters.attribute("x").as_int();
     position.y = parameters.attribute("y").as_int();
     texturePath = parameters.attribute("texturepath").as_string();
+    deathSFXPath = parameters.attribute("deathsfxpath").as_string();
     //path = parameters.attribute("path").as_string();
 
     pugi::xml_node animNode = parameters.first_child();
@@ -71,6 +72,7 @@ bool EnemyFLY::Start()
     death = false;
     DeathAnim.Reset();
     texture = app->tex->Load(texturePath);
+    deathSFX = app->audio->LoadFx(deathSFXPath);
     pathTexture = app->tex->Load("Assets/Textures/player1.png");
     pbody = app->physics->CreateFlyingEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
@@ -86,6 +88,12 @@ bool EnemyFLY::Update(float dt)
     if (death)
     {
         currentAnimation = &DeathAnim;
+
+        if (!audiohasplayed)
+        {
+            app->audio->PlayFx(deathSFX);
+            audiohasplayed = true;
+        }
 
         if (currentAnimation->HasFinished())
         {
@@ -142,32 +150,41 @@ bool EnemyFLY::Update(float dt)
         iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
         iPoint playerPos = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
 
-        app->map->pathfinding->CreatePath(enemyPos, playerPos);
+        if (position.DistanceTo(app->scene->player->position) < 700) {
+            app->map->pathfinding->CreatePath(enemyPos, playerPos);
 
-        const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
-
-        for (uint i = 0; i < path->Count(); ++i)
-        {
-            iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-            app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
-        }
-
-        if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
-
-            if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x)>1) {
-                pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+            const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+            b2Vec2 posi;
+            if (app->scene->player->debug && !death) {
+                for (uint i = 0; i < path->Count(); ++i)
+                {
+                    iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+                    app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
+                }
             }
-            else if (abs(enemyPos.x - playerPos.x) > 1) {
-                pbody->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+            if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1 && path->Count() < 25) {
+
+                iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
+
+                float dirx = position.x - pos.x;
+                float diry = position.y - pos.y;
+
+                b2Vec2 vel;
+                vel.x = dirx;
+                vel.y = diry;
+                vel.Normalize();
+
+                pbody->body->SetLinearVelocity(b2Vec2(-vel.x * 2, -vel.y * 2));
             }
-            else if (abs(enemyPos.x - playerPos.x) < 1) {
-                pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+            else
+            {
+                pbody->body->SetLinearVelocity(b2Vec2(0, 0));
                 pbody->body->SetLinearDamping(0);
             }
         }
     }
     
-    pbody->body->SetLinearVelocity(vel);
+    //pbody->body->SetLinearVelocity(vel);
 
     position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 44;
     position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 42;
@@ -223,7 +240,7 @@ void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DEATH:
         LOG("Collision DEATH");
-        Death();
+        //Death();
         break;
     case ColliderType::PLAYER:
         LOG("Collision PLAYER");

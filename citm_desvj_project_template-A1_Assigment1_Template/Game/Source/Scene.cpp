@@ -66,7 +66,7 @@ bool Scene::Awake(pugi::xml_node& config)
 		enemyfly1->parameters = config.child("enemyfly");
 	}
 
-	musicPath = config.child("Scene").child("Music").attribute("musicpath").as_string();
+	musicPath = config.child("Music").attribute("musicpath").as_string();
 	
   return ret;
 }
@@ -79,7 +79,7 @@ bool Scene::Start()
 	
 	//Music is commented so that you can add your own music
 	//add path to config file
-	app->audio->PlayMusic("Assets/Audio/Music/mus.ogg");
+	app->audio->PlayMusic(musicPath);
 
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);

@@ -157,14 +157,7 @@ PhysBody* Physics::CreateBullet(int x, int y, int width, int height, bodyType ty
 
 	pbody->ctype = collider;
 
-	// Create a red rectangle for the bullet
-	SDL_Rect bulletRect;
-	bulletRect.x = body.position.x;
-	bulletRect.y = body.position.y;
-	bulletRect.w = width;
-	bulletRect.h = height;
-	SDL_SetRenderDrawColor(app->render->renderer, 255, 0, 0, 255); // Set color to red
-	SDL_RenderFillRect(app->render->renderer, &bulletRect);
+	
 
 	return pbody;
 }
@@ -276,6 +269,7 @@ void Physics::CreatePathForFlyingEnemy(PhysBody* enemy, int startX, int startY, 
 PhysBody* Physics::CreateGroundEnemy(int x, int y, int width, int height, bodyType type)
 {
 	b2BodyDef body;
+	body.gravityScale = 0.0f;
 
 	if (type == DYNAMIC) body.type = b2_dynamicBody;
 	if (type == STATIC) body.type = b2_staticBody;

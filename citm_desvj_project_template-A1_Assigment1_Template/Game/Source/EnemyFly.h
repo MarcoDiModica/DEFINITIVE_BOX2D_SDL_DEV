@@ -37,10 +37,12 @@ public:
 
 public:
 	const char* texturePath;
+	const char* deathSFXPath;
 	SDL_Texture* texture = nullptr;
 	SDL_Texture* pathTexture = nullptr;
 	Animation* currentAnimation = nullptr;
-
+	uint deathSFX;
+	bool audiohasplayed = false;
 	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;
 	SDL_RendererFlip flipHorizontal = lastDirection;
 	SDL_RendererFlip flipVertical = SDL_FLIP_NONE;
