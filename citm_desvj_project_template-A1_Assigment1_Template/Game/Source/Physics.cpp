@@ -157,7 +157,9 @@ PhysBody* Physics::CreateBullet(int x, int y, int width, int height, bodyType ty
 
 	pbody->ctype = collider;
 
-	
+	SDL_Rect rect = { x, y, width, height };
+
+	app->render->DrawRectangle(rect, 255, 255, 255, 255, true, false);
 
 	return pbody;
 }

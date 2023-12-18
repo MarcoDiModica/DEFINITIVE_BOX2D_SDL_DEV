@@ -239,8 +239,7 @@ bool Player::Update(float dt)
         //PhysBody* newBullet = app->physics->CreateBullet(bulletPos.x, bulletPos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, bulletDirection);
         //bullets.push_back(newBullet);
 
-        Entity* bullet = app->entityManager->CreateEntity(EntityType::BULLET, &bulletPos, &bulletDirection);
-        app->entityManager->entities.Add(bullet);
+        app->entityManager->CreateEntity(EntityType::BULLET, &bulletPos, &bulletDirection);
     }
 
     if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && isTouchingGround && !death)

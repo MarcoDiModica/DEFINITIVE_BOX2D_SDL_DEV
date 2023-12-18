@@ -67,7 +67,10 @@ bool Bullet::Update(float dt)
 		texcreated = true;
 	}
 	
-	//app->render->DrawTexture(texture2, 100, 673);
+	//position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
+	//position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 10;
+
+
 	//app->render->DrawTexture(texture2, pbody->body->GetPosition().x, pbody->body->GetPosition().x);
 	
 	return true;
