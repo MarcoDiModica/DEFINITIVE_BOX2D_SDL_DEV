@@ -8,25 +8,33 @@
 	<entitymanager>
 		<Player>
 			<player1 gravity="1">
-				<Position x="2" y="13.4850016" />
+				<Position x="23.9620495" y="23.0850029" />
 				<velocity vx="0" vy="0" />
 			</player1>
 		</Player>
 		<Items />
 		<Walking_Enemies>
 			<enemy1 enabled="true" grounded="true">
-				<PhysicalPosition x="3" y="13.4850016" />
-				<GraphicPosition x="150" y="674" />
+				<PhysicalPosition x="28" y="14.1199999" />
+				<GraphicPosition x="1400" y="706" />
 			</enemy1>
+			<enemy2 enabled="true" grounded="true">
+				<PhysicalPosition x="36" y="9" />
+				<GraphicPosition x="1800" y="450" />
+			</enemy2>
 		</Walking_Enemies>
 		<Flying_Enemies>
-			<enemy1 enabled="true" grounded="true">
-				<PhysicalPosition x="3" y="9.46000004" />
-				<GraphicPosition x="150" y="473" />
+			<enemy1 enabled="false" grounded="true">
+				<PhysicalPosition x="0" y="0" />
+				<GraphicPosition x="1544" y="1092" />
 			</enemy1>
+			<enemy2 enabled="false" grounded="true">
+				<PhysicalPosition x="0" y="0" />
+				<GraphicPosition x="1844" y="1092" />
+			</enemy2>
 		</Flying_Enemies>
 	</entitymanager>
 	<renderer>
-		<camera x="0" y="-248" />
+		<camera x="-642" y="-728" />
 	</renderer>
 </game_state>

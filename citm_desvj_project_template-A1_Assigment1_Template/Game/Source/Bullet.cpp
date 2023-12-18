@@ -36,6 +36,7 @@ Bullet::Bullet(b2Vec2* position, b2Vec2* direction) : Entity(EntityType::BULLET)
 	}
 	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 18, 18, DYNAMIC, ColliderType::WEAPON, 15, this->direction);
 	pbody->listener = this;
+	texture2 = app->tex->Load("Assets/Textures/marco.png");
 }
 
 
@@ -62,16 +63,13 @@ bool Bullet::Start()
 
 bool Bullet::Update(float dt)
 {
-	if (!texcreated) {
-		texture2 = app->tex->Load("Assets/Textures/marco.png");
-		texcreated = true;
-	}
 	
-	//position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
-	//position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 10;
+	
+	position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
+	position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 10;
 
 
-	//app->render->DrawTexture(texture2, pbody->body->GetPosition().x, pbody->body->GetPosition().x);
+	app->render->DrawTexture(texture2,position.x, position.y);
 	
 	return true;
 
@@ -79,7 +77,7 @@ bool Bullet::Update(float dt)
 
 bool Bullet::CleanUp()
 {
-	return true;
+	return true;	
 
 }
 
