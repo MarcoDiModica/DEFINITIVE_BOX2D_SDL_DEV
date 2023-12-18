@@ -37,6 +37,7 @@ public:
 public:
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
+	SDL_Texture* pathTexture = nullptr;
 	Animation* currentAnimation = nullptr;
 
 	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;

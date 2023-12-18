@@ -61,13 +61,13 @@ bool Map::Start() {
 
     }
 
-    //pathfinding = new PathFinding();
+    pathfinding = new PathFinding();
 
-    ////Initialize the navigation map
-    //uchar* navigationMap = NULL;
-    //CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
-    //pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
-    //RELEASE_ARRAY(navigationMap);
+    //Initialize the navigation map
+    uchar* navigationMap = NULL;
+    CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
+    pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
+    RELEASE_ARRAY(navigationMap);
 
     return ret;
 }
@@ -107,6 +107,25 @@ bool Map::Update(float dt)
                 }
             }
         }
+        /*if (mapLayerItem->data->properties.GetProperty("Navigate") != NULL && mapLayerItem->data->properties.GetProperty("Navigate")->value) {
+
+            for (int x = 0; x < mapLayerItem->data->width; x++)
+            {
+                for (int y = 0; y < mapLayerItem->data->height; y++)
+                {
+                    int gid = mapLayerItem->data->Get(x, y);
+                    TileSet* tileset = GetTilesetFromTileId(gid);
+
+                    SDL_Rect r = tileset->GetTileRect(gid);
+                    iPoint pos = MapToWorld(x, y);
+
+                    app->render->DrawTexture(tileset->texture,
+                        pos.x,
+                        pos.y,
+                        &r);
+                }
+            }
+        }*/
         mapLayerItem = mapLayerItem->next;
 
     }
@@ -263,15 +282,19 @@ bool Map::Load(SString mapFileName)
 
         ListItem<MapLayer*>* mapLayer;
         mapLayer = mapData.maplayers.start;
+        navigationLayer = mapLayer->data;
 
         while (mapLayer != NULL) {
-            LOG("id : %d name : %s", mapLayer->data->id, mapLayer->data->name.GetString());
-            LOG("Layer width : %d Layer height : %d", mapLayer->data->width, mapLayer->data->height);
+            if (mapLayer->data->properties.GetProperty("Navigation") != NULL && mapLayer->data->properties.GetProperty("Navigation")->value) {
+                navigationLayer = mapLayer->data;
+                break;
+            }
             mapLayer = mapLayer->next;
         }
+
+        if (mapFileXML) mapFileXML.reset();
     }
 
-    if(mapFileXML) mapFileXML.reset();
 
     mapLoaded = ret;
 

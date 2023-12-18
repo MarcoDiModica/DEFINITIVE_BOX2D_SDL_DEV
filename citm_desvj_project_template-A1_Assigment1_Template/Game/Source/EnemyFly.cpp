@@ -71,7 +71,7 @@ bool EnemyFLY::Start()
     death = false;
     DeathAnim.Reset();
     texture = app->tex->Load(texturePath);
-    pathTexture = app->tex->Load("Assets/Textures/goldCoin.png");
+    pathTexture = app->tex->Load("Assets/Textures/player1.png");
     pbody = app->physics->CreateFlyingEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
     pbody->listener = this;
@@ -139,7 +139,7 @@ bool EnemyFLY::Update(float dt)
         //    isMoving = false;
         //}
 
-        /*iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
+        iPoint enemyPos = app->map->WorldToMap(position.x, position.y);
         iPoint playerPos = app->map->WorldToMap(app->scene->player->position.x, app->scene->player->position.y);
 
         app->map->pathfinding->CreatePath(enemyPos, playerPos);
@@ -150,7 +150,21 @@ bool EnemyFLY::Update(float dt)
         {
             iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
             app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
-        }*/
+        }
+
+        if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+
+            if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x)>1) {
+                pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+            }
+            else if (abs(enemyPos.x - playerPos.x) > 1) {
+                pbody->body->SetLinearVelocity(b2Vec2(-0.1 * dt, 0.2 * dt));
+            }
+            else if (abs(enemyPos.x - playerPos.x) < 1) {
+                pbody->body->SetLinearVelocity(b2Vec2(0.1 * dt, 0.2 * dt));
+                pbody->body->SetLinearDamping(0);
+            }
+        }
     }
     
     pbody->body->SetLinearVelocity(vel);

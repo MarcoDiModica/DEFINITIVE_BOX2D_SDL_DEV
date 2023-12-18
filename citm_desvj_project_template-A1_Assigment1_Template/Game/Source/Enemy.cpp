@@ -72,6 +72,7 @@ bool Enemy::Start()
     death = false;
     DeathAnim.Reset();
     texture = app->tex->Load(texturePath);
+    pathTexture = app->tex->Load("Assets/Textures/player1.png");
 	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
 	pbody->listener = this;
@@ -100,34 +101,62 @@ bool Enemy::Update(float dt)
     else
     {
         // Si el jugador está a la vista, mueve al enemigo hacia el jugador
-        if (position.DistanceTo(app->scene->player->position) < 200)
-        {
-            if (app->scene->player->position.x > position.x)
-            {
-                // Mueve al enemigo a la derecha
-                vel.x = enemySpeed * dt;
-                flipHorizontal = SDL_FLIP_NONE;
-                isMoving = true;
-            }
-            else if (app->scene->player->position.x < position.x)
-            {
-                // Mueve al enemigo a la izquierda
-                vel.x = -enemySpeed * dt;
-                flipHorizontal = SDL_FLIP_HORIZONTAL;
-                isMoving = true;
-            }
+        //if (position.DistanceTo(app->scene->player->position) < 200)
+        //{
+        //    if (app->scene->player->position.x > position.x)
+        //    {
+        //        // Mueve al enemigo a la derecha
+        //        vel.x = enemySpeed * dt;
+        //        flipHorizontal = SDL_FLIP_NONE;
+        //        isMoving = true;
+        //    }
+        //    else if (app->scene->player->position.x < position.x)
+        //    {
+        //        // Mueve al enemigo a la izquierda
+        //        vel.x = -enemySpeed * dt;
+        //        flipHorizontal = SDL_FLIP_HORIZONTAL;
+        //        isMoving = true;
+        //    }
 
-            // Si hay un obstáculo delante, haz que el enemigo salte
-            /*if (ObstacleInFront())
-            {
-                Jump();
-            }*/
+        //    // Si hay un obstáculo delante, haz que el enemigo salte
+        //    /*if (ObstacleInFront())
+        //    {
+        //        Jump();
+        //    }*/
+        //}
+        //else
+        //{
+        //    vel.x = 0;
+        //    isMoving = false;
+        //}
+
+        iPoint enemyPos = { position.x, position.y };
+        iPoint playerPos = { app->scene->player->position.x, app->scene->player->position.y };
+
+        app->map->pathfinding->CreatePath(enemyPos, playerPos);
+
+        const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
+
+        for (uint i = 0; i < path->Count(); ++i)
+        {
+            iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
+            app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
+        }
+
+        if (path->Count() > 1 && app->map->pathfinding->CreatePath(enemyPos, playerPos) != -1) {
+            iPoint pos = app->map->MapToWorld(path->At(1)->x, path->At(1)->y);
+
+
+            if (enemyPos.x - playerPos.x < 0 && abs(enemyPos.x - playerPos.x) > 2)
+                pbody->body->SetLinearVelocity(b2Vec2(1, 9.8f));
+            else if (abs(enemyPos.x - playerPos.x) > 2)
+                pbody->body->SetLinearVelocity(b2Vec2(-1, 9.8f));
         }
         else
         {
-            vel.x = 0;
-            isMoving = false;
-        }
+			vel.x = 0;
+			isMoving = false;
+		}
     }
 
     
