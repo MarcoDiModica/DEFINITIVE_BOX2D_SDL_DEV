@@ -69,6 +69,7 @@ bool EnemyFLY::Awake() {
 
 bool EnemyFLY::Start()
 {
+    audiohasplayed = false;
     death = false;
     DeathAnim.Reset();
     texture = app->tex->Load(texturePath);

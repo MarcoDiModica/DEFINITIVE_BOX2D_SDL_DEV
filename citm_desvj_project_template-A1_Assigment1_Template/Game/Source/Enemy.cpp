@@ -70,6 +70,7 @@ bool Enemy::Awake() {
 
 bool Enemy::Start()
 {
+    audiohasplayed = false;
     death = false;
     DeathAnim.Reset();
     texture = app->tex->Load(texturePath);
