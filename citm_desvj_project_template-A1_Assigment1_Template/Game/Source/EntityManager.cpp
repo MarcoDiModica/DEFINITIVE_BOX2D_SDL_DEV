@@ -5,6 +5,7 @@
 #include "Scene.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Bullet.h"
 #include "Physics.h"
 
 #include "Defs.h"
@@ -78,7 +79,7 @@ bool EntityManager::CleanUp()
 	return ret;
 }
 
-Entity* EntityManager::CreateEntity(EntityType type)
+Entity* EntityManager::CreateEntity(EntityType type, b2Vec2* position, b2Vec2* direction)
 {
 	Entity* entity = nullptr; 
 
@@ -95,6 +96,9 @@ Entity* EntityManager::CreateEntity(EntityType type)
 		break;
 	case EntityType::FLYING_ENEMY:
 		entity = new EnemyFLY();
+		break;
+	case EntityType::BULLET:
+		entity = new Bullet(position,direction);
 		break;
 	default:
 		break;

@@ -139,6 +139,12 @@ PhysBody* Physics::CreateBullet(int x, int y, int width, int height, bodyType ty
 
 	b->CreateFixture(&fixture);
 
+	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
+	float footSensorHeight = PIXEL_TO_METERS(height);
+	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);
+	fixture.isSensor = true;
+	b->CreateFixture(&fixture);
+
 	b->ResetMassData();
 
 	b->SetLinearVelocity(b2Vec2(velocity * direction.x, velocity * direction.y));
@@ -185,7 +191,6 @@ PhysBody* Physics::CreatePlayer(int x, int y, int width, int height, bodyType ty
 	fixture.restitution = 0.0f; 
 
 	b->CreateFixture(&fixture);
-
 	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
 	float footSensorHeight = PIXEL_TO_METERS(height);
 	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);

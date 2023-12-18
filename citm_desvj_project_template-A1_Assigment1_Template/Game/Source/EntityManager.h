@@ -5,6 +5,8 @@
 #include "Entity.h"
 #include "List.h"
 
+struct b2Vec2;
+
 class EntityManager : public Module
 {
 public:
@@ -27,7 +29,7 @@ public:
 	bool CleanUp();
 
 	// Additional methods
-	Entity* CreateEntity(EntityType type);
+	Entity* CreateEntity(EntityType type, b2Vec2* position = nullptr, b2Vec2* direction=nullptr);
 
 	void DestroyEntity(Entity* entity);
 

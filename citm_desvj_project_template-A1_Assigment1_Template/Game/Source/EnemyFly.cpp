@@ -205,6 +205,8 @@ void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
 void EnemyFLY::Death()
 {
     death = true;
+    pbody->ctype = ColliderType::UNKNOWN;
+
 }
 
 bool EnemyFLY::LoadState(pugi::xml_node node, int num)

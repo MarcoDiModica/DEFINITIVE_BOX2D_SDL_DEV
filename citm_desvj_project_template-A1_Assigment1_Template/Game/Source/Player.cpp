@@ -70,6 +70,8 @@ bool Player::Awake() {
 bool Player::Start() 
 {
 	texture = app->tex->Load(texturePath);
+    //Add path to config file
+    deathSFX = app->audio->LoadFx("Assets/Audio/Fx/kill2.wav");
 	pbody = app->physics->CreatePlayer(position.x, position.y, 34, 58, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
@@ -86,6 +88,11 @@ bool Player::Update(float dt)
     if (death)
     {
         currentAnimation = &DeathAnim;
+        if (!audiohasplayed)
+        {
+            app->audio->PlayFx(deathSFX);
+            audiohasplayed = true;  
+        }
 
         if (currentAnimation->HasFinished())
         {
@@ -214,8 +221,10 @@ bool Player::Update(float dt)
             bulletPos.y = position.y + 40;
         }
 
-        PhysBody* newBullet = app->physics->CreateBullet(bulletPos.x, bulletPos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, bulletDirection);
-        bullets.push_back(newBullet);
+        //PhysBody* newBullet = app->physics->CreateBullet(bulletPos.x, bulletPos.y, 5, 5, DYNAMIC, ColliderType::WEAPON, 15, bulletDirection);
+        //bullets.push_back(newBullet);
+
+        app->entityManager->CreateEntity(EntityType::BULLET, &bulletPos, &bulletDirection);
     }
 
     if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && isTouchingGround && !death)
@@ -307,6 +316,7 @@ void Player::Respawn()
     death = false;
     DeathAnim.Reset();
     currentAnimation = &idleAnim; 
+    audiohasplayed = false;
 }
 
 void Player::UpdateCamera()

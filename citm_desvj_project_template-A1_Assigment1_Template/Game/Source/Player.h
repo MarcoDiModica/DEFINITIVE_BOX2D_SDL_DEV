@@ -75,6 +75,8 @@ public:
 	float gravityScale = 1.0f;
 	int initX;
 	int initY;
+	uint deathSFX;
+	bool audiohasplayed = false;
 };
 
 #endif // __PLAYER_H__

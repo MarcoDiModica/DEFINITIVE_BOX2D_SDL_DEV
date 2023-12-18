@@ -14,6 +14,7 @@ enum class EntityType
 	ITEM,
 	WALKING_ENEMY,
 	FLYING_ENEMY,
+	BULLET,
 	UNKNOWN
 };
 
