@@ -97,11 +97,12 @@ public:
 public:
 
 	float gravity_y = 30.0f;
+	bool debug = false;
 
 private:
 
 	// Debug mode
-	bool debug = false;
+	
 
 	// Box2D World
 	b2World* world;

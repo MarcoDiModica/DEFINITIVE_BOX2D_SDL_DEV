@@ -147,7 +147,7 @@ bool App::Update()
 
 	FinishUpdate();
 
-	if (app->input->GetKey(SDL_SCANCODE_F8) == KEY_DOWN) {
+	if (app->input->GetKey(SDL_SCANCODE_F11) == KEY_DOWN) {
 		if (maxFrameDuration == 1000 / 60) {
 			maxFrameDuration = 1000 / 30;
 		}

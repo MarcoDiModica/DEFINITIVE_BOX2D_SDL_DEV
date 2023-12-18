@@ -147,11 +147,11 @@ bool Enemy::Update(float dt)
 
             const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
 
-            if (app->scene->player->debug && !death) {
+            if (app->physics->debug && !death) {
                 for (uint i = 0; i < path->Count(); ++i)
                 {
                     iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);
-                    if (app->scene->player->debug) app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
+                    app->render->DrawTexture(pathTexture, pos.x, pos.y, false);
                 }
 
             }

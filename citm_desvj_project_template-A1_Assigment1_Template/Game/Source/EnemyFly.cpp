@@ -155,7 +155,7 @@ bool EnemyFLY::Update(float dt)
 
             const DynArray<iPoint>* path = app->map->pathfinding->GetLastPath();
             b2Vec2 posi;
-            if (app->scene->player->debug && !death) {
+            if (app->physics->debug && !death) {
                 for (uint i = 0; i < path->Count(); ++i)
                 {
                     iPoint pos = app->map->MapToWorld(path->At(i)->x, path->At(i)->y);

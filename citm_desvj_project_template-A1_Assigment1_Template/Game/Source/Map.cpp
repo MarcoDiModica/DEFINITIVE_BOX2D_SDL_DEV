@@ -79,7 +79,7 @@ bool Map::Update(float dt)
 
     app->render->DrawTexture(background, 0, 0);
 
-    if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN) {
+    if (app->input->GetKey(SDL_SCANCODE_F9) == KEY_DOWN) {
         *debug = !*debug;
     }
 

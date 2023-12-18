@@ -82,9 +82,22 @@ bool Player::Start()
 
 bool Player::Update(float dt)
 {
-    if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+    if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
         debug = !debug;
 
+    if (app->input->GetKey(SDL_SCANCODE_F3) == KEY_DOWN) {
+        b2Vec2 stop(0, 0);
+        pbody->body->SetLinearVelocity(stop);
+        b2Vec2 initpos(PIXEL_TO_METERS(initX), PIXEL_TO_METERS(initY));
+        pbody->body->SetTransform(initpos, 0);
+        gravityScale = 1.0f;
+        pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+        pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+        pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
+        flipVertical = SDL_FLIP_NONE;
+        gravityScale = 1.0f;
+        Respawn();
+    }
 
     //Play death animation and respawn
     if (death)

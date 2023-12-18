@@ -10,8 +10,6 @@
 #include "EntityManager.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
-#include "Enemy2.h"
-#include "EnemyFly2.h"
 
 #include "Defs.h"
 #include "Log.h"
