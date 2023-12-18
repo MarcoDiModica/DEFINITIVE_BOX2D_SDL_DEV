@@ -38,6 +38,7 @@ public:
 public:
 	const char* texturePath;
 	SDL_Texture* texture = nullptr;
+	SDL_Texture* pathTexture = nullptr;
 	Animation* currentAnimation = nullptr;
 
 	SDL_RendererFlip lastDirection = SDL_FLIP_NONE;
@@ -60,7 +61,7 @@ public:
 	int initX;
 	int initY;
 
-	b2Vec2 path;
+	//b2Vec2 path;
 	int currentTargetIndex;
 	int enemySpeed = 0.3f;
 };
