@@ -40,6 +40,7 @@ public:
 public:
 	float speed = 0.4f;
 	const char* texturePath;
+	const char* deathSFXPath;
 	SDL_Texture* texture = nullptr;
 	Animation* currentAnimation = nullptr;
 

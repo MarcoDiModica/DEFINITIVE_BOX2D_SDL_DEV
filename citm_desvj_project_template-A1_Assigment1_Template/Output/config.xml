@@ -24,7 +24,7 @@
   <scene>
     <background path="Assets/Maps/" name="Background.png"/>
     <map path="Assets/Maps/" name="Attempt2.tmx"/>
-	<player x="100" y="673" texturepath="Assets/Textures/platformer.png">
+	<player x="100" y="673" texturepath="Assets/Textures/platformer.png" deathsfxpath="Assets/Audio/Fx/kill2.wav">
 		  <idle animspeed ="0.3f" loop="true">
 			  <pushback x="0" y="0" width="96" height="96"/>
 			  <pushback x="96" y="0" width="96" height="96"/>
@@ -141,7 +141,7 @@
 		  </death>
 			  
 	</enemyfly>
-	<Music x="256" y="515" musicpath="Assets/Audio/Music/snow.wav"/>
+	<Music x="256" y="515" musicpath="Assets/Audio/Music/mus.ogg"/>
   </scene>
   
 </config>

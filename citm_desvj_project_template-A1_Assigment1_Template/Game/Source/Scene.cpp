@@ -65,6 +65,8 @@ bool Scene::Awake(pugi::xml_node& config)
 		enemyfly1 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
 		enemyfly1->parameters = config.child("enemyfly");
 	}
+
+	musicPath = config.child("Scene").child("Music").attribute("musicpath").as_string();
 	
   return ret;
 }

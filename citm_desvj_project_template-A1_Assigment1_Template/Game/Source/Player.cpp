@@ -29,7 +29,7 @@ bool Player::Awake() {
     position.x = parameters.attribute("x").as_int();
 	position.y = parameters.attribute("y").as_int();
 	texturePath = parameters.attribute("texturepath").as_string();
-
+    deathSFXPath = parameters.attribute("deathsfxpath").as_string();
 
     //Set animations
     pugi::xml_node animNode = parameters.first_child();
@@ -71,7 +71,7 @@ bool Player::Start()
 {
 	texture = app->tex->Load(texturePath);
     //Add path to config file
-    deathSFX = app->audio->LoadFx("Assets/Audio/Fx/kill2.wav");
+    deathSFX = app->audio->LoadFx(deathSFXPath);
 	pbody = app->physics->CreatePlayer(position.x, position.y, 34, 58, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;

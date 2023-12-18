@@ -40,6 +40,8 @@ public:
 	Enemy* enemyground1;
 	EnemyFLY* enemyfly1;
 
+	const char* musicPath;
+
 private:
 	SDL_Texture* img;
 	float textPosX, textPosY = 0;
