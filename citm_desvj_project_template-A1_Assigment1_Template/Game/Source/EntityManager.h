@@ -34,6 +34,10 @@ public:
 	void DestroyEntity(Entity* entity);
 
 	void AddEntity(Entity* entity);
+
+	void RespawnAllEnemies();
+
+	void DestroyAllBullets();
 	
 	bool LoadState(pugi::xml_node node);
 

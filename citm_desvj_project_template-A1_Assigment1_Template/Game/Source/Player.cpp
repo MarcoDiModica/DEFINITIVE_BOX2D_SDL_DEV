@@ -317,6 +317,7 @@ void Player::Respawn()
     DeathAnim.Reset();
     currentAnimation = &idleAnim; 
     audiohasplayed = false;
+    app->entityManager->RespawnAllEnemies();
 }
 
 void Player::UpdateCamera()

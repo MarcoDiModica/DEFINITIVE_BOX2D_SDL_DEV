@@ -76,6 +76,7 @@ bool Scene::Start()
 	//img = app->tex->Load("Assets/Textures/test.png");
 	
 	//Music is commented so that you can add your own music
+	//add path to config file
 	app->audio->PlayMusic("Assets/Audio/Music/mus.ogg");
 
 	//Get the size of the window

@@ -19,17 +19,7 @@ Enemy::Enemy() : Entity(EntityType::WALKING_ENEMY)
 
 Enemy::~Enemy() {
 
-    if (texture != nullptr)
-    {
-        app->tex->UnLoad(texture);
-        texture = nullptr;
-    }
-
-    if (pbody != nullptr)
-    {
-        delete pbody;
-        pbody = nullptr;
-    }
+   
 
 }
 
@@ -79,6 +69,8 @@ bool Enemy::Awake() {
 
 bool Enemy::Start()
 {
+    death = false;
+    DeathAnim.Reset();
     texture = app->tex->Load(texturePath);
 	pbody = app->physics->CreateGroundEnemy(position.x, position.y, 34, 58, bodyType::DYNAMIC);
     //app->physics->CreatePathForGroundEnemy(pbody, ? ? ? , ? ? ? , position.y);
@@ -99,7 +91,8 @@ bool Enemy::Update(float dt)
         {
             b2Vec2 stop(0, 0);
             pbody->body->SetLinearVelocity(stop);
-            pendingtodestroy = true;
+            //pendingtodestroy = true;
+            Disable();
             return true;
         }
     }
@@ -178,10 +171,13 @@ bool Enemy::CleanUp()
 
     if (pbody != nullptr)
     {
-        delete pbody;
+        app->physics->DestroyObject(pbody);
+
         pbody = nullptr;
     }
     
+    position.x = initX;
+    position.y = initY;
     return true;
 }
 
@@ -225,27 +221,81 @@ bool Enemy::LoadState(pugi::xml_node node, int num)
     pugi::xml_node enemy = node.child(childName.GetString());
 
 
-    pugi::xml_node pos = enemy.child("Position");
-    float32 x = pos.attribute("x").as_float();
-    float32 y = pos.attribute("y").as_float();
-    pbody->body->SetTransform(b2Vec2(x, y), 0);
+
+
+    pugi::xml_node ppos = enemy.child("PhysicalPosition");
+    float32 px = ppos.attribute("x").as_float();
+    float32 py = ppos.attribute("y").as_float();
+    pugi::xml_node gpos = enemy.child("GraphicPosition");
+    float32 gx = gpos.attribute("x").as_float();
+    float32 gy = gpos.attribute("y").as_float();
+
+    bool enabled = enemy.attribute("enabled").as_bool();
+    bool grounded = enemy.attribute("grounded").as_bool();
+
+
+    if (enabled)
+    {
+        if (active)
+        {
+            pbody->body->SetTransform(b2Vec2(px, py), 0);
+        }
+        else
+        {
+
+            position.x = gx;
+            position.y = gy;
+            Enable();
+        }
+        isTouchingGround = grounded;
+    }
+    else
+    {
+        if (active)
+        {
+            Disable();
+        }
+    }
+
 
     return true;
 }
 
 bool Enemy::SaveState(pugi::xml_node node, int num)
 {
+
     SString childName("enemy%d", num);
 
 
     pugi::xml_node enemy = node.append_child(childName.GetString());
 
-    pugi::xml_node pos = enemy.append_child("Position");
-    pugi::xml_attribute x = pos.append_attribute("x");
-    pugi::xml_attribute y = pos.append_attribute("y");
-    
-    x.set_value(pbody->body->GetPosition().x);
-    y.set_value(pbody->body->GetPosition().y);
+    pugi::xml_node ppos = enemy.append_child("PhysicalPosition");
+    pugi::xml_attribute px = ppos.append_attribute("x");
+    pugi::xml_attribute py = ppos.append_attribute("y");
+    pugi::xml_node gpos = enemy.append_child("GraphicPosition");
+    pugi::xml_attribute gx = gpos.append_attribute("x");
+    pugi::xml_attribute gy = gpos.append_attribute("y");
+    pugi::xml_attribute enabled = enemy.append_attribute("enabled");
+    pugi::xml_attribute grounded = enemy.append_attribute("grounded");
+
+    if (active)
+    {
+        px.set_value(pbody->body->GetPosition().x);
+        py.set_value(pbody->body->GetPosition().y);
+    }
+    else
+    {
+        px.set_value(0);
+        py.set_value(0);
+    }
+
+    gx.set_value(position.x + 44);
+    gy.set_value(position.y + 42);
+
+    enabled.set_value(active);
+    grounded.set_value(isTouchingGround);
+
 
     return true;
+
 }

@@ -101,7 +101,6 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB)
 bool Bullet::LoadState(pugi::xml_node node, int num)
 {
 	return true;
-
 }
 
 bool Bullet::SaveState(pugi::xml_node node, int num)

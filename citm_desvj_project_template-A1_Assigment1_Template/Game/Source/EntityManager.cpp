@@ -147,8 +147,46 @@ bool EntityManager::Update(float dt)
 	return ret;
 }
 
+
+void EntityManager::RespawnAllEnemies()
+{
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		pEntity = item->data;
+
+		if (pEntity->type == EntityType::WALKING_ENEMY || pEntity->type == EntityType::FLYING_ENEMY)
+		{
+			pEntity->Enable();
+		}
+		
+	}
+	DestroyAllBullets();
+}
+
+void EntityManager::DestroyAllBullets()
+{
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		pEntity = item->data;
+
+		if (pEntity->type == EntityType::BULLET)
+		{
+			app->physics->DestroyObject(pEntity->pbody);
+			DestroyEntity(pEntity);
+		}
+
+	}
+}
+
 bool EntityManager::LoadState(pugi::xml_node node)
 {
+	DestroyAllBullets();
 	bool ret = true;
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;
@@ -190,7 +228,7 @@ bool EntityManager::LoadState(pugi::xml_node node)
 		}
 		
 	}
-
+	
 
 	return ret;
 }
