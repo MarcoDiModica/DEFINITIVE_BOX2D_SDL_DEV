@@ -34,11 +34,12 @@ public:
 	bool SaveState(pugi::xml_node node, int num);
 public:
 	const char* texturePath;
-	SDL_Texture* texture = nullptr;
+	SDL_Texture* texture2 = nullptr;
+	bool texcreated = false;
 	Animation* currentAnimation = nullptr;
 	b2Vec2 spawnpos;
 	b2Vec2 direction;
-
+	SDL_Rect box = { 0,0,18,18 };
 
 };
 

@@ -240,6 +240,7 @@ bool Player::Update(float dt)
         //bullets.push_back(newBullet);
 
         Entity* bullet = app->entityManager->CreateEntity(EntityType::BULLET, &bulletPos, &bulletDirection);
+        app->entityManager->entities.Add(bullet);
     }
 
     if (app->input->GetKey(SDL_SCANCODE_LSHIFT) == KEY_REPEAT && isTouchingGround && !death)

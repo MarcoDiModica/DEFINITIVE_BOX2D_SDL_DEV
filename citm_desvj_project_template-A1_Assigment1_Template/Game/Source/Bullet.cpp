@@ -53,7 +53,7 @@ bool Bullet::Awake()
 bool Bullet::Start()
 {
 	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 18, 18, DYNAMIC, ColliderType::WEAPON, 15, direction);
-    texture = app->tex->Load("Assets/Textures/goldCoin.png");
+    texture2 = app->tex->Load("Assets/Textures/marco.png");
 
    
 	return true;
@@ -62,7 +62,13 @@ bool Bullet::Start()
 
 bool Bullet::Update(float dt)
 {
-	app->render->DrawTexture(texture, pbody->body->GetPosition().x, pbody->body->GetPosition().y, nullptr);
+	if (!texcreated) {
+		texture2 = app->tex->Load("Assets/Textures/marco.png");
+		texcreated = true;
+	}
+	
+	//app->render->DrawTexture(texture2, 100, 673);
+	//app->render->DrawTexture(texture2, pbody->body->GetPosition().x, pbody->body->GetPosition().x);
 	
 	return true;
 
