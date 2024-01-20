@@ -425,7 +425,11 @@ bool Map::LoadAllObjectGroups(pugi::xml_node mapNode) {
                 PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
                 c1->ctype = ColliderType::DEATH;
             }
-           
+            else if (strcmp(objectNode.child("properties").child("property").attribute("value").as_string(), "Win") == 0)
+            {
+                PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+                c1->ctype = ColliderType::WIN;
+            }
         }
     }
 

@@ -331,12 +331,11 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision Heart");
         lifes++;
         break;
-    /*case ColliderType::WIN:
+    case ColliderType::WIN:
 		LOG("Collision WIN");
-		app->scene->ChangeScene(SceneType::WIN);
-		break;*/
-    default:
-    }
+		//app->scene->ChangeScene(SceneType::WIN);
+		break;
+            }
 }
 
 void Player::Death()
