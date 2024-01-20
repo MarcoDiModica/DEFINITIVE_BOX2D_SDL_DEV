@@ -104,6 +104,8 @@ PhysBody* Physics::CreateRectangle(int x, int y, int width, int height, bodyType
 	return pbody;
 }
 
+
+
 PhysBody* Physics::CreateBullet(int x, int y, int width, int height, bodyType type, ColliderType collider, int velocity, b2Vec2 direction)
 {
 	b2BodyDef body;
@@ -160,6 +162,56 @@ PhysBody* Physics::CreateBullet(int x, int y, int width, int height, bodyType ty
 	//SDL_Rect rect = { x, y, width, height };
 
 	//app->render->DrawRectangle(rect, 255, 255, 255, 255, true, false);
+
+	return pbody;
+}
+
+PhysBody* Physics::CreateCoin(int x, int y, int radius, bodyType type, ColliderType collider)
+{
+	b2BodyDef body;
+
+	body.gravityScale = 0.0f;
+
+	switch (type) {
+	case DYNAMIC:
+		body.type = b2_dynamicBody;
+		break;
+	case STATIC:
+		body.type = b2_staticBody;
+		break;
+	case KINEMATIC:
+		body.type = b2_kinematicBody;
+		break;
+	default:
+		body.type = b2_staticBody;
+		break;
+	}
+
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.fixedRotation = true;
+	b2Body* b = world->CreateBody(&body);
+
+	b2CircleShape circle;
+	circle.m_radius = PIXEL_TO_METERS(radius);
+
+	b2FixtureDef fixture;
+	fixture.shape = &circle;
+	fixture.density = 1.0f;
+	fixture.friction = 0.0f;
+	fixture.restitution = 0.0f;
+	fixture.isSensor = true;
+
+	b->CreateFixture(&fixture);
+
+	b->ResetMassData();
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = radius;
+	pbody->height = radius;
+
+	pbody->ctype = collider;
 
 	return pbody;
 }

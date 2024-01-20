@@ -7,6 +7,8 @@
 #include "EnemyFly.h"
 #include "Bullet.h"
 #include "Physics.h"
+#include "Coin.h"
+#include "Heart.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -99,6 +101,12 @@ Entity* EntityManager::CreateEntity(EntityType type, b2Vec2* position, b2Vec2* d
 		break;
 	case EntityType::BULLET:
 		entity = new Bullet(position,direction);
+		break;
+	case EntityType::COIN:
+		entity = new Bullet(position);
+		break;
+	case EntityType::HEART:
+		entity = new Bullet(position);
 		break;
 	default:
 		break;
@@ -196,11 +204,15 @@ bool EntityManager::LoadState(pugi::xml_node node)
 	pugi::xml_node items = node.child("Items");
 	pugi::xml_node walkingEnemies = node.child("Walking_Enemies");
 	pugi::xml_node flyingEnemies = node.child("Flying_Enemies");
+	//pugi::xml_node coins = node.child("Coins");
+	//pugi::xml_node hearts = node.child("Hearts");
 
 	int playerNo = 1;
 	int itemNo = 1;
 	int wEnemyNo = 1;
 	int fEnemyno = 1;
+	//int fCoinsno = 1;
+	//int fHeartsno = 1;
 
 	for (item = entities.start; item != NULL && ret == true; item = item->next)
 	{
@@ -224,6 +236,14 @@ bool EntityManager::LoadState(pugi::xml_node node)
 			ret = pEntity->LoadState(flyingEnemies, fEnemyno);
 			fEnemyno++;
 			break;
+		/*case EntityType::COIN:
+			ret = pEntity->LoadState(coins, fCoinsno);
+			fCoinsno++;
+			break;
+		case EntityType::HEART:
+			ret = pEntity->LoadState(hearts, fHeartsno);
+			fHeartsno++;
+			break;*/
 		default:
 			break;
 		}
@@ -245,11 +265,15 @@ bool EntityManager::SaveState(pugi::xml_node node)
 	pugi::xml_node items = node.append_child("Items");
 	pugi::xml_node walkingEnemies = node.append_child("Walking_Enemies");
 	pugi::xml_node flyingEnemies = node.append_child("Flying_Enemies");
+	//pugi::xml_node coins = node.append_child("Coins");
+	//pugi::xml_node hearts = node.append_child("Hearts");
 
 	int playerNo = 1;
 	int itemNo = 1;
 	int wEnemyNo = 1;
 	int fEnemyno = 1;
+	//int fHeartsno = 1;
+	//int fCoinsno = 1;
 
 	for (item = entities.start; item != NULL && ret == true; item = item->next)
 	{
@@ -273,6 +297,14 @@ bool EntityManager::SaveState(pugi::xml_node node)
 			ret = pEntity->SaveState(flyingEnemies, fEnemyno);
 			fEnemyno++;
 			break;
+		/*case EntityType::COIN:
+			ret = pEntity->SaveState(coins, fCoinsno);
+			fCoinsno++;
+			break;
+		case EntityType::HEART:
+			ret = pEntity->SaveState(hearts, fHeartsno);
+			fHeartsno++;
+			break;*/
 		default:
 			break;
 		}

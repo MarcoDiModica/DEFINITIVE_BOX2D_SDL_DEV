@@ -102,6 +102,8 @@ bool Player::Update(float dt)
     //Play death animation and respawn
     if (death)
     {
+        lifes--;
+        
         currentAnimation = &DeathAnim;
         if (!audiohasplayed)
         {
@@ -109,7 +111,7 @@ bool Player::Update(float dt)
             audiohasplayed = true;  
         }
 
-        if (currentAnimation->HasFinished())
+        if (currentAnimation->HasFinished() && lifes > 0)
         {
             b2Vec2 stop(0, 0);
             pbody->body->SetLinearVelocity(stop);
@@ -123,6 +125,10 @@ bool Player::Update(float dt)
             gravityScale = 1.0f;
             Respawn();
         }
+		else if (currentAnimation->HasFinished() && lifes <= 0)
+		{
+			//app->scene->ChangeScene(SceneType::LOSE);
+		}
     }
 
     //get the velocity from last frame
@@ -317,6 +323,19 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         LOG("Collision ENEMY");
 		Death();
 		break;
+    case ColliderType::COIN:
+		LOG("Collision WIN");
+		coins++;
+		break;
+    case ColliderType::HEART:
+        LOG("Collision Heart");
+        lifes++;
+        break;
+    /*case ColliderType::WIN:
+		LOG("Collision WIN");
+		app->scene->ChangeScene(SceneType::WIN);
+		break;*/
+    default:
     }
 }
 
