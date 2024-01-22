@@ -443,7 +443,7 @@ PhysBody* Physics::CreateCircleNoColision(int x, int y, int radious, bodyType ty
 }
 
 
-PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type)
+PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bodyType type, ColliderType collider)
 {
 	// Create BODY at position x,y
 	b2BodyDef body;
@@ -474,6 +474,8 @@ PhysBody* Physics::CreateRectangleSensor(int x, int y, int width, int height, bo
 	b->SetUserData(pbody);
 	pbody->width = width;
 	pbody->height = height;
+
+	pbody->ctype = collider;
 
 	// Return our PhysBody class
 	return pbody;

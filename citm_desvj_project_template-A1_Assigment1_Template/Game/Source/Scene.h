@@ -6,6 +6,8 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Coin.h"
+#include "Heart.h"
 
 struct SDL_Texture;
 
@@ -41,6 +43,16 @@ public:
 	EnemyFLY* enemyfly1;
 	Enemy* enemyground2;
 	EnemyFLY* enemyfly2;
+	Coin* coin1;
+	Coin* coin2;
+	Coin* coin3;
+	Coin* coin4;
+	Coin* coin5;
+	Heart* heart1;
+	Heart* heart2;
+	Heart* heart3;
+	Heart* heart4;
+	Heart* heart5;
 
 	const char* musicPath;
 

@@ -95,6 +95,9 @@ public:
 	Map* map;
 	Physics* physics;
 
+	int lifes = 20;
+	int coins = 0;
+
 private:
 
 	int argc;

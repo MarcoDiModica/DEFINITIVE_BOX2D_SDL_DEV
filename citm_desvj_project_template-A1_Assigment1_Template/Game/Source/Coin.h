@@ -14,7 +14,7 @@ class Coin : public Entity
 {
 public:
 
-	Coin(b2Vec2* position = nullptr);
+	Coin();
 
 	virtual ~Coin();
 

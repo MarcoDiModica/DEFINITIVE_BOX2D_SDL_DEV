@@ -11,6 +11,12 @@
 #include "Map.h"
 #include "Animation.h"
 #include "Bullet.h"
+#include "EntityManager.h"
+#include "Enemy.h"
+#include "EnemyFly.h"
+#include "Coin.h"
+#include "Heart.h"
+#include "Window.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
 {
@@ -102,7 +108,6 @@ bool Player::Update(float dt)
     //Play death animation and respawn
     if (death)
     {
-        lifes--;
         
         currentAnimation = &DeathAnim;
         if (!audiohasplayed)
@@ -111,7 +116,7 @@ bool Player::Update(float dt)
             audiohasplayed = true;  
         }
 
-        if (currentAnimation->HasFinished() && lifes > 0)
+        if (currentAnimation->HasFinished() && app->lifes > 0)
         {
             b2Vec2 stop(0, 0);
             pbody->body->SetLinearVelocity(stop);
@@ -125,12 +130,18 @@ bool Player::Update(float dt)
             gravityScale = 1.0f;
             Respawn();
         }
-		else if (currentAnimation->HasFinished() && lifes <= 0)
+		else if (currentAnimation->HasFinished() && app->lifes <= 0)
 		{
 			//app->scene->ChangeScene(SceneType::LOSE);
 		}
     }
 
+    if (app->coins >= 10)
+    {
+        app->lifes++;
+        app->coins = 0;
+    }
+    
     //get the velocity from last frame
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
@@ -278,6 +289,9 @@ bool Player::Update(float dt)
 
     UpdateCamera();
 
+    /*const char* title = ("Coins: %d Lifes: %d", coins, lifes);
+    app->win->SetTitle(title);*/
+
     return true;
 }
 
@@ -304,10 +318,6 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 
     switch (physB->ctype)
     {
-    case ColliderType::ITEM:
-        LOG("Collision ITEM");
-        app->audio->PlayFx(pickCoinFxId);
-        break;
     case ColliderType::PLATFORM:
         LOG("Collision PLATFORM");
         isTouchingGround = true;
@@ -317,6 +327,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::DEATH:
         LOG("Collision DEATH");
+        app->lifes--;
         Death();
         break;
     case ColliderType::ENEMY:
@@ -325,17 +336,18 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		break;
     case ColliderType::COIN:
 		LOG("Collision WIN");
-		coins++;
+        app->audio->PlayFx(pickCoinFxId);
+        app->coins++;
 		break;
     case ColliderType::HEART:
         LOG("Collision Heart");
-        lifes++;
+        app->lifes++;
         break;
     case ColliderType::WIN:
 		LOG("Collision WIN");
 		//app->scene->ChangeScene(SceneType::WIN);
 		break;
-            }
+    }
 }
 
 void Player::Death()

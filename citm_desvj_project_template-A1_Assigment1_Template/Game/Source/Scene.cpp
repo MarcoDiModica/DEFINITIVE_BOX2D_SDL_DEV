@@ -10,6 +10,8 @@
 #include "EntityManager.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Coin.h"
+#include "Heart.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -31,11 +33,59 @@ bool Scene::Awake(pugi::xml_node& config)
 
 	// iterate all objects in the scene
 	// Check https://pugixml.org/docs/quickstart.html#access
-	/*for (pugi::xml_node itemNode = config.child("item"); itemNode; itemNode = itemNode.next_sibling("item"))
+	if (config.child("Coin1"))
 	{
-		Item* item = (Item*)app->entityManager->CreateEntity(EntityType::ITEM);
-		item->parameters = itemNode;
-	}*/
+		coin1 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+		coin1->parameters = config.child("Coin1");
+	}
+
+	if (config.child("Coin2"))
+	{
+		coin2 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+		coin2->parameters = config.child("Coin2");
+	}
+
+	if (config.child("Coin3"))
+	{
+		coin3 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+		coin3->parameters = config.child("Coin3");
+	}
+
+	if (config.child("Coin4"))
+	{
+		coin4 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+		coin4->parameters = config.child("Coin4");
+	}
+
+	if (config.child("Coin5"))
+	{
+		coin5 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+		coin5->parameters = config.child("Coin5");
+	}
+
+	if (config.child("Heart1"))
+	{
+		heart1 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+		heart1->parameters = config.child("Heart1");
+	}
+
+	if (config.child("Heart2"))
+	{
+		heart2 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+		heart2->parameters = config.child("Heart2");
+	}
+
+	if (config.child("Heart3"))
+	{
+		heart3 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+		heart3->parameters = config.child("Heart3");
+	}
+
+	if (config.child("Heart4"))
+	{
+		heart4 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+		heart4->parameters = config.child("Heart4");
+	}
 
 	if (config.child("player")) {
 		player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);

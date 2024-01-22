@@ -13,22 +13,9 @@
 #include "EntityManager.h"
 #include "Player.h"
 
-Coin::Coin(b2Vec2* position) : Entity(EntityType::COIN)
+Coin::Coin() : Entity(EntityType::COIN)
 {
 	name.Create("Coin");
-	if (position != nullptr)
-	{
-		spawnpos = *position;
-	}
-	else
-	{
-		spawnpos.x = 0;
-		spawnpos.y = 0;
-	}
-	
-	pbody = app->physics->CreateCoin(position->x,position->y,10,STATIC, ColliderType::COIN);
-	pbody->listener = this;
-	texture2 = app->tex->Load("Assets/Textures/marco.png");
 }
 
 Coin::~Coin()
@@ -38,13 +25,18 @@ Coin::~Coin()
 
 bool Coin::Awake()
 {
+	spawnpos.x = parameters.attribute("x").as_float();
+	spawnpos.y = parameters.attribute("y").as_float();
+	
 	return true;
 }
 
 bool Coin::Start()
 {
-	pbody = app->physics->CreateCoin(spawnpos.x, spawnpos.y, 10, STATIC, ColliderType::COIN);
-	texture2 = app->tex->Load("Assets/Textures/marco.png");
+	pbody = app->physics->CreateCircleNoColision(spawnpos.x, spawnpos.y, 16, bodyType::STATIC);
+	pbody->ctype = ColliderType::COIN;
+	pbody->listener = this;
+	texture2 = app->tex->Load("Assets/Textures/euro.png");
 
 
 	return true;
@@ -76,11 +68,10 @@ void Coin::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		pendingtodestroy = true;
+		Disable();
 		LOG("Collision Player");
 		break;
 	case ColliderType::WEAPON:
-		pendingtodestroy = true;
 		LOG("Collision WEAPON");
 		break;
 	}

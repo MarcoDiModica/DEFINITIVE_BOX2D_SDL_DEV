@@ -103,10 +103,10 @@ Entity* EntityManager::CreateEntity(EntityType type, b2Vec2* position, b2Vec2* d
 		entity = new Bullet(position,direction);
 		break;
 	case EntityType::COIN:
-		entity = new Bullet(position);
+		entity = new Coin();
 		break;
 	case EntityType::HEART:
-		entity = new Bullet(position);
+		entity = new Heart();
 		break;
 	default:
 		break;

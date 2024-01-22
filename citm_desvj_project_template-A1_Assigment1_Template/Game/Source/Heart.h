@@ -14,7 +14,7 @@ class Heart : public Entity
 {
 public:
 
-	Heart(b2Vec2* position = nullptr);
+	Heart();
 
 	virtual ~Heart();
 

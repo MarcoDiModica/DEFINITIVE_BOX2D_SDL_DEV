@@ -73,8 +73,6 @@ public:
 	float maxDashTime = 4.0f;
 	float dashSpeed = 200.0f;
 	int dashDirection = 0;
-	int lifes = 20;
-	int coins = 0;
 
 	float gravityScale = 1.0f;
 	int initX;

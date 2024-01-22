@@ -91,7 +91,7 @@ public:
 
 	PhysBody* CreateCircle(int x, int y, int radious, bodyType type);
 	PhysBody* CreateCircleNoColision(int x, int y, int radious, bodyType type);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type);
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, bodyType type, ColliderType collider);
 	PhysBody* CreateChain(int x, int y, int* points, int size, bodyType type);
 	
 	// b2ContactListener ---

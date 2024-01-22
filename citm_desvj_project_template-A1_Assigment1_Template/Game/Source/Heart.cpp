@@ -13,22 +13,9 @@
 #include "EntityManager.h"
 #include "Player.h"
 
-Heart::Heart(b2Vec2* position) : Entity(EntityType::HEART)
+Heart::Heart() : Entity(EntityType::HEART)
 {
 	name.Create("1UP");
-	if (position != nullptr)
-	{
-		spawnpos = *position;
-	}
-	else
-	{
-		spawnpos.x = 0;
-		spawnpos.y = 0;
-	}
-
-	pbody = app->physics->CreateCoin(position->x, position->y, 10, STATIC, ColliderType::HEART);
-	pbody->listener = this;
-	texture2 = app->tex->Load("Assets/Textures/marco.png");
 }
 
 Heart::~Heart()
@@ -43,8 +30,12 @@ bool Heart::Awake()
 
 bool Heart::Start()
 {
-	pbody = app->physics->CreateCoin(spawnpos.x, spawnpos.y, 10, STATIC, ColliderType::COIN);
-	texture2 = app->tex->Load("Assets/Textures/marco.png");
+	spawnpos.x = parameters.attribute("x").as_float();
+	spawnpos.y = parameters.attribute("y").as_float();
+	pbody = app->physics->CreateCircleNoColision(spawnpos.x, spawnpos.y, 16, bodyType::STATIC);
+	pbody->ctype = ColliderType::HEART;
+	pbody->listener = this;
+	texture2 = app->tex->Load("Assets/Textures/cora.png");
 
 
 	return true;
@@ -76,13 +67,10 @@ void Heart::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		//player.lifes++;
-		pendingtodestroy = true;
+		Disable();
 		LOG("Collision Player");
 		break;
 	case ColliderType::WEAPON:
-		//player.lifes++;
-		pendingtodestroy = true;
 		LOG("Collision WEAPON");
 		break;
 	}
