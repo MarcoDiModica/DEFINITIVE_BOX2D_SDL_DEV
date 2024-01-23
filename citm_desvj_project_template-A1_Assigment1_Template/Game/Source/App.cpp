@@ -228,7 +228,7 @@ void App::FinishUpdate()
 		LoadFromFile();
 		loadRequest = false;
 	}
-
+	
 	if (saveRequest)
 	{
 		SaveToFile();

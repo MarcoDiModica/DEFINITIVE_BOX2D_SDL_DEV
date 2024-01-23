@@ -67,6 +67,8 @@ void Heart::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
+		position.x = -100;
+		position.y = -100;
 		Disable();
 		LOG("Collision Player");
 		break;
