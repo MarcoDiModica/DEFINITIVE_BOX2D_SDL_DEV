@@ -6,6 +6,7 @@
 #include "PugiXml/src/pugixml.hpp"
 
 class App;
+class GuiControl;
 
 class Module
 {
@@ -14,9 +15,9 @@ public:
 	Module() : active(false)
 	{}
 
-	void Init()
+	void Init(bool isActive = true)
 	{
-		active = true;
+		active = isActive;
 	}
 
 	// Called before render is available
@@ -63,6 +64,11 @@ public:
 
 	//Called when pressing F5 (save game)
 	virtual bool SaveState(pugi::xml_node node)
+	{
+		return true;
+	}
+
+	virtual bool OnGuiMouseClickEvent(GuiControl* control)
 	{
 		return true;
 	}

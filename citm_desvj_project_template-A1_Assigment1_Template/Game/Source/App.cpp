@@ -9,6 +9,11 @@
 #include "Physics.h"
 #include "Pathfinding.h"
 #include "GuiManager.h"
+#include "dead.h"
+#include "win.h"
+#include "winboss.h"
+#include "group.h"
+#include "title.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -36,23 +41,33 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	map = new Map();
 	entityManager = new EntityManager();
 	guiManager = new GuiManager();
+	dead = new Dead();
+	victory = new Victory();
+	victory_boss = new VictoryBoss();
+	group = new Group();
+	title = new Title();
 
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
-	AddModule(win);
-	AddModule(input);
-	AddModule(tex);
-	AddModule(audio);
-	AddModule(physics);
-	AddModule(map);
-	AddModule(scene);
+	AddModule(win, true);
+	AddModule(input, true);
+	AddModule(tex, true);
+	AddModule(audio, true);
+	AddModule(physics, true);
+	AddModule(map, true);
+	AddModule(scene, true);
+	AddModule(dead, false);
+	AddModule(victory, false);
+	AddModule(victory_boss, false);
+	AddModule(group, false);
+	AddModule(title, false);
 	
-	AddModule(entityManager);
-	AddModule(guiManager);
+	AddModule(entityManager, true);
+	AddModule(guiManager, true);
 
 	// Render last to swap buffer
-	AddModule(render);
+	AddModule(render, true);
 
 	LOG("Timer App Constructor: %f", timer.ReadMSec());
 }
@@ -72,9 +87,9 @@ App::~App()
 	modules.Clear();
 }
 
-void App::AddModule(Module* module)
+void App::AddModule(Module* module, bool isActive)
 {
-	module->Init();
+	module->Init(isActive);
 	modules.Add(module);
 }
 
@@ -157,6 +172,12 @@ bool App::Update()
 		else {
 			maxFrameDuration = 1000 / 60;
 		}
+	}
+
+	if (lifes <=0)
+	{
+		dead->active = true;
+		scene->active = false;
 	}
 
 	return ret;

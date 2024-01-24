@@ -20,6 +20,11 @@ class EntityManager;
 class Map;
 class Physics;
 class GuiManager;
+class Dead;
+class Group;
+class Title;
+class Victory;
+class VictoryBoss;
 
 class App
 {
@@ -44,7 +49,7 @@ public:
 	bool CleanUp();
 
 	// Add a new module to handle
-	void AddModule(Module* module);
+	void AddModule(Module* module, bool isActive);
 
 	// Exposing some properties for reading
 	int GetArgc() const;
@@ -96,8 +101,13 @@ public:
 	Map* map;
 	Physics* physics;
 	GuiManager* guiManager;
+	Dead* dead;
+	Group* group;
+	Title* title;
+	Victory* victory;
+	VictoryBoss* victory_boss;
 
-	int lifes = 20;
+	int lifes = 2;
 	int coins = 0;
 
 private:

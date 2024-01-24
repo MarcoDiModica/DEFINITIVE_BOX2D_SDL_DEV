@@ -1,5 +1,5 @@
-#ifndef __SCENE_H__
-#define __SCENE_H__
+#ifndef __GROUP_H__
+#define __GROUP_H__
 
 #include "Module.h"
 #include "Player.h"
@@ -8,18 +8,17 @@
 #include "EnemyFly.h"
 #include "Coin.h"
 #include "Heart.h"
-#include "GuiControl.h"
 
 struct SDL_Texture;
 
-class Scene : public Module
+class Group : public Module
 {
 public:
 
-	Scene();
+	Group();
 
 	// Destructor
-	virtual ~Scene();
+	virtual ~Group();
 
 	// Called before render is available
 	bool Awake(pugi::xml_node& conf);
@@ -41,22 +40,6 @@ public:
 
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
-	Player* player;
-	Enemy* enemyground1;
-	EnemyFLY* enemyfly1;
-	Enemy* enemyground2;
-	EnemyFLY* enemyfly2;
-	Coin* coin1;
-	Coin* coin2;
-	Coin* coin3;
-	Coin* coin4;
-	Coin* coin5;
-	Heart* heart1;
-	Heart* heart2;
-	Heart* heart3;
-	Heart* heart4;
-	Heart* heart5;
-
 	const char* musicPath;
 
 private:
@@ -64,10 +47,7 @@ private:
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
-	
-	SString bgPath;
-	SString bgName;
-	
+
 };
 
-#endif // __SCENE_H__
+#endif // __GROUP_H__
