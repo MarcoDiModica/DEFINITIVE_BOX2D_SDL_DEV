@@ -38,6 +38,8 @@ public:
 	// Called before quitting
 	bool CleanUp();
 
+	bool OnGuiMouseClickEvent(GuiControl* control);
+
 	Player* player;
 	Enemy* enemyground1;
 	EnemyFLY* enemyfly1;

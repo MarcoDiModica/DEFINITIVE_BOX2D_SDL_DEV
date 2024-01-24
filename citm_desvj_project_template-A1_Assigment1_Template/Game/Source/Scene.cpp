@@ -12,6 +12,8 @@
 #include "EnemyFly.h"
 #include "Coin.h"
 #include "Heart.h"
+#include "GuiControl.h"
+#include "GuiManager.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -218,6 +220,14 @@ bool Scene::CleanUp()
 
 	player->CleanUp();
 
+
+	return true;
+}
+
+bool Scene::OnGuiMouseClickEvent(GuiControl* control)
+{
+	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
+	LOG("Press Gui Control: %d", control->id);
 
 	return true;
 }

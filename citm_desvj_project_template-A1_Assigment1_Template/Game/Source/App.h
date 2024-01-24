@@ -19,6 +19,7 @@ class Scene;
 class EntityManager;
 class Map;
 class Physics;
+class GuiManager;
 
 class App
 {
@@ -94,6 +95,7 @@ public:
 	EntityManager* entityManager;
 	Map* map;
 	Physics* physics;
+	GuiManager* guiManager;
 
 	int lifes = 20;
 	int coins = 0;
