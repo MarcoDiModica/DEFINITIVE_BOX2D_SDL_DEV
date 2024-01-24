@@ -1,0 +1,2 @@
+HUD, para vidas y monedas
+screen pause
