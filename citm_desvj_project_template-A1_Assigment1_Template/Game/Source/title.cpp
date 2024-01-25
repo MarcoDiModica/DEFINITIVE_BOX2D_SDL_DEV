@@ -49,7 +49,8 @@ bool Title::Start()
 	if (active)
 	{
 		img = app->tex->Load("Assets/GUI/title.png");
-		selector = app->tex->Load("Assets/GUI/selector.png");
+		img2 = app->tex->Load("Assets/GUI/config.jpg");
+		selector = app->tex->Load("Assets/GUI/select.png");
 
 		//app->audio->PlayMusic(musicPath);
 
@@ -74,6 +75,21 @@ bool Title::Start()
 		quit->state = GuiControlState::NORMAL;
 		options->state = GuiControlState::NORMAL;
 
+		SDL_Rect backpos = { windowW / 2 - 60, windowH / 2 + 10, 100,50 };
+		SDL_Rect musicpos = { windowW / 2 - 60, windowH / 2 + 180, 100,50 };
+		SDL_Rect fullpos = { windowW / 2 - 110, windowH / 2 + 90 , 200,50 };
+		SDL_Rect vsyncpos = { windowW / 2 - 110, windowH / 2 + 90 , 200,50 };
+
+		backbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "   Back   ", backpos, this);
+		musicbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 5, "   Sound   ", fullpos, this);
+		fullbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 6, "   Fullscreen   ", fullpos, this);
+		vsyncbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "   Vsync   ", vsyncpos, this);
+
+		backbutton->state = GuiControlState::DISABLED;
+		musicbutton->state = GuiControlState::DISABLED;
+		fullbutton->state = GuiControlState::DISABLED;
+		vsyncbutton->state = GuiControlState::DISABLED;
+
 	}
 	
 	return true;
@@ -90,6 +106,10 @@ bool Title::Update(float dt)
 {
 	if (comenzar)
 	{
+		start->state = GuiControlState::DISABLED;
+		quit->state = GuiControlState::DISABLED;
+		options->state = GuiControlState::DISABLED;
+		
 		app->map->active = false;
 		app->physics->active = true;
 		app->physics->Start();
@@ -103,13 +123,25 @@ bool Title::Update(float dt)
 		app->guiManager->active = true;
 		app->guiManager->Start();
 
+		app->title->active = false;
+		comenzar = false;
+	}
+
+	if (iraconfiguracion)
+	{
+		fondonormal = false;
+		fondoconfig = true;
 		start->state = GuiControlState::DISABLED;
 		quit->state = GuiControlState::DISABLED;
 		options->state = GuiControlState::DISABLED;
 
-		app->title->active = false;
-		comenzar = false;
+		backbutton->state = GuiControlState::NORMAL;
+		musicbutton->state = GuiControlState::NORMAL;
+		fullbutton->state = GuiControlState::NORMAL;
+		vsyncbutton->state = GuiControlState::NORMAL;
 	}
+
+	
 
 	return true;
 }
@@ -119,11 +151,31 @@ bool Title::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN || exitgame)
+	if (exitgame)
 		ret = false;
 
 	//blit texture
-	app->render->DrawTexture(img, textPosX, textPosY, NULL);
+	if (fondonormal)
+	{
+		app->render->DrawTexture(img, textPosX, textPosY, NULL);
+	}
+	else if (fondoconfig)
+	{
+		//app->render->DrawTexture(img2, textPosX, textPosY, NULL);
+	}
+
+	if (start->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(selector, 360, 400, NULL);
+	}
+	else if (quit->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(selector, 360, 580, NULL);
+	}
+	else if (options->state == GuiControlState::FOCUSED)
+	{
+		app->render->DrawTexture(selector, 290, 490, NULL);
+	}
 
 	return ret;
 }

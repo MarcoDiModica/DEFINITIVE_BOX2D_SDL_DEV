@@ -214,6 +214,12 @@ bool Scene::PostUpdate()
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
 
+	lifetext = "lifes X" + std::to_string(app->lifes);
+	app->render->DrawText(lifetext.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 380, 80, 40);
+
+	cointext = "Coins X" + std::to_string(app->coins);
+	app->render->DrawText(cointext.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 340, 80, 40);
+
 	return ret;
 }
 

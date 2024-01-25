@@ -59,6 +59,8 @@ public:
 
 	const char* musicPath;
 	float volume = 90;
+	std::string lifetext;
+	std::string cointext;
 
 private:
 	SDL_Texture* img;

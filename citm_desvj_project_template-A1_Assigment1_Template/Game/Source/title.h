@@ -50,6 +50,7 @@ public:
 
 private:
 	SDL_Texture* img;
+	SDL_Texture* img2;
 	SDL_Texture* selector;
 	float textPosX, textPosY = 0;
 	uint texW, texH;
@@ -58,6 +59,10 @@ private:
 	GuiControlButton* start;
 	GuiControlButton* quit;
 	GuiControlButton* options;
+	GuiControlButton* backbutton;
+	GuiControlButton* musicbutton;
+	GuiControlButton* fullbutton;
+	GuiControlButton* vsyncbutton;
 
 	SString bgPath;
 	SString bgName;
@@ -67,6 +72,8 @@ private:
 	bool comenzar = false;
 	bool exitgame = false;
 	bool iraconfiguracion = false;
+	bool fondonormal = true;
+	bool fondoconfig = false;
 };
 
 #endif // __TITLE_H__

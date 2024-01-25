@@ -81,9 +81,6 @@ bool Dead::PostUpdate()
 {
 	bool ret = true;
 
-	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
-
 	//blit texture
 	app->render->DrawTexture(img, textPosX, textPosY, NULL);
 
