@@ -30,107 +30,111 @@ Scene::~Scene()
 // Called before render is available
 bool Scene::Awake(pugi::xml_node& config)
 {
-	LOG("Loading Scene");
-	bool ret = true;
-
-	// iterate all objects in the scene
-	// Check https://pugixml.org/docs/quickstart.html#access
-	if (config.child("Coin1"))
+	if (active)
 	{
-		coin1 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
-		coin1->parameters = config.child("Coin1");
-	}
+		LOG("Loading Scene");
+		bool ret = true;
 
-	if (config.child("Coin2"))
-	{
-		coin2 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
-		coin2->parameters = config.child("Coin2");
-	}
+		// iterate all objects in the scene
+		// Check https://pugixml.org/docs/quickstart.html#access
+		if (config.child("Coin1"))
+		{
+			coin1 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+			coin1->parameters = config.child("Coin1");
+		}
 
-	if (config.child("Coin3"))
-	{
-		coin3 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
-		coin3->parameters = config.child("Coin3");
-	}
+		if (config.child("Coin2"))
+		{
+			coin2 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+			coin2->parameters = config.child("Coin2");
+		}
 
-	if (config.child("Coin4"))
-	{
-		coin4 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
-		coin4->parameters = config.child("Coin4");
-	}
+		if (config.child("Coin3"))
+		{
+			coin3 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+			coin3->parameters = config.child("Coin3");
+		}
 
-	if (config.child("Coin5"))
-	{
-		coin5 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
-		coin5->parameters = config.child("Coin5");
-	}
+		if (config.child("Coin4"))
+		{
+			coin4 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+			coin4->parameters = config.child("Coin4");
+		}
 
-	if (config.child("Heart1"))
-	{
-		heart1 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
-		heart1->parameters = config.child("Heart1");
-	}
+		if (config.child("Coin5"))
+		{
+			coin5 = (Coin*)app->entityManager->CreateEntity(EntityType::COIN);
+			coin5->parameters = config.child("Coin5");
+		}
 
-	if (config.child("Heart2"))
-	{
-		heart2 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
-		heart2->parameters = config.child("Heart2");
-	}
+		if (config.child("Heart1"))
+		{
+			heart1 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+			heart1->parameters = config.child("Heart1");
+		}
 
-	if (config.child("Heart3"))
-	{
-		heart3 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
-		heart3->parameters = config.child("Heart3");
-	}
+		if (config.child("Heart2"))
+		{
+			heart2 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+			heart2->parameters = config.child("Heart2");
+		}
 
-	if (config.child("Heart4"))
-	{
-		heart4 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
-		heart4->parameters = config.child("Heart4");
-	}
+		if (config.child("Heart3"))
+		{
+			heart3 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+			heart3->parameters = config.child("Heart3");
+		}
 
-	if (config.child("player")) {
-		player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
-		player->parameters = config.child("player");
-	}
+		if (config.child("Heart4"))
+		{
+			heart4 = (Heart*)app->entityManager->CreateEntity(EntityType::HEART);
+			heart4->parameters = config.child("Heart4");
+		}
 
-	if (config.child("map")) {
-		//Get the map name from the config file and assigns the value in the module
-		app->map->name = config.child("map").attribute("name").as_string();
-		app->map->path = config.child("map").attribute("path").as_string();
-	}
+		if (config.child("player")) {
+			player = (Player*)app->entityManager->CreateEntity(EntityType::PLAYER);
+			player->parameters = config.child("player");
+		}
+
+		if (config.child("map")) {
+			//Get the map name from the config file and assigns the value in the module
+			app->map->name = config.child("map").attribute("name").as_string();
+			app->map->path = config.child("map").attribute("path").as_string();
+		}
 
 
-	if (config.child("background"))
-	{
-		app->map->bgPath = config.child("background").attribute("path").as_string();
-		app->map->bgName = config.child("background").attribute("name").as_string();
-		
+		if (config.child("background"))
+		{
+			app->map->bgPath = config.child("background").attribute("path").as_string();
+			app->map->bgName = config.child("background").attribute("name").as_string();
+
+		}
+
+		if (config.child("enemyground")) {
+			enemyground1 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
+			enemyground1->parameters = config.child("enemyground");
+		}
+
+		if (config.child("enemyfly")) {
+			enemyfly1 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
+			enemyfly1->parameters = config.child("enemyfly");
+		}
+
+		if (config.child("enemyground2")) {
+			enemyground2 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
+			enemyground2->parameters = config.child("enemyground2");
+		}
+
+		if (config.child("enemyfly2")) {
+			enemyfly2 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
+			enemyfly2->parameters = config.child("enemyfly2");
+		}
+
+		//musicPath = config.child("Music").attribute("musicpath").as_string();
+		return ret;
 	}
 	
-	if (config.child("enemyground")) {
-		enemyground1 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
-		enemyground1->parameters = config.child("enemyground");
-	}
-
-	if (config.child("enemyfly")) {
-		enemyfly1 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
-		enemyfly1->parameters = config.child("enemyfly");
-	}
-
-	if (config.child("enemyground2")) {
-		enemyground2 = (Enemy*)app->entityManager->CreateEntity(EntityType::WALKING_ENEMY);
-		enemyground2->parameters = config.child("enemyground2");
-	}
-
-	if (config.child("enemyfly2")) {
-		enemyfly2 = (EnemyFLY*)app->entityManager->CreateEntity(EntityType::FLYING_ENEMY);
-		enemyfly2->parameters = config.child("enemyfly2");
-	}
-
-	musicPath = config.child("Music").attribute("musicpath").as_string();
-	
-  return ret;
+	return true;
 }
 
 // Called before the first frame
@@ -141,7 +145,7 @@ bool Scene::Start()
 	
 	//Music is commented so that you can add your own music
 	//add path to config file
-	app->audio->PlayMusic(musicPath);
+	//app->audio->PlayMusic(musicPath);
 
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
@@ -218,7 +222,7 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	player->CleanUp();
+	if (this->active) player->CleanUp();
 
 
 	return true;

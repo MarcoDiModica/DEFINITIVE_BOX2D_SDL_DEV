@@ -20,6 +20,8 @@
     <music volume="128"/>
     <fx volume="128"/>
   </audio>
+  <group>
+  </group>
 
   <scene>
     <background path="Assets/Maps/" name="Background.png"/>
@@ -232,7 +234,7 @@
 	<Heart2 x="121" y="243" />
 	<Heart3 x="131" y="253" />
 	<Heart4 x="141" y="263" />
-	<Music x="256" y="515" musicpath="Assets/Audio/Music/mus.ogg"/>
+	<Music musicpath="Assets/Audio/Music/mus.ogg"/>
   </scene>
   
 </config>

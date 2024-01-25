@@ -88,6 +88,13 @@ bool Player::Start()
 
 bool Player::Update(float dt)
 {
+    if (firstload)
+    {
+        this->Awake();
+        this->Start();
+        firstload = false;
+    }
+    
     if (app->input->GetKey(SDL_SCANCODE_F10) == KEY_DOWN)
         debug = !debug;
 

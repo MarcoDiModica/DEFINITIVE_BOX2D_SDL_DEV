@@ -69,6 +69,7 @@ public:
 	b2Vec2 path1;
 	int currentTargetIndex;
 	int enemySpeed = 0.3f;
+	bool firstLoad = true;
 };
 
 #endif // __ENEMY_H__

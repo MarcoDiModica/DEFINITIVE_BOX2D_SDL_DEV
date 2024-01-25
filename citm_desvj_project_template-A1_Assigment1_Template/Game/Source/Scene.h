@@ -58,6 +58,7 @@ public:
 	Heart* heart5;
 
 	const char* musicPath;
+	float volume = 90;
 
 private:
 	SDL_Texture* img;

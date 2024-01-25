@@ -84,6 +84,13 @@ bool EnemyFLY::Start()
 
 bool EnemyFLY::Update(float dt)
 {
+    if (firstload)
+    {
+        this->Awake();
+        this->Start();
+        firstload = false;
+    }
+    
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
     if (death)

@@ -40,7 +40,7 @@ bool Victory::Awake(pugi::xml_node& config)
 	bgPath = config.child("win").attribute("path").as_string();
 	img = app->tex->Load("Assets/Textures/dead.png");
 
-	musicPath = config.child("Music").attribute("musicpath").as_string();
+	//musicPath = config.child("Music").attribute("musicpath").as_string();
 
 	return ret;
 }
@@ -48,7 +48,7 @@ bool Victory::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Victory::Start()
 {
-	app->audio->PlayMusic(musicPath);
+	//app->audio->PlayMusic(musicPath);
 
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);

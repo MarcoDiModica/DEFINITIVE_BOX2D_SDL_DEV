@@ -32,14 +32,16 @@ Physics::~Physics()
 
 bool Physics::Start()
 {
-	LOG("Creating Physics 2D environment");
+	if (active)
+	{
+		LOG("Creating Physics 2D environment");
 
-	// Create a new World
-	world = new b2World(b2Vec2(GRAVITY_X, gravity_y));
+		// Create a new World
+		world = new b2World(b2Vec2(GRAVITY_X, gravity_y));
 
-	// Set this module as a listener for contacts
-	world->SetContactListener(this);
-
+		// Set this module as a listener for contacts
+		world->SetContactListener(this);
+	}
 	return true;
 }
 

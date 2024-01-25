@@ -85,6 +85,13 @@ bool Enemy::Start()
 
 bool Enemy::Update(float dt)
 {
+    if (firstLoad)
+    {
+        this->Awake();
+        this->Start();
+        firstLoad = false;
+    }
+    
     b2Vec2 vel = pbody->body->GetLinearVelocity();
 
     if (death)

@@ -79,6 +79,7 @@ public:
 	int initY;
 	uint deathSFX;
 	bool audiohasplayed = false;
+	bool firstload = true;
 };
 
 #endif // __PLAYER_H__

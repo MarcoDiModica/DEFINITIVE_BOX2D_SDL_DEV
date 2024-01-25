@@ -39,8 +39,6 @@ Bullet::Bullet(b2Vec2* position, b2Vec2* direction) : Entity(EntityType::BULLET)
 	texture2 = app->tex->Load("Assets/Textures/marco.png");
 }
 
-
-
 Bullet::~Bullet()
 {
 

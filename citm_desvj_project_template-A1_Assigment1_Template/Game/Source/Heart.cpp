@@ -44,7 +44,12 @@ bool Heart::Start()
 
 bool Heart::Update(float dt)
 {
-
+	if (firstload)
+	{
+		this->Awake();
+		this->Start();
+		firstload = false;
+	}
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
 	position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 10;

@@ -5,6 +5,7 @@
 #include "Map.h"
 #include "Physics.h"
 #include "Pathfinding.h"
+#include "Scene.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -35,41 +36,46 @@ bool Map::Awake(pugi::xml_node& config)
 
 bool Map::Start() {
 
-    //Calls the functon to load the map, make sure that the filename is assigned
-    SString mapPath = path;
-    mapPath += name;
-    bgPath += bgName;
-    bool ret = Load(mapPath);
-    background = app->tex->Load(bgPath.GetString());
-    debug = false;
+    if (active && app->scene->active == true)
+    {
+        //Calls the functon to load the map, make sure that the filename is assigned
+        SString mapPath = path;
+        mapPath += name;
+        bgPath += bgName;
+        bool ret = Load(mapPath);
+        background = app->tex->Load(bgPath.GetString());
+        debug = false;
 
-    ListItem<MapLayer*>* mapLayerItem;
-    mapLayerItem = mapData.maplayers.start;
-    
-    char* col = "Colissions";
+        ListItem<MapLayer*>* mapLayerItem;
+        mapLayerItem = mapData.maplayers.start;
 
-    while (mapLayerItem != NULL) {
+        char* col = "Colissions";
 
-        if (mapLayerItem->data->name.GetString() != NULL &&  strcmp(mapLayerItem->data->name.GetString(), "Colissions") == 0)
-        {
-            if (mapLayerItem->data->properties.GetProperty("Draw") != NULL) {
+        while (mapLayerItem != NULL) {
 
-                debug = &mapLayerItem->data->properties.GetProperty("Draw")->value;
+            if (mapLayerItem->data->name.GetString() != NULL && strcmp(mapLayerItem->data->name.GetString(), "Colissions") == 0)
+            {
+                if (mapLayerItem->data->properties.GetProperty("Draw") != NULL) {
+
+                    debug = &mapLayerItem->data->properties.GetProperty("Draw")->value;
+                }
             }
-        }
-        mapLayerItem = mapLayerItem->next;
+            mapLayerItem = mapLayerItem->next;
 
+        }
+
+        pathfinding = new PathFinding();
+
+        //Initialize the navigation map
+        uchar* navigationMap = NULL;
+        CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
+        pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
+        RELEASE_ARRAY(navigationMap);
+
+        return ret;
     }
 
-    pathfinding = new PathFinding();
-
-    //Initialize the navigation map
-    uchar* navigationMap = NULL;
-    CreateNavigationMap(mapData.width, mapData.height, &navigationMap);
-    pathfinding->SetNavigationMap((uint)mapData.width, (uint)mapData.height, navigationMap);
-    RELEASE_ARRAY(navigationMap);
-
-    return ret;
+    return true;
 }
 
 bool Map::Update(float dt)

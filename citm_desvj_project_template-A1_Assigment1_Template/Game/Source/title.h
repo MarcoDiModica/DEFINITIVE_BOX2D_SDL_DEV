@@ -8,6 +8,10 @@
 #include "EnemyFly.h"
 #include "Coin.h"
 #include "Heart.h"
+#include "GuiControl.h"
+#include "GuiManager.h"
+#include "GuiControlButton.h"
+
 
 struct SDL_Texture;
 
@@ -42,15 +46,27 @@ public:
 
 	const char* musicPath;
 
+	float volume = 90;
+
 private:
 	SDL_Texture* img;
+	SDL_Texture* selector;
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
 
+	GuiControlButton* start;
+	GuiControlButton* quit;
+	GuiControlButton* options;
+
 	SString bgPath;
 	SString bgName;
 
+	pugi::xml_node mynode;
+
+	bool comenzar = false;
+	bool exitgame = false;
+	bool iraconfiguracion = false;
 };
 
 #endif // __TITLE_H__

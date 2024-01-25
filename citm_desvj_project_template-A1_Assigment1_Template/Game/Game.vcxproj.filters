@@ -35,6 +35,8 @@
     <ClCompile Include="Source\title.cpp" />
     <ClCompile Include="Source\win.cpp" />
     <ClCompile Include="Source\winboss.cpp" />
+    <ClCompile Include="Source\GuiCheckBox.cpp" />
+    <ClCompile Include="Source\GuiSlider.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Window.h" />
@@ -94,6 +96,8 @@
     <ClInclude Include="Source\title.h" />
     <ClInclude Include="Source\win.h" />
     <ClInclude Include="Source\winboss.h" />
+    <ClInclude Include="Source\GuiCheckBox.h" />
+    <ClInclude Include="Source\GuiSlider.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="External">

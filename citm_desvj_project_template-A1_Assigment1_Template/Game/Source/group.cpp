@@ -17,13 +17,13 @@
 #include "group.h"
 #include "dead.h"
 #include "Physics.h"
-
+#include "title.h"
 #include "Defs.h"
 #include "Log.h"
 
 Group::Group() : Module()
 {
-	name.Create("die");
+	name.Create("scene");
 }
 
 // Destructor
@@ -36,9 +36,9 @@ bool Group::Awake(pugi::xml_node& config)
 	LOG("Loading Group");
 	bool ret = true;
 
-	img = app->tex->Load("Assets/GUI/dead.png");
-
 	musicPath = config.child("Music").attribute("musicpath").as_string();
+
+	mynode = config;
 
 	return ret;
 }
@@ -47,7 +47,9 @@ bool Group::Awake(pugi::xml_node& config)
 bool Group::Start()
 {
 	app->audio->PlayMusic(musicPath);
-
+	
+	img = app->tex->Load("Assets/GUI/group.png");
+	
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 
@@ -69,9 +71,17 @@ bool Group::PreUpdate()
 // Called each loop iteration
 bool Group::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	//timer de 3 segundos y pasa a la siguente escena
+	if (startTime == 0) startTime = SDL_GetTicks();
+	
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || SDL_GetTicks() - startTime >= 3000)
 	{
-		
+		app->title->active = true;
+		app->title->Awake(mynode);
+		app->title->Start();
+		app->group->active = false;
+
+		startTime = 0;
 	}
 
 	return true;

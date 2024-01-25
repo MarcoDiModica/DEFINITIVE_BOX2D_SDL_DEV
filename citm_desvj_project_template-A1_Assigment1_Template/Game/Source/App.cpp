@@ -50,24 +50,24 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 
 	// Ordered for awake / Start / Update
 	// Reverse order of CleanUp
-	AddModule(win, true);
-	AddModule(input, true);
-	AddModule(tex, true);
-	AddModule(audio, true);
-	AddModule(physics, true);
-	AddModule(map, true);
-	AddModule(scene, true);
+	AddModule(win);
+	AddModule(input);
+	AddModule(tex);
+	AddModule(audio);
+	AddModule(physics, false);
+	AddModule(map, false);
+	AddModule(scene, false);
 	AddModule(dead, false);
 	AddModule(victory, false);
 	AddModule(victory_boss, false);
-	AddModule(group, false);
+	AddModule(group, true);
 	AddModule(title, false);
 	
-	AddModule(entityManager, true);
+	AddModule(entityManager);
 	AddModule(guiManager, true);
 
 	// Render last to swap buffer
-	AddModule(render, true);
+	AddModule(render);
 
 	LOG("Timer App Constructor: %f", timer.ReadMSec());
 }
@@ -177,6 +177,8 @@ bool App::Update()
 	if (lifes <=0)
 	{
 		dead->active = true;
+		dead->Start();
+		
 		scene->active = false;
 	}
 
