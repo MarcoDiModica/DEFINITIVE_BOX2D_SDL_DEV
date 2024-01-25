@@ -5,6 +5,7 @@
 #include "Audio.h"
 #include "Window.h"
 #include "title.h"
+#include "group.h"
 
 GuiSlider::GuiSlider(uint32 id, SDL_Rect bounds, const char* tex) : GuiControl(GuiControlType::SLIDER, id)
 {
@@ -125,6 +126,7 @@ bool GuiSlider::Update( float dt)
 
     app->scene->volume = value2;
     app->title->volume = value2;
+    app->group->volume = value2;
 
     return false;
 }

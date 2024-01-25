@@ -14,6 +14,11 @@
 #include "Heart.h"
 #include "GuiControl.h"
 #include "GuiManager.h"
+#include "dead.h"
+#include "title.h"
+#include "Physics.h"
+#include "Map.h"
+#include "SDL_mixer/include/SDL_mixer.h"
 
 #include "Defs.h"
 #include "Log.h"
@@ -131,6 +136,7 @@ bool Scene::Awake(pugi::xml_node& config)
 		}
 
 		//musicPath = config.child("Music").attribute("musicpath").as_string();
+
 		return ret;
 	}
 	
@@ -146,7 +152,7 @@ bool Scene::Start()
 	//Music is commented so that you can add your own music
 	//add path to config file
 	//app->audio->PlayMusic(musicPath);
-
+	
 	//Get the size of the window
 	app->win->GetWindowSize(windowW, windowH);
 
@@ -175,7 +181,7 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-
+	
 	float camSpeed = 1; 
 
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)
@@ -213,6 +219,9 @@ bool Scene::PostUpdate()
 
 	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
 		ret = false;
+
+	Mix_VolumeMusic(volume);
+	Mix_Volume(-1, volume);
 
 	lifetext = "lifes X" + std::to_string(app->lifes);
 	app->render->DrawText(lifetext.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 380, 80, 40);

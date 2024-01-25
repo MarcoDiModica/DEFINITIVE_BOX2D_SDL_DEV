@@ -20,6 +20,7 @@
 #include "title.h"
 #include "Defs.h"
 #include "Log.h"
+#include "SDL_mixer/include/SDL_mixer.h"
 
 Group::Group() : Module()
 {
@@ -91,6 +92,9 @@ bool Group::Update(float dt)
 bool Group::PostUpdate()
 {
 	bool ret = true;
+
+	Mix_VolumeMusic(volume);
+	Mix_Volume(-1, volume);
 
 	//blit texture
 	app->render->DrawTexture(img, textPosX, textPosY, NULL);

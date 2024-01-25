@@ -44,10 +44,11 @@ public:
 
 	Uint32 startTime = 0;
 	pugi::xml_node mynode;
+	float volume = 90;
 
 private:
 	SDL_Texture* img;
-
+	
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;

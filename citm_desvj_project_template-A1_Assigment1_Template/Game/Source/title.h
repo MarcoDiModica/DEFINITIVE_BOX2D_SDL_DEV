@@ -47,6 +47,23 @@ public:
 	const char* musicPath;
 
 	float volume = 90;
+	GuiControlButton* start;
+	GuiControlButton* quit;
+	GuiControlButton* options;
+	GuiControlButton* backbutton;
+	GuiControlButton* musicbutton;
+	GuiControlButton* fullbutton;
+	GuiControlButton* vsyncbutton;
+
+	pugi::xml_node mynode;
+
+	bool comenzar = false;
+	bool exitgame = false;
+	bool iraconfiguracion = false;
+	bool fondonormal = true;
+	bool fondoconfig = false;
+	bool full = false;
+	bool vsyncactive = false;
 
 private:
 	SDL_Texture* img;
@@ -56,24 +73,12 @@ private:
 	uint texW, texH;
 	uint windowW, windowH;
 
-	GuiControlButton* start;
-	GuiControlButton* quit;
-	GuiControlButton* options;
-	GuiControlButton* backbutton;
-	GuiControlButton* musicbutton;
-	GuiControlButton* fullbutton;
-	GuiControlButton* vsyncbutton;
+	
 
 	SString bgPath;
 	SString bgName;
 
-	pugi::xml_node mynode;
-
-	bool comenzar = false;
-	bool exitgame = false;
-	bool iraconfiguracion = false;
-	bool fondonormal = true;
-	bool fondoconfig = false;
+	
 };
 
 #endif // __TITLE_H__

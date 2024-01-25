@@ -75,13 +75,13 @@ bool Title::Start()
 		quit->state = GuiControlState::NORMAL;
 		options->state = GuiControlState::NORMAL;
 
-		SDL_Rect backpos = { windowW / 2 - 60, windowH / 2 + 10, 100,50 };
-		SDL_Rect musicpos = { windowW / 2 - 60, windowH / 2 + 180, 100,50 };
-		SDL_Rect fullpos = { windowW / 2 - 110, windowH / 2 + 90 , 200,50 };
-		SDL_Rect vsyncpos = { windowW / 2 - 110, windowH / 2 + 90 , 200,50 };
+		SDL_Rect backpos = { windowW / 2 - 60, windowH / 2 + 300, 100,50 };
+		SDL_Rect musicpos = { windowW / 2 - 60, windowH / 2 + 10, 100,50 };
+		SDL_Rect fullpos = { windowW / 2 - 110, windowH / 2 + 80 , 200,50 };
+		SDL_Rect vsyncpos = { windowW / 2 - 110, windowH / 2 + 150 , 200,50 };
 
 		backbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "   Back   ", backpos, this);
-		musicbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 5, "   Sound   ", fullpos, this);
+		musicbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 5, "   Volume   ", musicpos, this);
 		fullbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 6, "   Fullscreen   ", fullpos, this);
 		vsyncbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::CHECKBOX, 7, "   Vsync   ", vsyncpos, this);
 
@@ -104,28 +104,7 @@ bool Title::PreUpdate()
 // Called each loop iteration
 bool Title::Update(float dt)
 {
-	if (comenzar)
-	{
-		start->state = GuiControlState::DISABLED;
-		quit->state = GuiControlState::DISABLED;
-		options->state = GuiControlState::DISABLED;
-		
-		app->map->active = false;
-		app->physics->active = true;
-		app->physics->Start();
-		pugi::xml_node n = mynode;
-		app->scene->active = true;
-		app->scene->Awake(n);
-		app->scene->Start();
-		app->map->active = true;
-		app->map->Start();
-
-		app->guiManager->active = true;
-		app->guiManager->Start();
-
-		app->title->active = false;
-		comenzar = false;
-	}
+	
 
 	if (iraconfiguracion)
 	{
@@ -140,8 +119,42 @@ bool Title::Update(float dt)
 		fullbutton->state = GuiControlState::NORMAL;
 		vsyncbutton->state = GuiControlState::NORMAL;
 	}
+	else if (!iraconfiguracion)
+	{
+		fondonormal = true;
+		fondoconfig = false;
+		start->state = GuiControlState::NORMAL;
+		quit->state = GuiControlState::NORMAL;
+		options->state = GuiControlState::NORMAL;
 
-	
+		backbutton->state = GuiControlState::DISABLED;
+		musicbutton->state = GuiControlState::DISABLED;
+		fullbutton->state = GuiControlState::DISABLED;
+		vsyncbutton->state = GuiControlState::DISABLED;
+	}	
+
+	if (comenzar)
+	{
+		app->map->active = false;
+		app->physics->active = true;
+		app->physics->Start();
+		pugi::xml_node n = mynode;
+		app->scene->active = true;
+		app->scene->Awake(n);
+		app->scene->Start();
+		app->map->active = true;
+		app->map->Start();
+
+		app->guiManager->active = true;
+		app->guiManager->Start();
+
+		start->state = GuiControlState::DISABLED;
+		quit->state = GuiControlState::DISABLED;
+		options->state = GuiControlState::DISABLED;
+
+		app->title->active = false;
+		comenzar = false;
+	}
 
 	return true;
 }
@@ -204,6 +217,32 @@ bool Title::OnGuiMouseClickEvent(GuiControl* control)
 	else if (control->id == 3)
 	{
 		iraconfiguracion = true;
+	}
+	else if (control->id == 4)
+	{
+		iraconfiguracion = false;
+	}
+	else if (control->id == 5)
+	{
+
+	}
+	else if (control->id == 6 && !full)
+	{
+		full = true;
+		SDL_SetWindowFullscreen(app->win->window, SDL_WINDOW_FULLSCREEN);
+	}
+	else if (control->id == 6 && full)
+	{
+		full = false;
+		SDL_SetWindowFullscreen(app->win->window, SDL_WINDOW_SHOWN);
+	}
+	else if (control->id == 7 && vsyncactive)
+	{
+		vsyncactive = false;
+	}
+	else if (control->id == 7 && !vsyncactive)
+	{
+		vsyncactive = true;
 	}
 
 	return true;
