@@ -35,7 +35,7 @@ Scene::~Scene()
 // Called before render is available
 bool Scene::Awake(pugi::xml_node& config)
 {
-	if (active)
+	if (active && firstTime)
 	{
 		LOG("Loading Scene");
 		bool ret = true;
@@ -142,7 +142,7 @@ bool Scene::Awake(pugi::xml_node& config)
 
 		//musicPath = config.child("Music").attribute("musicpath").as_string();
 		startTime = 0;
-
+		firstTime = false;
 		return ret;
 	}
 	

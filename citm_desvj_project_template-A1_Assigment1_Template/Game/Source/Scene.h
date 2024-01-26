@@ -66,6 +66,7 @@ public:
 	void goToLevel1();
 	std::string timer;
 	Uint32 startTime = 0;
+	bool firstTime = true;
 
 private:
 	SDL_Texture* img;
