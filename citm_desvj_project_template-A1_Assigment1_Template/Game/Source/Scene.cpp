@@ -35,6 +35,8 @@ Scene::~Scene()
 // Called before render is available
 bool Scene::Awake(pugi::xml_node& config)
 {
+	mynode = config;
+	
 	if (active && firstTime)
 	{
 		LOG("Loading Scene");
@@ -141,7 +143,7 @@ bool Scene::Awake(pugi::xml_node& config)
 		}
 
 		//musicPath = config.child("Music").attribute("musicpath").as_string();
-		startTime = 0;
+		startTime = SDL_GetTicks();
 		firstTime = false;
 		return ret;
 	}
@@ -187,7 +189,6 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	startTime = SDL_GetTicks();
 
 	float camSpeed = 1; 
 
@@ -216,6 +217,8 @@ bool Scene::Update(float dt)
 		app->LoadRequest();
 	}
 
+	
+
 	return true;
 }
 
@@ -223,9 +226,6 @@ bool Scene::Update(float dt)
 bool Scene::PostUpdate()
 {
 	bool ret = true;
-
-	if(app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
-		ret = false;
 
 	Mix_VolumeMusic(volume);
 	Mix_Volume(-1, volume);
@@ -236,8 +236,30 @@ bool Scene::PostUpdate()
 	cointext = "Coins X" + std::to_string(app->coins);
 	app->render->DrawText(cointext.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 340, 80, 40);
 
-	timer = "Time: " + std::to_string(startTime/ 1000) + " Seconds";
+	timer = "Time: " + std::to_string((SDL_GetTicks() - startTime) / 1000) + " Seconds";
 	app->render->DrawText(timer.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 300, 150, 40);
+
+	if (app->input->GetKey(SDL_SCANCODE_ESCAPE) == KEY_DOWN)
+	{
+		pausemenu = !pausemenu;
+	}
+
+	if (pausemenu)
+	{
+		app->title->musicbutton->state = GuiControlState::NORMAL;
+		app->title->fullbutton->state = GuiControlState::NORMAL;
+		app->title->vsyncbutton->state = GuiControlState::NORMAL;
+		app->title->titlebutton->state = GuiControlState::NORMAL;
+		app->title->resumebutton->state = GuiControlState::NORMAL;
+	}
+	else
+	{
+		app->title->musicbutton->state = GuiControlState::DISABLED;
+		app->title->fullbutton->state = GuiControlState::DISABLED;
+		app->title->vsyncbutton->state = GuiControlState::DISABLED;
+		app->title->titlebutton->state = GuiControlState::DISABLED;
+		app->title->resumebutton->state = GuiControlState::DISABLED;
+	}
 
 	return ret;
 }
@@ -257,6 +279,8 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 {
 	// L15: DONE 5: Implement the OnGuiMouseClickEvent method
 	LOG("Press Gui Control: %d", control->id);
+
+	
 
 	return true;
 }

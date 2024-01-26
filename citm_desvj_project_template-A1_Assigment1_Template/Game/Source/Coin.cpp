@@ -64,6 +64,22 @@ bool Coin::Update(float dt)
 
 bool Coin::CleanUp()
 {
+	if (texture2 != nullptr)
+	{
+		app->tex->UnLoad(texture2);
+		texture2 = nullptr;
+	}
+
+	if (pbody != nullptr)
+	{
+		app->physics->DestroyObject(pbody);
+
+		pbody = nullptr;
+	}
+
+	position.x = spawnpos.x;
+	position.y = spawnpos.y;
+	
 	return true;
 
 }
@@ -73,7 +89,8 @@ void Coin::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::PLAYER:
-		Disable();
+		pbody->ctype = ColliderType::UNKNOWN;
+		texture2 = nullptr;
 		LOG("Collision Player");
 		break;
 	case ColliderType::WEAPON:

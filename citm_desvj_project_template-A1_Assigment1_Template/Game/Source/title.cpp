@@ -75,10 +75,10 @@ bool Title::Start()
 		quit->state = GuiControlState::NORMAL;
 		options->state = GuiControlState::NORMAL;
 
-		SDL_Rect backpos = { windowW / 2 - 60, windowH / 2 + 300, 100,50 };
-		SDL_Rect musicpos = { windowW / 2 - 60, windowH / 2 + 10, 100,50 };
-		SDL_Rect fullpos = { windowW / 2 - 110, windowH / 2 + 80 , 200,50 };
-		SDL_Rect vsyncpos = { windowW / 2 - 110, windowH / 2 + 150 , 200,50 };
+		SDL_Rect backpos = { windowW / 2 - 70, windowH / 2 + 300, 100,50 };
+		SDL_Rect musicpos = { windowW / 2 - 70, windowH / 2 - 330, 100,20 };
+		SDL_Rect fullpos = { windowW / 2 - 70, windowH / 2 - 230 , 50,50 };
+		SDL_Rect vsyncpos = { windowW / 2 - 70, windowH / 2 - 130 , 50,50 };
 
 		backbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "   Back   ", backpos, this);
 		musicbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 5, "   Volume   ", musicpos, this);
@@ -90,6 +90,14 @@ bool Title::Start()
 		fullbutton->state = GuiControlState::DISABLED;
 		vsyncbutton->state = GuiControlState::DISABLED;
 
+		SDL_Rect resumepos = { windowW / 2 - 70, windowH / 2 + 300, 100,50 };
+		SDL_Rect backtitlepos = { windowW / 2 - 70, windowH / 2 + 250, 100,50 };
+
+		resumebutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "   Resume   ", resumepos, this);
+		titlebutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "   Back To Title   ", backtitlepos, this);
+
+		resumebutton->state = GuiControlState::DISABLED;
+		titlebutton->state = GuiControlState::DISABLED;
 	}
 	
 	return true;
@@ -246,6 +254,24 @@ bool Title::OnGuiMouseClickEvent(GuiControl* control)
 	else if (control->id == 7 && !vsyncactive)
 	{
 		vsyncactive = true;
+	}
+	else if (control->id == 8)
+	{
+		app->scene->pausemenu = false;
+	}
+	else if (control->id == 9)
+	{
+		app->scene->pausemenu = false;
+		app->scene->player->followplayer = false;
+		app->render->camera.x = 0;
+		app->render->camera.y = 0;
+		app->title->active = true;
+		app->title->Awake(mynode);
+		app->title->Start();
+		app->scene->active = false;
+		app->physics->active = false;
+		app->map->active = false;
+		app->entityManager->active = false;
 	}
 
 	return true;

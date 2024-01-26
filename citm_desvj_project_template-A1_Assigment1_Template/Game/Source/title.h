@@ -54,6 +54,8 @@ public:
 	GuiControlButton* musicbutton;
 	GuiControlButton* fullbutton;
 	GuiControlButton* vsyncbutton;
+	GuiControlButton* resumebutton;
+	GuiControlButton* titlebutton;
 
 	pugi::xml_node mynode;
 

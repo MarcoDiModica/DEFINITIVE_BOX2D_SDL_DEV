@@ -382,7 +382,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::WIN:
 		LOG("Collision WIN");
-		//app->scene->ChangeScene(SceneType::WIN);
+		
 		break;
     }
 }

@@ -9,6 +9,8 @@
 #include "Coin.h"
 #include "Heart.h"
 #include "GuiControl.h"
+#include "GuiManager.h"
+#include "GuiControlButton.h"
 
 struct SDL_Texture;
 
@@ -67,6 +69,8 @@ public:
 	std::string timer;
 	Uint32 startTime = 0;
 	bool firstTime = true;
+	bool pausemenu = false;
+	pugi::xml_node mynode;
 
 private:
 	SDL_Texture* img;
