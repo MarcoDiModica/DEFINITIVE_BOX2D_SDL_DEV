@@ -248,6 +248,18 @@ void App::FinishUpdate()
 
 	app->win->SetTitle(title);
 
+	if (level1Request)
+	{
+		ToLevel1();
+		level1Request = false;
+	}
+
+	if (level2Request)
+	{
+		ToLevel2();
+		level2Request = false;
+	}
+
 	if (loadRequest)
 	{
 		LoadFromFile();
@@ -389,6 +401,16 @@ void App::SaveRequest()
 	saveRequest = true;
 }
 
+void App::Level1Request()
+{
+	level1Request = true;
+}
+
+void App::Level2Request()
+{
+	level2Request = true;
+}
+
 void App::LoadFromFile()
 {
 	//Open the XML file for reading save_game.xml
@@ -440,10 +462,42 @@ void App::SaveToFile()
 			saveFile.save_file("save_game.xml");
 		}
 		item = item->next;
-		//Remember to remove after testing
-
 	}
 
+
+}
+
+void App::ToLevel1()
+{
+
+	level2 = false;
+
+	ListItem<Module*>* item;
+	item = modules.start;
+
+
+	while (item != NULL)
+	{
+		item->data->goToLevel1();
+		item = item->next;
+	}
+
+}
+
+void App::ToLevel2()
+{
+
+	level2 = true;
+
+	ListItem<Module*>* item;
+	item = modules.start;
+
+
+	while (item != NULL)
+	{
+		item->data->goToLevel2();
+		item = item->next;
+	}
 
 }
 

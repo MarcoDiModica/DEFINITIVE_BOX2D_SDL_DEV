@@ -139,6 +139,10 @@ private:
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 	void CreateNavigationMap(int& width, int& height, uchar** buffer) const;
 
+	bool goToLevel1();
+
+	bool goToLevel2();
+
 	bool reloadMap();
 
 public: 

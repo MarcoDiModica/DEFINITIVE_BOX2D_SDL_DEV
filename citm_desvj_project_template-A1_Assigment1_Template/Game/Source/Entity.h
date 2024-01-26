@@ -91,6 +91,7 @@ public:
 	iPoint position;       
 	bool renderable = true;
 	bool pendingtodestroy = false;
+	bool pendingToDisable = false;
 };
 
 #endif // __ENTITY_H__

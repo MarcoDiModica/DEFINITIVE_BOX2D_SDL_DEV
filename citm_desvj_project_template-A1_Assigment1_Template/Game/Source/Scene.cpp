@@ -213,6 +213,22 @@ bool Scene::Update(float dt)
 	// Renders the image in the center of the screen 
 	//app->render->DrawTexture(img, (int)textPosX, (int)textPosY);
 
+	if (app->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
+	{
+		app->Level1Request();
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_F2) == KEY_DOWN)
+	{
+		app->Level2Request();
+	}
+
+	if (app->input->GetKey(SDL_SCANCODE_H) == KEY_DOWN)
+	{
+		app->entityManager->DisableAllItems();
+	}
+
+
 	if (app->input->GetKey(SDL_SCANCODE_F5) == KEY_DOWN)
 	{
 		app->SaveRequest();
@@ -277,7 +293,7 @@ bool Scene::CleanUp()
 {
 	LOG("Freeing scene");
 
-	if (this->active) player->CleanUp();
+	
 
 
 	return true;
@@ -292,3 +308,4 @@ bool Scene::OnGuiMouseClickEvent(GuiControl* control)
 
 	return true;
 }
+

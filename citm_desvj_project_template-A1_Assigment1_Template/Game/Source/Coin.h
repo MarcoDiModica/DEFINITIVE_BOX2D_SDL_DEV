@@ -39,7 +39,6 @@ public:
 	b2Vec2 spawnpos;
 	SDL_Rect box = { 0,0,30,30 };
 	bool firstload = true;
-
 };
 
 #endif // __COIN_H__

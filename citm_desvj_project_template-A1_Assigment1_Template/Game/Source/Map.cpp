@@ -40,7 +40,7 @@ bool Map::Start() {
     {
         //Calls the functon to load the map, make sure that the filename is assigned
         mapPath = path;
-        if (!app->scene->level2)
+        if (!app->level2)
         {
             mapPath += mapName;
         }
@@ -82,6 +82,7 @@ bool Map::Start() {
 
         return ret;
     }
+    debug = false;
 
     return true;
 }
@@ -255,8 +256,6 @@ bool Map::CleanUp()
 bool Map::reloadMap()
 {
     bool ret = true;
-    app->scene->level2 = !app->scene->level2;
-
     ret = CleanUp();
     ret = Start();
     if (ret)
@@ -561,3 +560,14 @@ Properties::Property* Properties::GetProperty(const char* name)
 }
 
 
+bool Map::goToLevel1()
+{
+    reloadMap();
+    return true;
+}
+
+bool Map::goToLevel2()
+{
+    reloadMap();
+    return true;
+}

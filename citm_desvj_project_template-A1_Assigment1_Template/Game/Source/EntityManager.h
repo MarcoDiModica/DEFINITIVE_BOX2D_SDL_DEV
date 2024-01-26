@@ -35,13 +35,23 @@ public:
 
 	void AddEntity(Entity* entity);
 
-	void RespawnAllEnemies();
+	void DisableAllItems();
+
+	void DisableAllEnemies();
+
+	void ResetAllEnemies();
+
+	void ResetAllItems();
 
 	void DestroyAllBullets();
 	
 	bool LoadState(pugi::xml_node node);
 
 	bool SaveState(pugi::xml_node node);
+
+	bool goToLevel1();
+
+	bool goToLevel2();
 
 public:
 

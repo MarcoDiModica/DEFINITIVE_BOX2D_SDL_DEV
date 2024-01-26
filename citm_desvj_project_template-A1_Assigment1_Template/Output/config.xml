@@ -226,15 +226,15 @@
 		  </death>
 			  
 	</enemyfly2>
-	<Coin1 x="256" y="480" />
-	<Coin2 x="544" y="320" />
-	<Coin3 x="1184" y="1120" />
-	<Coin4 x="2336" y="960" />
-	<Coin5 x="2304" y="512" />
-	<Heart1 x="2048" y="1120" />
-	<Heart2 x="2880" y="320" />
-	<Heart3 x="3200" y="512" />
-	<Heart4 x="896" y="640" />
+	<Coin1 x="256" y="480" texturepath="Assets/Textures/euro.png" />
+	<Coin2 x="544" y="320" texturepath="Assets/Textures/euro.png"  />
+	<Coin3 x="1184" y="1120" texturepath="Assets/Textures/euro.png"  />
+	<Coin4 x="2336" y="960"  texturepath="Assets/Textures/euro.png" />
+	<Coin5 x="2304" y="512"  texturepath="Assets/Textures/euro.png" />
+	<Heart1 x="2048" y="1120" texturepath="Assets/Textures/cora.png" />
+	<Heart2 x="2880" y="320" texturepath="Assets/Textures/cora.png"/>
+	<Heart3 x="3200" y="512" texturepath="Assets/Textures/cora.png"/>
+	<Heart4 x="896" y="640" texturepath="Assets/Textures/cora.png"/>
 
 	<Music musicpath="Assets/Audio/Music/mus.ogg"/>
   </scene>

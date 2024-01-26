@@ -90,6 +90,18 @@ bool Player::Start()
     death = false;
     DeathAnim.Reset();
 
+    //Restart player
+    b2Vec2 stop(0, 0);
+    pbody->body->SetLinearVelocity(stop);
+    b2Vec2 initpos(PIXEL_TO_METERS(initX), PIXEL_TO_METERS(initY));
+    pbody->body->SetTransform(initpos, 0);
+    gravityScale = 1.0f;
+    pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+    pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+    pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
+    flipVertical = SDL_FLIP_NONE;
+    gravityScale = 1.0f;
+
 	return true;
 }
 
@@ -403,7 +415,7 @@ void Player::Respawn()
     DeathAnim.Reset();
     currentAnimation = &idleAnim; 
     audiohasplayed = false;
-    app->entityManager->RespawnAllEnemies();
+    app->entityManager->ResetAllEnemies();
 }
 
 void Player::UpdateCamera()

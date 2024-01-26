@@ -27,6 +27,7 @@ bool Coin::Awake()
 {
 	spawnpos.x = parameters.attribute("x").as_float();
 	spawnpos.y = parameters.attribute("y").as_float();
+	texturePath = parameters.attribute("texturepath").as_string();
 	
 	return true;
 }
@@ -36,7 +37,7 @@ bool Coin::Start()
 	pbody = app->physics->CreateCircleNoColision(spawnpos.x, spawnpos.y, 16, bodyType::STATIC);
 	pbody->ctype = ColliderType::COIN;
 	pbody->listener = this;
-	texture2 = app->tex->Load("Assets/Textures/euro.png");
+	texture2 = app->tex->Load(texturePath);
 
 
 	return true;
@@ -50,6 +51,13 @@ bool Coin::Update(float dt)
 		this->Awake();
 		this->Start();
 		firstload = false;
+	}
+
+	if (pendingToDisable)
+	{
+		pendingToDisable = false;
+		Disable();
+		return true;
 	}
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
@@ -86,17 +94,23 @@ bool Coin::CleanUp()
 
 void Coin::OnCollision(PhysBody* physA, PhysBody* physB)
 {
-	switch (physB->ctype)
+
+	if (pbody != NULL)
 	{
-	case ColliderType::PLAYER:
-		pbody->ctype = ColliderType::UNKNOWN;
-		texture2 = nullptr;
-		LOG("Collision Player");
-		break;
-	case ColliderType::WEAPON:
-		LOG("Collision WEAPON");
-		break;
+		switch (physB->ctype)
+		{
+		case ColliderType::PLAYER:
+			pbody->ctype = ColliderType::UNKNOWN;
+			//texture2 = nullptr;
+			pendingToDisable = true;
+			LOG("Collision Player");
+			break;
+		case ColliderType::WEAPON:
+			LOG("Collision WEAPON");
+			break;
+		}
 	}
+	
 
 }
 

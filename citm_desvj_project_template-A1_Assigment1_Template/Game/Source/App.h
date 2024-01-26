@@ -62,6 +62,9 @@ public:
 	// Ask to save/load at the end of the frame
 	void LoadRequest();
 	void SaveRequest();
+	void Level1Request();
+	void Level2Request();
+
 
 private:
 
@@ -88,6 +91,10 @@ private:
 
 	// Load to an XML file
 	void SaveToFile();
+
+	void ToLevel1();
+
+	void ToLevel2();
 public:
 
 	// Modules
@@ -106,6 +113,8 @@ public:
 	Title* title;
 	Victory* victory;
 	VictoryBoss* victory_boss;
+	bool level2 = false;
+
 
 	int lifes = 2;
 	int coins = 0;
@@ -144,6 +153,9 @@ private:
 
 	bool loadRequest = false;
 	bool saveRequest = false;
+
+	bool level1Request = false;
+	bool level2Request = false;
 };
 
 extern App* app;

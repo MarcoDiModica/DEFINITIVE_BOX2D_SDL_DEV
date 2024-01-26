@@ -32,10 +32,11 @@ bool Heart::Start()
 {
 	spawnpos.x = parameters.attribute("x").as_float();
 	spawnpos.y = parameters.attribute("y").as_float();
+	texturePath = parameters.attribute("texturepath").as_string();
 	pbody = app->physics->CreateCircleNoColision(spawnpos.x, spawnpos.y, 16, bodyType::STATIC);
 	pbody->ctype = ColliderType::HEART;
 	pbody->listener = this;
-	texture2 = app->tex->Load("Assets/Textures/cora.png");
+	texture2 = app->tex->Load(texturePath);
 
 
 	return true;
@@ -49,6 +50,12 @@ bool Heart::Update(float dt)
 		this->Awake();
 		this->Start();
 		firstload = false;
+	}
+	if (pendingToDisable)
+	{
+		pendingToDisable = false;
+		Disable();
+		return true;
 	}
 
 	position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
@@ -89,7 +96,8 @@ void Heart::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 	case ColliderType::PLAYER:
 		pbody->ctype = ColliderType::UNKNOWN;
-		texture2 = nullptr;
+		//texture2 = nullptr;
+		pendingToDisable = true;
 		LOG("Collision Player");
 		break;
 	case ColliderType::WEAPON:

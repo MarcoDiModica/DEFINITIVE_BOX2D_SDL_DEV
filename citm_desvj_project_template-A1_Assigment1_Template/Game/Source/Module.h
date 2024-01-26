@@ -72,6 +72,17 @@ public:
 	{
 		return true;
 	}
+
+
+	
+	virtual bool goToLevel2()
+	{
+		return true;
+	}
+	virtual bool goToLevel1()
+	{
+		return true;
+	}
 public:
 
 	SString name;

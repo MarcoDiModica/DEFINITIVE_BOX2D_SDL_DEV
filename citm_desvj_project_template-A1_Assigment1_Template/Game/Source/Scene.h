@@ -43,6 +43,7 @@ public:
 
 	bool OnGuiMouseClickEvent(GuiControl* control);
 
+
 	Player* player;
 	Enemy* enemyground1;
 	EnemyFLY* enemyfly1;
@@ -63,9 +64,6 @@ public:
 	float volume = 90;
 	std::string lifetext;
 	std::string cointext;
-	bool level2 = false;
-	void goToLevel2();
-	void goToLevel1();
 	std::string timer;
 	Uint32 startTime = 0;
 	bool firstTime = true;

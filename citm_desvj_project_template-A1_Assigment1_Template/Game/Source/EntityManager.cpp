@@ -156,7 +156,65 @@ bool EntityManager::Update(float dt)
 }
 
 
-void EntityManager::RespawnAllEnemies()
+void EntityManager::DisableAllItems()
+{
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		pEntity = item->data;
+
+		if (pEntity->type == EntityType::HEART || pEntity->type == EntityType::COIN)
+		{
+			pEntity->Disable();
+		}
+
+	}
+	DestroyAllBullets();
+}
+
+void EntityManager::ResetAllItems()
+{
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		pEntity = item->data;
+
+		if (pEntity->type == EntityType::HEART || pEntity->type == EntityType::COIN)
+		{
+			pEntity->Disable();
+			pEntity->Enable();
+		}
+
+	}
+	DestroyAllBullets();
+}
+
+
+
+void EntityManager::DisableAllEnemies()
+{
+	ListItem<Entity*>* item;
+	Entity* pEntity = NULL;
+
+	for (item = entities.start; item != NULL; item = item->next)
+	{
+		pEntity = item->data;
+
+		if (pEntity->type == EntityType::WALKING_ENEMY || pEntity->type == EntityType::FLYING_ENEMY)
+		{
+			pEntity->Disable();
+		}
+
+	}
+	DestroyAllBullets();
+}
+
+
+void EntityManager::ResetAllEnemies()
 {
 	ListItem<Entity*>* item;
 	Entity* pEntity = NULL;
@@ -175,6 +233,7 @@ void EntityManager::RespawnAllEnemies()
 	DestroyAllBullets();
 }
 
+
 void EntityManager::DestroyAllBullets()
 {
 	ListItem<Entity*>* item;
@@ -192,6 +251,9 @@ void EntityManager::DestroyAllBullets()
 
 	}
 }
+
+
+
 
 bool EntityManager::LoadState(pugi::xml_node node)
 {
@@ -312,4 +374,25 @@ bool EntityManager::SaveState(pugi::xml_node node)
 	}
 
 	return ret;
+}
+
+bool EntityManager::goToLevel1()
+{
+	ResetAllEnemies();
+	ResetAllItems();
+	app->physics->DestroyObject(app->scene->player->pbody);
+	Start();
+	
+	return true;
+}
+
+bool EntityManager::goToLevel2()
+{
+	DisableAllEnemies();
+	DisableAllItems();
+	app->physics->DestroyObject(app->scene->player->pbody);
+	Start();
+
+
+	return true;
 }
