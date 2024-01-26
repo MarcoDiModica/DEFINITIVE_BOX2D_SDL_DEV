@@ -10,6 +10,7 @@
 #include "EntityManager.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Boss.h"
 #include "Coin.h"
 #include "Heart.h"
 #include "GuiControl.h"
@@ -142,6 +143,10 @@ bool Scene::Awake(pugi::xml_node& config)
 			enemyfly2->parameters = config.child("enemyfly2");
 		}
 
+		boss = (Boss*)app->entityManager->CreateEntity(EntityType::BOSS);
+
+
+		//boss->Disable();
 		//musicPath = config.child("Music").attribute("musicpath").as_string();
 		startTime = SDL_GetTicks();
 		secondTime = true;

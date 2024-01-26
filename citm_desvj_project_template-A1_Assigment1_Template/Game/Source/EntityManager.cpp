@@ -108,6 +108,9 @@ Entity* EntityManager::CreateEntity(EntityType type, b2Vec2* position, b2Vec2* d
 	case EntityType::HEART:
 		entity = new Heart();
 		break;
+	case EntityType::BOSS:
+		entity = new Boss();
+		break;
 	default:
 		break;
 	}
@@ -380,6 +383,7 @@ bool EntityManager::goToLevel1()
 {
 	ResetAllEnemies();
 	ResetAllItems();
+	app->scene->boss->Disable();
 	app->physics->DestroyObject(app->scene->player->pbody);
 	Start();
 	
@@ -390,6 +394,7 @@ bool EntityManager::goToLevel2()
 {
 	DisableAllEnemies();
 	DisableAllItems();
+	app->scene->boss->Enable();
 	app->physics->DestroyObject(app->scene->player->pbody);
 	Start();
 

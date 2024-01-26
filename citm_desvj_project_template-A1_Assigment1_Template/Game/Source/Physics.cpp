@@ -258,6 +258,52 @@ PhysBody* Physics::CreatePlayer(int x, int y, int width, int height, bodyType ty
 	return pbody;
 }
 
+
+PhysBody* Physics::CreateBoss(int x, int y, int width, int height, bodyType type)
+{
+	b2BodyDef body;
+	body.gravityScale = 0.0f;
+
+	if (type == DYNAMIC) body.type = b2_dynamicBody;
+	if (type == STATIC) body.type = b2_staticBody;
+	if (type == KINEMATIC) body.type = b2_kinematicBody;
+
+	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
+	body.fixedRotation = true;
+	b2Body* b = world->CreateBody(&body);
+	b2PolygonShape box;
+	box.SetAsBox(PIXEL_TO_METERS(width) * 0.5f, PIXEL_TO_METERS(height) * 0.5f);
+
+	b2FixtureDef fixture;
+	fixture.shape = &box;
+	fixture.density = 1.0f;
+	fixture.friction = 0.0f;
+	fixture.restitution = 0.0f;
+
+	b->CreateFixture(&fixture);
+
+	float footSensorWidth = PIXEL_TO_METERS(width) * 0.9f;
+	float footSensorHeight = PIXEL_TO_METERS(height);
+	box.SetAsBox(footSensorWidth * 0.6f, footSensorHeight * 0.6f, b2Vec2(0, 0), 0);
+	fixture.isSensor = true;
+	b->CreateFixture(&fixture);
+
+	b->ResetMassData();
+
+	PhysBody* pbody = new PhysBody();
+	pbody->body = b;
+	b->SetUserData(pbody);
+	pbody->width = width * 0.5f;
+	pbody->height = height * 0.5f;
+
+	pbody->ctype = ColliderType::ENEMY;
+
+	return pbody;
+}
+
+
+
+
 PhysBody* Physics::CreateFlyingEnemy(int x, int y, int width, int height, bodyType type)
 {
 	b2BodyDef body;

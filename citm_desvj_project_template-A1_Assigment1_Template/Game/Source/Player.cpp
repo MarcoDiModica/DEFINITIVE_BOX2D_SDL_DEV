@@ -388,7 +388,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
 		Death();
 		break;
     case ColliderType::COIN:
-		LOG("Collision WIN");
+		LOG("Collision COIN");
         app->audio->PlayFx(pickCoinFxId);
         app->coins++;
 		break;
@@ -398,7 +398,7 @@ void Player::OnCollision(PhysBody* physA, PhysBody* physB) {
         break;
     case ColliderType::WIN:
 		LOG("Collision WIN");
-		
+        app->Level2Request();
 		break;
     }
 }
@@ -415,6 +415,7 @@ void Player::Respawn()
     DeathAnim.Reset();
     currentAnimation = &idleAnim; 
     audiohasplayed = false;
+    if(!app->level2)
     app->entityManager->ResetAllEnemies();
 }
 

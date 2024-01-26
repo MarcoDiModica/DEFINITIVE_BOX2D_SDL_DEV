@@ -17,7 +17,8 @@ enum class EntityType
 	BULLET,
 	UNKNOWN,
 	COIN,
-	HEART
+	HEART,
+	BOSS
 };
 
 class Entity

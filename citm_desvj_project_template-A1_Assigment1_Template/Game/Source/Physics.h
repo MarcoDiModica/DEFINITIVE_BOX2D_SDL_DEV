@@ -33,7 +33,8 @@ enum class ColliderType {
 	UNKNOWN,
 	COIN,
 	HEART,
-	WIN
+	WIN,
+	SCAN
 	// ..
 };
 
@@ -82,6 +83,7 @@ public:
 	// Create basic physics objects
 	PhysBody* CreateRectangle(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreatePlayer(int x, int y, int width, int height, bodyType type);
+	PhysBody* CreateBoss(int x, int y, int width, int height, bodyType type);
 	PhysBody* CreateGroundEnemy(int x, int y, int width, int height, bodyType type);
 	void CreatePathForGroundEnemy(PhysBody* enemy, int startX, int endX, int y);
 	PhysBody* CreateFlyingEnemy(int x, int y, int width, int height, bodyType type);

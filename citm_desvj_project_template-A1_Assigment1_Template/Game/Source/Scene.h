@@ -6,6 +6,7 @@
 #include "Item.h"
 #include "Enemy.h"
 #include "EnemyFly.h"
+#include "Boss.h"
 #include "Coin.h"
 #include "Heart.h"
 #include "GuiControl.h"
@@ -59,6 +60,7 @@ public:
 	Heart* heart3;
 	Heart* heart4;
 	Heart* heart5;
+	Boss* boss;
 
 	const char* musicPath;
 	float volume = 90;
