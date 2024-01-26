@@ -15,13 +15,13 @@
 #include "GuiControl.h"
 #include "GuiManager.h"
 #include "dead.h"
-
+#include "Title.h"
 #include "Defs.h"
 #include "Log.h"
 
 Dead::Dead() : Module()
 {
-	name.Create("die");
+	name.Create("scene");
 }
 
 // Destructor
@@ -34,9 +34,8 @@ bool Dead::Awake(pugi::xml_node& config)
 	LOG("Loading Dead");
 	bool ret = true;
 
-	bgPath = config.child("dead").attribute("path").as_string();
-	img = app->tex->Load("Assets/Textures/dead.png");
 
+	mynode = config;
 	//musicPath = config.child("Music").attribute("musicpath").as_string();
 
 	return ret;
@@ -45,16 +44,20 @@ bool Dead::Awake(pugi::xml_node& config)
 // Called before the first frame
 bool Dead::Start()
 {
-	//app->audio->PlayMusic(musicPath);
+	if (active)
+	{
+		//app->audio->PlayMusic(musicPath);
+		img = app->tex->Load("Assets/GUI/die.png");
 
-	//Get the size of the window
-	app->win->GetWindowSize(windowW, windowH);
+		//Get the size of the window
+		app->win->GetWindowSize(windowW, windowH);
 
-	//Get the size of the texture
-	app->tex->GetSize(img, texW, texH);
+		//Get the size of the texture
+		app->tex->GetSize(img, texW, texH);
 
-	textPosX = (float)windowW / 2 - (float)texW / 2;
-	textPosY = (float)windowH / 2 - (float)texH / 2;
+		textPosX = (float)windowW / 2 - (float)texW / 2;
+		textPosY = (float)windowH / 2 - (float)texH / 2;
+	}
 
 	return true;
 }
@@ -68,9 +71,16 @@ bool Dead::PreUpdate()
 // Called each loop iteration
 bool Dead::Update(float dt)
 {
-	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN)
+	if (startTime == 0) startTime = SDL_GetTicks();
+
+	if (app->input->GetKey(SDL_SCANCODE_SPACE) == KEY_DOWN || SDL_GetTicks() - startTime >= 3000)
 	{
-		
+		app->title->active = true;
+		app->title->Awake(mynode);
+		app->title->Start();
+		app->dead->active = false;
+
+		startTime = 0;
 	}
 
 	return true;
@@ -82,7 +92,7 @@ bool Dead::PostUpdate()
 	bool ret = true;
 
 	//blit texture
-	app->render->DrawTexture(img, textPosX, textPosY, NULL);
+	if(active) app->render->DrawTexture(img, 0, 0 , NULL);
 
 	return ret;
 }

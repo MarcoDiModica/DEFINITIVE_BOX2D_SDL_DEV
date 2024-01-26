@@ -136,6 +136,7 @@ bool Scene::Awake(pugi::xml_node& config)
 		}
 
 		//musicPath = config.child("Music").attribute("musicpath").as_string();
+		startTime = 0;
 
 		return ret;
 	}
@@ -181,7 +182,8 @@ bool Scene::PreUpdate()
 // Called each loop iteration
 bool Scene::Update(float dt)
 {
-	
+	startTime = SDL_GetTicks();
+
 	float camSpeed = 1; 
 
 	if(app->input->GetKey(SDL_SCANCODE_I) == KEY_REPEAT)
@@ -228,6 +230,9 @@ bool Scene::PostUpdate()
 
 	cointext = "Coins X" + std::to_string(app->coins);
 	app->render->DrawText(cointext.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 340, 80, 40);
+
+	timer = "Time: " + std::to_string(startTime/ 1000) + " Seconds";
+	app->render->DrawText(timer.c_str(), app->scene->windowW / 2 - 480, app->scene->windowH / 2 - 300, 150, 40);
 
 	return ret;
 }

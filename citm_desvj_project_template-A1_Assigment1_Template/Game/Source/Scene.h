@@ -61,6 +61,8 @@ public:
 	float volume = 90;
 	std::string lifetext;
 	std::string cointext;
+	std::string timer;
+	Uint32 startTime = 0;
 
 private:
 	SDL_Texture* img;

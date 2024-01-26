@@ -16,6 +16,8 @@
 #include "EnemyFly.h"
 #include "Coin.h"
 #include "Heart.h"
+#include "Win.h"
+#include "Dead.h"
 #include "Window.h"
 
 Player::Player() : Entity(EntityType::PLAYER)
@@ -83,6 +85,7 @@ bool Player::Start()
 	pbody = app->physics->CreatePlayer(position.x, position.y, 34, 58, bodyType::DYNAMIC);
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
+    followplayer = true;
 	return true;
 }
 
@@ -139,7 +142,29 @@ bool Player::Update(float dt)
         }
 		else if (currentAnimation->HasFinished() && app->lifes <= 0)
 		{
-			//app->scene->ChangeScene(SceneType::LOSE);
+            
+            b2Vec2 stop(0, 0);
+            pbody->body->SetLinearVelocity(stop);
+            b2Vec2 initpos(PIXEL_TO_METERS(initX), PIXEL_TO_METERS(initY));
+            pbody->body->SetTransform(initpos, 0);
+            gravityScale = 1.0f;
+            pbody->body->GetWorld()->SetGravity(b2Vec2(GRAVITY_X, -GRAVITY_Y));
+            pbody->body->SetLinearVelocity(b2Vec2(pbody->body->GetLinearVelocity().x, 0.0f));
+            pbody->body->ApplyForce(b2Vec2(0, 1.0f), pbody->body->GetWorldCenter(), true);
+            flipVertical = SDL_FLIP_NONE;
+            gravityScale = 1.0f;
+            Respawn();
+            app->scene->player->followplayer = false;
+            app->render->camera.x = 0;
+            app->render->camera.y = 0;
+            app->dead->active = true;
+            app->dead->Start();
+            app->scene->active = false;
+            app->physics->active = false;
+            app->map->active = false;
+            app->entityManager->active = false;
+
+            app->lifes = 2;
 		}
     }
 
@@ -294,7 +319,12 @@ bool Player::Update(float dt)
     SDL_Rect destRect = { position.x - 5, position.y - 8, currentFrame.w, currentFrame.h };
     app->render->DrawTexture(texture, destRect.x, destRect.y, &currentFrame, flips);
 
-    UpdateCamera();
+    if (app->input->GetKey(SDL_SCANCODE_U) == KEY_DOWN)
+    {
+        followplayer = !followplayer;
+    }
+
+    if (followplayer) UpdateCamera();
 
     /*const char* title = ("Coins: %d Lifes: %d", coins, lifes);
     app->win->SetTitle(title);*/

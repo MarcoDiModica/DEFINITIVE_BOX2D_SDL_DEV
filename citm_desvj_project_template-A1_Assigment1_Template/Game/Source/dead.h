@@ -47,9 +47,10 @@ private:
 	float textPosX, textPosY = 0;
 	uint texW, texH;
 	uint windowW, windowH;
-
+	Uint32 startTime = 0;
 	SString bgPath;
 	SString bgName;
+	pugi::xml_node mynode;
 
 };
 

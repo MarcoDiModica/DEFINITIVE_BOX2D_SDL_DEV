@@ -63,7 +63,7 @@ App::App(int argc, char* args[]) : argc(argc), args(args)
 	AddModule(group, true);
 	AddModule(title, false);
 	
-	AddModule(entityManager);
+	AddModule(entityManager, true);
 	AddModule(guiManager, true);
 
 	// Render last to swap buffer
@@ -172,14 +172,6 @@ bool App::Update()
 		else {
 			maxFrameDuration = 1000 / 60;
 		}
-	}
-
-	if (lifes <=0)
-	{
-		dead->active = true;
-		dead->Start();
-		
-		scene->active = false;
 	}
 
 	return ret;

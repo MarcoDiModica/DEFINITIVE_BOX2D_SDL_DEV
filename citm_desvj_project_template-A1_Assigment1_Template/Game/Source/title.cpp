@@ -135,10 +135,13 @@ bool Title::Update(float dt)
 
 	if (comenzar)
 	{
+		pugi::xml_node n = mynode;
 		app->map->active = false;
 		app->physics->active = true;
 		app->physics->Start();
-		pugi::xml_node n = mynode;
+		app->entityManager->active = true;
+		app->entityManager->Awake(n);
+		app->entityManager->Start();
 		app->scene->active = true;
 		app->scene->Awake(n);
 		app->scene->Start();

@@ -80,6 +80,7 @@ public:
 	uint deathSFX;
 	bool audiohasplayed = false;
 	bool firstload = true;
+	bool followplayer = true;
 };
 
 #endif // __PLAYER_H__
