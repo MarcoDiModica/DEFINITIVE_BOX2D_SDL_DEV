@@ -103,6 +103,8 @@ bool GuiSlider::Update( float dt)
            // app->render->DrawTexture(texture, bounds.x, bounds.y, &SDL_Rect({ 0, 23, 116, 23 }), 0, 0, 0, 0, false);
            // app->render->DrawTexture(texture, sliderPosx, bounds.y, &SDL_Rect({ 116, 23 , 16, 23 }), 0, 0, 0, 0, false);
             app->scene->volume = value2;
+            app->title->volume = value2;
+            app->group->volume = value2;
             break;
 
         case GuiControlState::SELECTED:
