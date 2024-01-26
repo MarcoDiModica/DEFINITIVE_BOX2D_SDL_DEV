@@ -86,6 +86,8 @@ bool Player::Start()
 	pbody->listener = this;
 	pbody->ctype = ColliderType::PLAYER;
     followplayer = true;
+    pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+
 	return true;
 }
 

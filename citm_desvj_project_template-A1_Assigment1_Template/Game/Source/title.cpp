@@ -75,10 +75,10 @@ bool Title::Start()
 		quit->state = GuiControlState::NORMAL;
 		options->state = GuiControlState::NORMAL;
 
-		SDL_Rect backpos = { windowW / 2 - 70, windowH / 2 + 300, 100,50 };
-		SDL_Rect musicpos = { windowW / 2 - 70, windowH / 2 - 330, 100,20 };
-		SDL_Rect fullpos = { windowW / 2 - 70, windowH / 2 - 230 , 50,50 };
-		SDL_Rect vsyncpos = { windowW / 2 - 70, windowH / 2 - 130 , 50,50 };
+		SDL_Rect backpos = { windowW / 2 - 500, windowH / 2 + 300, 100,50 };
+		SDL_Rect musicpos = { windowW / 2 - 500, windowH / 2 - 130, 100,20 };
+		SDL_Rect fullpos = { windowW / 2 - 500, windowH / 2 - 30 , 50,50 };
+		SDL_Rect vsyncpos = { windowW / 2 - 500, windowH / 2 + 70 , 50,50 };
 
 		backbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 4, "   Back   ", backpos, this);
 		musicbutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::SLIDER, 5, "   Volume   ", musicpos, this);
@@ -90,8 +90,8 @@ bool Title::Start()
 		fullbutton->state = GuiControlState::DISABLED;
 		vsyncbutton->state = GuiControlState::DISABLED;
 
-		SDL_Rect resumepos = { windowW / 2 - 70, windowH / 2 + 300, 100,50 };
-		SDL_Rect backtitlepos = { windowW / 2 - 70, windowH / 2 + 250, 100,50 };
+		SDL_Rect resumepos = { windowW / 2 - 500, windowH / 2 + 300, 150,50 };
+		SDL_Rect backtitlepos = { windowW / 2 - 500, windowH / 2 + 200, 250,50 };
 
 		resumebutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 8, "   Resume   ", resumepos, this);
 		titlebutton = (GuiControlButton*)app->guiManager->CreateGuiControl(GuiControlType::BUTTON, 9, "   Back To Title   ", backtitlepos, this);
@@ -261,6 +261,11 @@ bool Title::OnGuiMouseClickEvent(GuiControl* control)
 	}
 	else if (control->id == 9)
 	{
+		app->title->musicbutton->state = GuiControlState::DISABLED;
+		app->title->fullbutton->state = GuiControlState::DISABLED;
+		app->title->vsyncbutton->state = GuiControlState::DISABLED;
+		app->title->titlebutton->state = GuiControlState::DISABLED;
+		app->title->resumebutton->state = GuiControlState::DISABLED;
 		app->scene->pausemenu = false;
 		app->scene->player->followplayer = false;
 		app->render->camera.x = 0;

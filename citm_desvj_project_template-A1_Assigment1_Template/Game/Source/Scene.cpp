@@ -144,8 +144,14 @@ bool Scene::Awake(pugi::xml_node& config)
 
 		//musicPath = config.child("Music").attribute("musicpath").as_string();
 		startTime = SDL_GetTicks();
+		secondTime = true;
 		firstTime = false;
 		return ret;
+	}
+
+	if (active && secondTime && !firstTime)
+	{
+		startTime = SDL_GetTicks();
 	}
 	
 	return true;
@@ -246,6 +252,8 @@ bool Scene::PostUpdate()
 
 	if (pausemenu)
 	{
+		SDL_Rect rect = { 0,0,300,1200 };
+		app->render->DrawRectangle(rect, 0, 0, 0, 50);
 		app->title->musicbutton->state = GuiControlState::NORMAL;
 		app->title->fullbutton->state = GuiControlState::NORMAL;
 		app->title->vsyncbutton->state = GuiControlState::NORMAL;

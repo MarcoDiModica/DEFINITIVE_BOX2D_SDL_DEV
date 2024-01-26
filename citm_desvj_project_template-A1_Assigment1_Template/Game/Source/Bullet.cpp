@@ -34,6 +34,7 @@ Bullet::Bullet(b2Vec2* position, b2Vec2* direction) : Entity(EntityType::BULLET)
 		this->direction.x = 0;
 		this->direction.y = 0;
 	}
+
 	pbody = app->physics->CreateBullet(spawnpos.x, spawnpos.y, 18, 18, DYNAMIC, ColliderType::WEAPON, 15, this->direction);
 	pbody->listener = this;
 	texture2 = app->tex->Load("Assets/Textures/marco.png");
@@ -66,6 +67,15 @@ bool Bullet::Update(float dt)
 	position.x = METERS_TO_PIXELS(pbody->body->GetPosition().x) - 10;
 	position.y = METERS_TO_PIXELS(pbody->body->GetPosition().y) - 10;
 
+	//hacer flip a la textura si direction.x < 0
+	if (direction.x < 0)
+	{
+		app->render->DrawTexture(texture2, position.x, position.y, NULL, SDL_FLIP_HORIZONTAL);
+	}
+	else
+	{
+		app->render->DrawTexture(texture2, position.x, position.y, NULL, SDL_FLIP_NONE);
+	}
 
 	app->render->DrawTexture(texture2,position.x, position.y);
 	

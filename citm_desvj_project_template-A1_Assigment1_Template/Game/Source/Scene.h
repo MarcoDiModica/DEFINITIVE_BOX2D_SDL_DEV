@@ -69,6 +69,7 @@ public:
 	std::string timer;
 	Uint32 startTime = 0;
 	bool firstTime = true;
+	bool secondTime = false;
 	bool pausemenu = false;
 	pugi::xml_node mynode;
 
