@@ -87,6 +87,8 @@ bool Player::Start()
 	pbody->ctype = ColliderType::PLAYER;
     followplayer = true;
     pickCoinFxId = app->audio->LoadFx("Assets/Audio/Fx/coin.wav");
+    death = false;
+    DeathAnim.Reset();
 
 	return true;
 }
