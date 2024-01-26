@@ -94,7 +94,7 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB)
 	switch (physB->ctype)
 	{
 	case ColliderType::UNKNOWN:
-		pendingtodestroy = true;
+		//pendingtodestroy = true;
 		LOG("Collision UNKNOWN");
 		break;
 	case ColliderType::DEATH:
@@ -109,6 +109,10 @@ void Bullet::OnCollision(PhysBody* physA, PhysBody* physB)
 		LOG("Collision PLAYER");
 		break;
 	case ColliderType::WEAPON:
+		LOG("Collision WEAPON");
+		break;
+	case ColliderType::ENEMY:
+		pendingtodestroy = true;
 		LOG("Collision WEAPON");
 		break;
 	}

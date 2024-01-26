@@ -43,17 +43,18 @@ bool Boss::Start()
 	entranceSensor = app->physics->CreateRectangleSensor(1280, 384, 128, 640, bodyType::STATIC, ColliderType::SCAN);
 	entranceSensor->listener = this;
 	timer = 0;
-	if (!app->level2)
-	{
-		Disable();
-	}
+	hp = 300;
+	
 	texturePath = "Assets/Textures/boss.png";
 	texture = app->tex->Load(texturePath);
 	t3 = app->tex->Load("Assets/Textures/3.png");
 	t2 = app->tex->Load("Assets/Textures/2.png");
 
 	t1 = app->tex->Load("Assets/Textures/1.png");
-
+	if (!app->level2)
+	{
+		Disable();
+	}
 	return true;
 
 }
@@ -63,31 +64,36 @@ bool Boss::Update(float dt)
 	app->render->DrawTexture(texture, 1856, 64);
 	if (aggro)
 	{
+		
 		if (startTime == 0) startTime = SDL_GetTicks();
 
-
-
-		if (SDL_GetTicks() - startTime >= 1000)
+		if (SDL_GetTicks() - startTime >= 3000)
+		{
+			Attack();
+		}
+		else if (SDL_GetTicks() - startTime >= 2000)
+		{
+			app->render->DrawTexture(t1, 1408, 352);
+			damage = false;
+		}
+		else if (SDL_GetTicks() - startTime >= 1000)
+		{
+			damage = false;
+			app->render->DrawTexture(t2, 1408, 352);
+		}
+		else
 		{
 			damage = false;
 			app->render->DrawTexture(t3, 1408, 352);
 		}
-		else if (SDL_GetTicks() - startTime >= 2000)
-		{
-			damage = false;
-			app->render->DrawTexture(t2, 1408, 352);
 
-		}
-		else if (SDL_GetTicks() - startTime >= 3000)
-		{
-			//Avisar del ataque
-			app->render->DrawTexture(t1, 1408, 352);
-			damage = false;
-		}
-		else
-		{
-			Attack();
-		}
+		
+	}
+
+	if (hp<=0)
+	{
+		//pantalla de win
+		Disable();
 	}
 	return true;
 }
@@ -109,6 +115,21 @@ bool Boss::CleanUp()
 		app->tex->UnLoad(texture);
 		texture = nullptr;
 	}
+	if (t3 != nullptr)
+	{
+		app->tex->UnLoad(t3);
+		t3 = nullptr;
+	}
+	if (t2 != nullptr)
+	{
+		app->tex->UnLoad(t2);
+		t2 = nullptr;
+	}
+	if (t1 != nullptr)
+	{
+		app->tex->UnLoad(t1);
+		t1 = nullptr;
+	}
 
 	if (pbody != nullptr)
 	{
@@ -121,6 +142,16 @@ bool Boss::CleanUp()
 	{
 		app->physics->DestroyObject(entranceSensor);
 		entranceSensor = nullptr;
+	}
+	if (sensorDown != nullptr)
+	{
+		app->physics->DestroyObject(sensorDown);
+		sensorDown = nullptr;
+	}
+	if (sensorUp != nullptr)
+	{
+		app->physics->DestroyObject(sensorUp);
+		sensorUp = nullptr;
 	}
 
 
@@ -153,6 +184,11 @@ void Boss::OnCollision(PhysBody* physA, PhysBody* physB)
 	{
 		if(damage)
 		app->scene->player->Death();
+	}
+
+	if (physA->ctype == ColliderType::ENEMY && physB->ctype == ColliderType::WEAPON)
+	{
+		hp--;
 	}
 
 }

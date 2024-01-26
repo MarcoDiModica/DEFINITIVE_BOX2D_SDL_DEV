@@ -51,6 +51,7 @@ public:
 	bool aggro = false;
 	bool attackhasfinished = false;
 	uint32 startTime;
+	int hp;
 
 	
 

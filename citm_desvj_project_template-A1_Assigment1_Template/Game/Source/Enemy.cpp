@@ -265,7 +265,7 @@ void Enemy::OnCollision(PhysBody* physA, PhysBody* physB) {
 void Enemy::Death()
 {
     death = true;
-    pbody->ctype = ColliderType::UNKNOWN;
+    pbody->ctype = ColliderType::PLATFORM;
 }
 
 bool Enemy::LoadState(pugi::xml_node node, int num)

@@ -263,7 +263,7 @@ void EnemyFLY::OnCollision(PhysBody* physA, PhysBody* physB) {
 void EnemyFLY::Death()
 {
     death = true;
-    pbody->ctype = ColliderType::UNKNOWN;
+    pbody->ctype = ColliderType::PLATFORM;
 
 }
 
