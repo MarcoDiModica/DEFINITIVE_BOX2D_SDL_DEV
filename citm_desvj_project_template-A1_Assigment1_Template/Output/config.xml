@@ -30,6 +30,7 @@
 	<title path="Assets/GUI/title.png"/>
 	<group path="Assets/GUI/group.png" />
     <map path="Assets/Maps/" name="Attempt2.tmx"/>
+	<map2 name="bossroom.tmx"/>
 	<player x="100" y="673" texturepath="Assets/Textures/platformer.png" deathsfxpath="Assets/Audio/Fx/kill2.wav">
 		  <idle animspeed ="0.3f" loop="true">
 			  <pushback x="0" y="0" width="96" height="96"/>

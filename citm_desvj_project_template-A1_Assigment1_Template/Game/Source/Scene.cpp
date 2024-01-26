@@ -103,8 +103,13 @@ bool Scene::Awake(pugi::xml_node& config)
 
 		if (config.child("map")) {
 			//Get the map name from the config file and assigns the value in the module
-			app->map->name = config.child("map").attribute("name").as_string();
+			app->map->mapName = config.child("map").attribute("name").as_string();
 			app->map->path = config.child("map").attribute("path").as_string();
+		}
+		
+		if (config.child("map2")) {
+			//Get the map name from the config file and assigns the value in the module
+			app->map->mapName2 = config.child("map2").attribute("name").as_string();
 		}
 
 

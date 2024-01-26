@@ -39,11 +39,19 @@ bool Map::Start() {
     if (active && app->scene->active == true)
     {
         //Calls the functon to load the map, make sure that the filename is assigned
-        SString mapPath = path;
-        mapPath += name;
-        bgPath += bgName;
+        mapPath = path;
+        if (!app->scene->level2)
+        {
+            mapPath += mapName;
+        }
+        else
+        {
+            mapPath += mapName2;
+        }
+        bgPathFull = bgPath;
+        bgPathFull += bgName;
         bool ret = Load(mapPath);
-        background = app->tex->Load(bgPath.GetString());
+        background = app->tex->Load(bgPathFull.GetString());
         debug = false;
 
         ListItem<MapLayer*>* mapLayerItem;
@@ -80,6 +88,15 @@ bool Map::Start() {
 
 bool Map::Update(float dt)
 {
+
+
+
+    if (app->input->GetKey(SDL_SCANCODE_R) == KEY_DOWN) {
+        reloadMap();
+    }
+
+
+
     if(mapLoaded == false)
         return false;
 
@@ -218,8 +235,41 @@ bool Map::CleanUp()
         RELEASE(layerItem->data);
         layerItem = layerItem->next;
     }
+    mapData.maplayers.Clear();
 
+
+    //Remove all colliders
+    ListItem<PhysBody*>* colliderItem;
+    colliderItem = mapData.colliders.start;
+
+    while (colliderItem != NULL)
+    {
+        app->physics->DestroyObject(colliderItem->data);
+        RELEASE(colliderItem->data);
+        colliderItem = colliderItem->next;
+    }
+    mapData.colliders.Clear();
     return true;
+}
+
+bool Map::reloadMap()
+{
+    bool ret = true;
+    app->scene->level2 = !app->scene->level2;
+
+    ret = CleanUp();
+    ret = Start();
+    if (ret)
+    {
+        LOG("Successfuly reloaded map");
+    }
+    else
+    {
+        LOG("Did not load map correctly");
+    }
+
+
+    return ret;
 }
 
 // Load new map
@@ -419,23 +469,25 @@ bool Map::LoadAllObjectGroups(pugi::xml_node mapNode) {
 
             int x = objectNode.attribute("x").as_int() + width / 2;
             int y = objectNode.attribute("y").as_int() + height / 2;
-
+            PhysBody* c1 = nullptr;
 
             if (strcmp(objectNode.child("properties").child("property").attribute("value").as_string(), "Platform") == 0)
             {
-                PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+                c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
                 c1->ctype = ColliderType::PLATFORM;
             }
             else if (strcmp(objectNode.child("properties").child("property").attribute("value").as_string(), "Death") == 0)
             {
-                PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+                c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
                 c1->ctype = ColliderType::DEATH;
             }
             else if (strcmp(objectNode.child("properties").child("property").attribute("value").as_string(), "Win") == 0)
             {
-                PhysBody* c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
+                c1 = app->physics->CreateRectangle(x, y, width, height, STATIC);
                 c1->ctype = ColliderType::WIN;
             }
+            if(c1!=nullptr)
+                mapData.colliders.Add(c1);
         }
     }
 

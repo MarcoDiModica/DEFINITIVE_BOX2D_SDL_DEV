@@ -96,6 +96,9 @@ struct MapData
 	MapTypes type;
 
 	List<MapLayer*> maplayers;
+
+	List<PhysBody*> colliders;
+
 };
 
 class Map : public Module
@@ -136,13 +139,19 @@ private:
 	bool LoadProperties(pugi::xml_node& node, Properties& properties);
 	void CreateNavigationMap(int& width, int& height, uchar** buffer) const;
 
+	bool reloadMap();
+
 public: 
 
 	MapData mapData;
 	SString name;
+	SString mapName;
+	SString mapName2;
+	SString mapPath;
 	SString path;
 	SString bgName;
 	SString bgPath;
+	SString bgPathFull;
 	SDL_Texture* background;
 	PathFinding* pathfinding;
 
@@ -152,6 +161,8 @@ private:
 	bool* debug;
 	MapLayer* navigationLayer;
 	int blockedGid = 1441;
+
+	
 };
 
 #endif // __MAP_H__
